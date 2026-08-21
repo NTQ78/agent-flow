@@ -31,3 +31,6 @@ folder name = that project only, any other word = match on title/slug.
 - **Suspected stalled**: no status change in over 7 days
 
 Close with one line: total open tickets, how many are blocked, which one to pick up next and why.
+
+Then count entries in `~/.claude/flow/friction.jsonl` with `promoted: null`. At five or more, add one
+line: `N unpromoted friction entries — run /retro`.

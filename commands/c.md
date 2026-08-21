@@ -58,7 +58,17 @@ fix now / should fix / noted.
   **STOP**. Diagnose the cause, propose options, ask the user. Guessing wrong at the business
   layer is expensive.
 
-## 7. Verdict
+## 7. Record friction
+
+Append entries per CONVENTIONS §9. What to look for at this stage:
+
+- cases with no test → why did `/p` not list them, or `/s` not write them? `missing-step`
+- a failure that a soft gate let through and that cost real time → `wrong-gate`
+- a check that found nothing useful two runs running → `noise`
+- an environment gap (dev API behind the FE, missing runtime) not documented → `missing-fact`,
+  applied to `flow.md`
+
+## 8. Verdict
 
 Write `03-verify/report.md`: pass/fail per item, cases with no test, code-review findings,
 slop-test result, screenshots attached.

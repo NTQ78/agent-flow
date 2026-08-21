@@ -76,7 +76,23 @@ Write into `04-deploy.md` **as soon as the deploy finishes**, not when it is nee
 - the exact commands to go back: restore files, restore DB, restart the app pool
 - whether this migration is reversible (if not, say so)
 
-## 8. After deploying
+## 8. Record friction
+
+Two passes. First, entries from this stage:
+
+- a deploy step you had to work out that `flow.md` should have declared → `missing-fact`, applied
+  to `flow.md`
+- a safety step that turned out to be missing → `missing-rule` or `wrong-gate`
+
+Second, a look back over the whole ticket — `02-build-log.md` and `03-verify/report.md` already
+record the divergences, the out-of-scope fixes and the untested cases. Distil what the stages
+missed into entries; do not re-observe from scratch.
+
+Then count entries in `~/.claude/flow/friction.jsonl` with `promoted: null`. At five or more, print
+one line: `N unpromoted friction entries — run /retro`. Nothing else; this is not the moment to act
+on them.
+
+## 9. After deploying
 
 - Set `status: done`, record the deploy date and target in the frontmatter
 - **Bilingual changelog** for end users, written into `04-deploy.md`: English first, then

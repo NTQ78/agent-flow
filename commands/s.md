@@ -56,6 +56,18 @@ by a legitimate change): fix them, and record them under "Fixes outside scope" i
 But if the fix starts changing business behaviour, or touches a locked business rule → follow the
 "When the spec is wrong" procedure above.
 
+## Record friction
+
+Append entries per CONVENTIONS §9. This stage produces the most signal, and the raw material is
+already in `02-build-log.md`:
+
+- every trap hit that `flow.md` did not warn about → `missing-fact`, **appended to that project's
+  `.claude/flow.md` traps section in this same run**
+- every "fix outside scope" → why did the spec not see it? usually `missing-step` on `/p`
+- every spec divergence → `missing-step` or `wrong-order`
+- work done in an order that had to be redone → `wrong-order`
+- no installed skill covered the design work → `missing-skill`
+
 ## Close out
 
 Set `status: build`. Print: files created/modified, build result per part, tests written, fixes

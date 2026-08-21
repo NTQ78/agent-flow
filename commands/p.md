@@ -77,7 +77,16 @@ coverage, not for looks.
 - Break the work down in the order `/s` will run it: BE → migration → FE → i18n
 - Re-estimate `size` if the survey disagrees with `/intake`
 
-## Step 8 — Write and close out
+## Step 8 — Record friction, write, close out
+
+Append friction entries per CONVENTIONS §9 before writing. What to look for at this stage:
+
+- a fact you had to discover by reading code that `flow.md` should have declared → `missing-fact`,
+  applied to `flow.md` in this run
+- every `[ASSUMPTION]` that exists because no rule covers the situation → `missing-rule`
+- a spec section that consumed effort and that `/s` ignored last time → `noise`
+
+Then:
 
 Write `01-spec.md`, set `status: spec` in `00-request.md`.
 

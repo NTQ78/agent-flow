@@ -125,3 +125,40 @@ The commands are global, so they hard-code no project detail. Details come from:
 That file declares build/test commands, how to run the app, known traps, locked business rules,
 and deploy targets. If a project has no such file, ask the user for what you need and offer to
 create it — do not guess.
+
+## 9. Friction log — how this process improves itself
+
+Every stage records where **the process itself** fell short, as it happens. One JSON object per
+line, appended to `~/.claude/flow/friction.jsonl` (never committed — it quotes project internals):
+
+```json
+{"id":"F-2026-08-21-01","date":"2026-08-21","project":"HR_APP","req":"REQ-2026-08-21-01",
+ "stage":"s","kind":"missing-fact","what":"OutDir had to be redirected; flow.md did not say so",
+ "cost":"20 min, two failed builds","fix":"add the MSB3021 trap",
+ "target":"HR_APP/.claude/flow.md · Known traps","promoted":null}
+```
+
+`kind` decides where the fix belongs:
+
+| kind | meaning | target |
+|---|---|---|
+| `missing-fact` | a fact about one project nobody had written down | that project's `.claude/flow.md` |
+| `missing-step` | a question not asked, a check not run | that command file |
+| `missing-rule` | something that should hold for every project | this file |
+| `wrong-order` | the sequence was wrong | that command file |
+| `wrong-gate` | a soft gate should be hard, or the reverse | this file, §4 |
+| `missing-skill` | no installed skill covered the work | a `/sk` action |
+| `noise` | the process made you do something with no value | a **deletion** candidate |
+
+Two rules for writing entries:
+
+- **No vague entries.** An entry must name what it cost and a concrete change with a target file.
+  If you cannot name the target, it is not friction worth logging. "The spec was unclear" is not an
+  entry; "the spec never says which timezone, and `/s` had to guess" is.
+- **`missing-fact` applies itself.** Append it to that project's `.claude/flow.md` in the same run
+  and set `promoted` — that file is project-local, gitignored, and the change is purely additive.
+  **Everything else waits for `/retro`**, which clusters the entries, proposes a diff and asks. A
+  stage command never edits this file or another command file on its own.
+
+Size budget, enforced by `/retro`: this file ≤ 170 lines, each command ≤ 110. At budget, an addition
+must arrive with a deletion in the same diff. A process that only grows stops being read.

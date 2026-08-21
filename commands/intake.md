@@ -89,7 +89,17 @@ schema in CONVENTIONS, `status: intake`, and these sections:
 ## Draft message to requester
 ```
 
-## Step 9 — Close out
+## Step 9 — Record friction and close out
+
+Before printing the summary, append friction entries per CONVENTIONS §9. What to look for at this
+stage:
+
+- a question you had to ask that the process should have pre-empted → `missing-step`
+- a source you could not read, or read incompletely → `missing-step` or `missing-fact`
+- locked rules that were not where `flow.md` said they were → `missing-fact`, applied to `flow.md`
+- a section of the ticket that had nothing to put in it two tickets running → `noise`
+
+Then:
 
 Print: REQ-ID, type, size, open-question count, whether rule approval is needed, folder path.
 
