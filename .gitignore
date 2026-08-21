@@ -1,0 +1,11 @@
+# Per-project config is machine- and client-specific: server addresses, database names,
+# test accounts, internal business rules. Only the redacted template belongs in git.
+flow.md
+*.local.md
+projects/
+
+# Ticket store lives outside the repo (D:\Agent-Projects) — never vendor it in.
+Agent-Projects/
+
+.DS_Store
+Thumbs.db

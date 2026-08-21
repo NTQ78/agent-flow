@@ -1,0 +1,85 @@
+# flow.md — project config for the /intake → /p → /s → /c → /ship chain
+
+Copy this file to `<project root>/.claude/flow.md` and fill it in. The global commands read it for
+everything project-specific; they hard-code nothing.
+
+Keep this file **out of any public repository**. It typically ends up holding server addresses,
+database names, test accounts and a client's internal business rules.
+
+Ticket folder for this project: `D:\Agent-Projects\<PROJECT-FOLDER-NAME>\`
+
+## Project
+
+- Root: `<absolute path>`
+- FE: `<folder>` — `<stack>`. If the project already documents its own conventions
+  (`CLAUDE.md`, `CONTRIBUTING.md`), **point at that file instead of restating it**.
+- BE: `<folder>` — `<stack, layer layout, test project>`
+- Business documents: `<folder>`
+
+## Requester
+
+Who owns feature scope, and how requests arrive (chat, mail, screenshots of forms).
+
+Note any channel-specific trap for reading those requests — e.g. an API that omits attachments
+unless asked for explicitly.
+
+## Locked business rules
+
+Where the rules actually live (file paths). State whether they are in version control; if not, say
+so, because `/intake` has to read them from disk to cross-check.
+
+List the rules that are easy to get wrong. In particular record any **"unless" clause**: those
+qualifiers are usually the whole point of the rule, and dropping one produces code that passes its
+own tests because the tests were written from the same misreading.
+
+## Commands
+
+FE (`cd <folder>`) — list what must pass before anything counts as done:
+
+```bash
+<lint>
+<test>
+<typecheck>
+<build>
+```
+
+BE (`cd <folder>`):
+
+```bash
+<build>
+<test>
+<migration add>
+<migration apply>
+```
+
+## Running the app
+
+- FE: `<command>` → `<url>`. Note any wrapper script and why it exists (e.g. a guard against
+  starting a duplicate dev server on an auto-incremented port).
+- BE: `<command>` → `<url>`, API docs at `<path>`
+- Screenshots: how to capture them reliably in this environment
+- Test login: `<account>`, and anything odd about how its password is set
+
+## Known traps — read before building, not after the error
+
+One bullet per trap that has actually bitten. For each: the symptom, the cause, and the fix.
+Anything that fails *silently* — where tests stay green while the app breaks — belongs here first.
+
+## Deploy
+
+`/ship` always asks for the target. List every target this project can go to, and what each needs.
+
+**<Target name>:**
+
+- Host / server, and what else runs on it
+- Hostnames and how they resolve
+- Which config file holds production settings, and whether it is gitignored
+- Runtime or platform prerequisites, and how a missing one presents itself (an error that
+  masquerades as a different error belongs here)
+
+**Database:**
+
+State plainly whether any environment shares a database with another. If so, say that a migration
+hits both immediately — `/ship` prints this warning before asking for confirmation.
+
+Backup location before any migration: `<path>`

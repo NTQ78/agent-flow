@@ -1,0 +1,70 @@
+---
+description: Verify — tests, builds, drive the real app, slop-test, code-review
+argument-hint: REQ-ID (empty = newest ticket already built)
+---
+
+Read `~/.claude/flow/CONVENTIONS.md` first, then the project's `.claude/flow.md` for test/build
+commands and how to run the app.
+
+Ticket: $ARGUMENTS — if empty, take the newest ticket with `status: build`.
+
+The purpose of this command is to catch **green tests over a broken app**. A passing suite is not
+evidence the app works.
+
+## 1. Tests and builds
+
+Run all of them, using the commands declared in `.claude/flow.md`: BE tests, FE tests, typecheck,
+FE build, BE build. Record each command's result under `03-verify/`.
+
+## 2. Cross-check the /p test case checklist
+
+Open `01-spec.md` and take the numbered case list. For each case: is there a corresponding test,
+and does that test actually exercise that case? List the cases **with no test** — this finding
+matters more than the suite passing.
+
+## 3. Drive the real app (only when FE changed)
+
+Skip if the ticket is BE-only. Otherwise:
+
+- Start the app as described in `.claude/flow.md`
+- Log in, navigate to the affected screen, capture a screenshot into `03-verify/`
+- Check for: console errors, 4xx/5xx requests, raw i18n keys showing through (`some.key.name`),
+  broken layout
+- **Compare the DTO the FE calls against the API actually running.** The dev API usually lands
+  after the FE; if the FE reads a field the API does not yet return, report it as an environment
+  gap rather than a code defect — but still confirm the FE does not break without that field.
+
+## 4. Slop-test the new UI
+
+Only when there is new or substantially changed UI.
+
+Per CONVENTIONS §6, look through the installed skills for a checker of this kind (`slop-test.md`,
+`anti-patterns.md` or equivalent) and use it as the checklist. If none exists, use the list in
+CONVENTIONS §7 directly.
+
+Compare the screenshots just captured against the checklist. A failure means **fix the UI**, not
+note it and move on. Record the outcome in `03-verify/slop-test.md`.
+
+## 5. Code review
+
+Run `/code-review` on the current diff. Fold the findings into the verify report, grouped as: must
+fix now / should fix / noted.
+
+## 6. Handling failures
+
+- **Clear technical failures** (wrong type, missing i18n key, imports, stale snapshot, lint, build
+  config): fix and re-run. Record it under `03-verify/`.
+- **Business-logic failures** (wrong computed result, wrong status transition, wrong permission):
+  **STOP**. Diagnose the cause, propose options, ask the user. Guessing wrong at the business
+  layer is expensive.
+
+## 7. Verdict
+
+Write `03-verify/report.md`: pass/fail per item, cases with no test, code-review findings,
+slop-test result, screenshots attached.
+
+Set `status: verify` **only** when every item passes and no untested case is left unexplained.
+Otherwise keep `status: build` and say exactly what is missing — `/ship` is a hard gate and will
+block.
+
+Then ask: "Run `/ship`?"
