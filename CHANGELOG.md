@@ -3,6 +3,55 @@
 Every entry here comes from a `/retro` run: what changed in the flow, why, and the friction entries
 that justified it. The raw friction log stays out of git.
 
+## 2026-08-21 — second /retro run
+
+Five fixes from 8 entries, now spanning two projects. Two of them fix half-fixes from the first run.
+
+- **§7 precedence** (F-22, extending promoted F-02) — the requester outranks §7 and a tell they
+  supplied verbatim is sign-off; **a skill does not**. A skill sets direction, but a tell it mandates
+  stays banned and `/p` records the deviation in a table `/c` treats as settled. Second ticket in two
+  days to argue §7 from scratch; the first run fixed only the requester half.
+- **A floor for greenfield briefs** (F-15, F-16, corroborated by F-01) — five answers before a ticket
+  can be named: brand, page list, does it transact, content language and currency, asset provenance.
+  Missing any, the folder is named from the request slug and `project` is marked provisional. The
+  first run's naming fix did not hold: the folder still got a placeholder destined for rename.
+  §7 also now says "no placeholders" changes the direction rather than licensing grey boxes.
+- **`REQ-ID` is global per calendar day across every project** (F-17) — `/intake` scans all project
+  folders for that date. Promoted on one occurrence: the text had two defensible readings and this
+  log produced duplicate ids twice the same day.
+- **The loop reads stale and numbered by eye** (F-19) — `id` is allocated as highest + 1 read at
+  write time, and `/retro` re-reads the log before writing, restarting if unpromoted entries arrived.
+  Three collisions in one day, one of which hid a second project from a whole promotion round.
+- **Interactive states are verified with real input** (F-13, `/c` half) — a hover an animation has
+  overridden passes tsc, lint, build and every static DOM assertion. It shipped dead through three
+  stages before a real mouse event exposed it.
+
+Funded by cutting §9's `kind` table down to a list: its `target` column duplicated FRICTION.md's
+"Where the change goes", which owns that decision. Two `intake.md` compressions, including a dangling
+`Then:` left by the first run's patch.
+
+`CONVENTIONS.md` 168 → 168/170 · `intake.md` 107 → 109/110 · `c.md` 85 → 88/110 ·
+`retro.md` 78 → 80/110.
+
+Renumbered F-18 and F-19 as filed by limited-drop-store to F-21 and F-22 — they collided with the
+pair the first run wrote. Numbers were then picked by hand a second time and collided again with an
+existing F-20, which is exactly what F-19 describes; the rule adopted above is what stops it.
+
+Routed to `/sk`, not a flow change: F-21. `gpt-taste` pins four faces and bans Inter without
+mentioning content language; for Vietnamese, Satoshi ships 2 of the 90 codepoints in U+1EA0–1EF9 and
+Outfit has no Vietnamese subset, leaving Geist as the only safe member. A skill-obedient pick ships
+tofu.
+
+Still watching: F-18, whether `/p` chooses the stack version on greenfield work — declined twice.
+F-23, naming animation-vs-transition precedence in the spec, now bounded by the `/c` gate.
+
+Reopened: **F-20**, an unresolved `missing-rule` a stage had marked `promoted` with a location note
+(`"01-spec.md Step 1 and Step 7 task 9"`), which hid it from the queue. Its content is a real
+contradiction introduced by the first run — §9 says a `missing-fact` applies itself to the project's
+`flow.md` in the same run, while §8 says a greenfield project has no `flow.md` until `/s` writes it
+at the end of the build. Five verified facts had nowhere to go and were carried in `01-spec.md`.
+`promoted` is reset to null so the next run sees it. Only `/retro` promotes a `missing-rule`.
+
 ## 2026-08-21 — first /retro run
 
 Seven fixes from 8 friction entries, all from `velorah-hero`, the first project run that was not

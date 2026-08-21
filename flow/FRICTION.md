@@ -1,7 +1,7 @@
 # Promotion rules for the friction log
 
-Only `/retro` reads this file. The stages only need the entry schema and the `kind` table in
-`CONVENTIONS.md` §9.
+Only `/retro` reads this file. The stages only need the entry schema and the `kind` list in
+`CONVENTIONS.md` §9; deciding where each kind's fix lands is this file's job, not theirs.
 
 ## What earns a change
 

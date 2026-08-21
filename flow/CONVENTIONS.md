@@ -18,7 +18,8 @@ D:\Agent-Projects\<project>\<REQ-ID>-<slug>\
 - `<project>` = the folder name of the project root you are working in (`HR_APP`, `aiur--hr`,
   `VILOG`) — whatever tree it sits in. For a project that does not exist yet, it is the folder
   name the new project will get. Derive it; never invent a second name for the same project.
-- `REQ-ID` = `REQ-YYYY-MM-DD-NN`, NN = sequence within that day. Get the date with
+- `REQ-ID` = `REQ-YYYY-MM-DD-NN`. **`NN` is global per calendar day across every project**, so
+  `/intake` scans all project folders for that date before allocating. Get the date with
   `date +%Y-%m-%d`; **never guess it**. `slug` = kebab-case ASCII, no diacritics, max 6 words.
 - **Code never lives here.** This folder holds documents and artifacts only; code stays in the
   real repo. Single exception: the request is a brand-new project with no repo yet — then create
@@ -104,15 +105,18 @@ Tells to avoid:
 - Three perfectly symmetrical feature columns
 - `shadow-lg` sprinkled on everything
 - Default icons on every row, and one metronomic spacing rhythm repeated in every section
-- Grey placeholder images, sample data like "John Doe" or lorem ipsum
+- Grey placeholder images, sample data like "John Doe" or lorem ipsum — when real assets do not
+  exist the direction changes to one that does not need them, it does not fall back to these
 
 Instead: the real labels and data of the domain, at the information density its actual users
 need, built from components that already exist.
 
-**A tell the requester supplied verbatim is sign-off, not slop.** When the request specifies one
-of these deliberately — exact CSS, a named font, a spacing value over a cap — record it under
+**Precedence, when something else mandates a tell.** The requester outranks §7: a tell they
+supplied verbatim — exact CSS, a named font, a spacing over a cap — is sign-off. Record it under
 "Business rule conflicts" in `00-request.md`, leave `needs_approval` false, and `/c` reports it
-without changing it. §7 governs what the agent chose, never what the customer asked for.
+without changing it. **A skill does not outrank §7.** A skill sets direction — palette, type,
+layout — but a tell it mandates stays banned; `/p` records the deviation in a table `/c` then
+treats as settled. §7 governs what the agent chose, including what a skill chose for it.
 
 ## 8. Per-project config
 
@@ -141,18 +145,14 @@ line, appended to `~/.claude/flow/friction.jsonl` (never committed — it quotes
 
 Write every path with forward slashes. A lone backslash in a JSON string is either invalid —
 `\P` in `D:\Project` — or a silent escape: `\f` in `\flow.md` ate the `f`. Both corrupt the log.
+Allocate `id` as the highest existing number + 1, read at write time; two sessions appending by
+eye have already collided twice.
 
-`kind` decides where the fix belongs:
-
-| kind | meaning | target |
-|---|---|---|
-| `missing-fact` | a fact about one project nobody had written down | that project's `.claude/flow.md` |
-| `missing-step` | a question not asked, a check not run | that command file |
-| `missing-rule` | something that should hold for every project | this file |
-| `wrong-order` | the sequence was wrong | that command file |
-| `wrong-gate` | a soft gate should be hard, or the reverse | this file, §4 |
-| `missing-skill` | no installed skill covered the work | a `/sk` action |
-| `noise` | the process made you do something with no value | a **deletion** candidate |
+`kind` is one of: **`missing-fact`** a project fact nobody wrote down · **`missing-step`** a
+question not asked or a check not run · **`missing-rule`** something that should hold for every
+project · **`wrong-order`** · **`wrong-gate`** · **`missing-skill`** no installed skill covered
+the work · **`noise`** work with no value, a deletion candidate. Where each one's fix lands is
+`/retro`'s call — see `flow/FRICTION.md`.
 
 Two rules for writing entries:
 

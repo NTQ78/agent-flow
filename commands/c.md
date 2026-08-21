@@ -30,6 +30,9 @@ Skip if the ticket is BE-only. Otherwise:
 - Log in, navigate to the affected screen, capture a screenshot into `03-verify/`
 - Check for: console errors, 4xx/5xx requests, raw i18n keys showing through (`some.key.name`),
   broken layout
+- **Interactive states are verified by dispatching real input** — hover, focus, click — never by
+  reading computed style off an element nobody is touching. A hover an animation has overridden
+  passes tsc, lint, build and every static DOM assertion
 - **Compare the DTO the FE calls against the API actually running.** The dev API usually lands
   after the FE; if the FE reads a field the API does not yet return, report it as an environment
   gap rather than a code defect — but still confirm the FE does not break without that field.

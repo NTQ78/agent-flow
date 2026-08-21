@@ -63,6 +63,8 @@ whole reason the process is allowed to change itself at all.
 
 ## 7. Apply what was approved
 
+- **Re-read the log before writing.** If unpromoted entries appeared since step 1, stop and
+  restart the run — the clustering and the thresholds were decided on a stale snapshot.
 - Write the approved diffs, and nothing else.
 - Set `promoted` to today's date on the entries behind them.
 - Set `promoted` to `rejected <date>` plus a one-line reason on entries you are declining, so the

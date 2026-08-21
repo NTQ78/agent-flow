@@ -48,21 +48,19 @@ Scan `D:\Agent-Projects\<project>\` (read the frontmatter of each `00-request.md
 
 ## Step 5 — Impact scope
 
-Survey the real code (grep and read; do not guess) and list:
+Survey the real code (grep and read; do not guess) and list — the point is to catch work that
+looks small and spreads:
 
 - affected FE screens
 - affected BE endpoints / handlers / entities
 - which roles see the change
 - reports, exports, background jobs and email templates that depend on the touched code
 
-The point of this step is to catch work that looks small and spreads.
-
 ## Step 6 — Priority, deadline, size
 
 - `priority` and `deadline`: if the requester did not say, add it to the open questions, set
   `priority: normal`, `deadline: null`
-- `size`: `S` (under half a day) | `M` (1–2 days) | `L` (more than 2 days). Rough only — `/p`
-  does the detailed breakdown.
+- `size`: `S` (under half a day) | `M` (1–2 days) | `L` (more). Rough only; `/p` breaks it down.
 
 ## Step 7 — Open questions
 
@@ -71,6 +69,12 @@ state the consequence of guessing wrong. Do not ask what reading the code would 
 
 Add a draft message to the requester — **written in Vietnamese**, colleague tone, every question
 gathered into a single ask.
+
+**Greenfield floor.** A brand-new product needs five answers before the ticket can be named:
+brand name, page list, does it transact, content language and currency, and where real assets
+come from (supplied / generated / none). If any is missing, name the folder from the request slug
+alone and mark `project` **provisional** — the one sanctioned exception to §1's
+never-a-second-name rule, and renaming it later updates the folder and `project` together.
 
 ## Step 8 — Write the ticket
 
@@ -98,8 +102,6 @@ stage:
 - a source you could not read, or read incompletely → `missing-step` or `missing-fact`
 - locked rules that were not where `flow.md` said they were → `missing-fact`, applied to `flow.md`
 - a section of the ticket that had nothing to put in it two tickets running → `noise`
-
-Then:
 
 Print: REQ-ID, type, size, open-question count, whether rule approval is needed, folder path.
 
