@@ -56,25 +56,36 @@ Hard constraints (re-check the traps section of the project's `.claude/flow.md`)
 - New fields on a response DTO must be **optional on the FE side** — the dev API is always
   implemented after the FE, and the FE has to keep working against the older API.
 - Permissions: request the minimum. Never widen a grant for convenience.
+- Anything whose shape an installed dependency or generator decides — a plugin's flat-config
+  export, a utility class Tailwind will emit, a type a major version removed — is **inspected,
+  not recalled**. If a brief supplies hand-written CSS class names, check each against what the
+  config would generate and name one source of truth. If nothing is installed yet, order the
+  work so it is inspected first.
 
 ## Step 5 — i18n
 
-List **every** key to add, with translations for **both locales**, as a table:
+Only when the project has a locale layer (CONVENTIONS §4). List **every** key to add, with
+translations for **both locales**, as a table:
 
 | key | vi | en |
 
-A missing locale is a defect, not a follow-up task.
+A missing locale is a defect, not a follow-up task. A project with no locale layer gets one
+line: `N/A — single locale, no i18n library`.
 
 ## Step 6 — Test case checklist
 
 List every case, numbered, grouped: BE unit / integration / FE component / business edge case.
 Each case states input → expected result. `/c` checks against exactly this list, so write it for
-coverage, not for looks.
+coverage, not for looks. With no test runner and installing one out of scope, keep the numbering
+and write the cases as **verification steps** naming their method — a toolchain gate, or the
+browser over CDP — so `/c` knows they are observations, not assertions.
 
 ## Step 7 — Risks and task breakdown
 
 - Risks: what is fragile, whether existing data stays compatible, who is affected if it is wrong
-- Break the work down in the order `/s` will run it: BE → migration → FE → i18n
+- Break the work down in the order `/s` will run it: BE → migration → FE → i18n. For a greenfield
+  FE scaffold that order is manifest → install → tooling config → code, so plugin and config
+  shapes are read from what is installed rather than from memory
 - Re-estimate `size` if the survey disagrees with `/intake`
 
 ## Step 8 — Record friction, write, close out

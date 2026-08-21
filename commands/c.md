@@ -42,8 +42,13 @@ Per CONVENTIONS §6, look through the installed skills for a checker of this kin
 `anti-patterns.md` or equivalent) and use it as the checklist. If none exists, use the list in
 CONVENTIONS §7 directly.
 
-Compare the screenshots just captured against the checklist. A failure means **fix the UI**, not
-note it and move on. Record the outcome in `03-verify/slop-test.md`.
+Compare the screenshots just captured against the checklist, and split the failures in two:
+
+- **Fix now** — anything the agent chose. Fix the UI; do not note it and move on.
+- **Report only** — any value the requester specified verbatim, cross-referenced to the §7
+  sign-off recorded in `00-request.md`. Never silently rewrite what the customer asked for.
+
+Record both in `03-verify/slop-test.md`.
 
 ## 5. Code review
 

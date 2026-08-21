@@ -15,6 +15,12 @@ Only `/retro` reads this file. The stages only need the entry schema and the `ki
 
 ## Where the change goes
 
+These placement rules govern **facts and project-scoped rules**. A gap in the process itself — a
+step that does not exist, a rule with no branch — cannot be fixed in a project file however few
+projects reported it; judge it instead on whether it is **structural** (any project could hit
+it) or **incidental** to the one that found it. Structural gaps promote on the normal
+thresholds; incidental ones stay watching.
+
 - Two or more **distinct projects** → the fix belongs in `CONVENTIONS.md`, not in one `flow.md`.
   If a matching rule already sits in one project's `flow.md`, propose moving it up **and** deleting
   it from there in the same diff. Never leave both copies.

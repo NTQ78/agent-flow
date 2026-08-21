@@ -15,18 +15,19 @@ D:\Agent-Projects\<project>\<REQ-ID>-<slug>\
   04-deploy.md       <- /ship writes
 ```
 
-- `<project>` = the **repo folder name** of the project you are working in (`HR_APP`,
-  `aiur--hr`, `VILOG`). Derive it from the project root; do not invent a new name.
-- `REQ-ID` = `REQ-YYYY-MM-DD-NN`, NN = sequence within that day (01, 02...). Get the date with
-  `date +%Y-%m-%d`. **Never guess the date.**
-- `slug` = kebab-case ASCII, no diacritics, max 6 words.
+- `<project>` = the folder name of the project root you are working in (`HR_APP`, `aiur--hr`,
+  `VILOG`) — whatever tree it sits in. For a project that does not exist yet, it is the folder
+  name the new project will get. Derive it; never invent a second name for the same project.
+- `REQ-ID` = `REQ-YYYY-MM-DD-NN`, NN = sequence within that day. Get the date with
+  `date +%Y-%m-%d`; **never guess it**. `slug` = kebab-case ASCII, no diacritics, max 6 words.
 - **Code never lives here.** This folder holds documents and artifacts only; code stays in the
   real repo. Single exception: the request is a brand-new project with no repo yet — then create
   `src\` inside the request folder and state that explicitly in `00-request.md`.
 
 ## 2. State
 
-The frontmatter of `00-request.md` is the single source of truth:
+The frontmatter of `00-request.md` is the single source of truth; each command advances `status`
+to the next stage when it finishes:
 
 ```yaml
 ---
@@ -48,17 +49,13 @@ created: 2026-08-21
 ---
 ```
 
-When a command finishes, it advances `status` to the next stage.
-
 ## 3. Language
 
 **English** for everything the chain writes and prints: request, spec, build log, verify report,
 deploy notes, terminal output. Never translate identifiers.
 
-Keep Vietnamese only where a Vietnamese-speaking person is the reader:
-
-- the **draft message asking the requester** a question — Vietnamese
-- the **end-user changelog** — bilingual, English first, then Vietnamese
+Keep Vietnamese only where a Vietnamese-speaking person is the reader: the draft message asking
+the requester a question, and the end-user changelog (bilingual, English first).
 
 Quote the requester's original words **verbatim in whatever language they used**; a translated
 quote is no longer evidence.
@@ -69,6 +66,9 @@ quote is no longer evidence.
   warning (what is missing, what the risk is) and continue anyway.
 - `/ship`: **hard**. If `status` has not reached `verify`, or `/c` did not pass → STOP, do not
   deploy. No exceptions, no override flag.
+- A step whose **precondition the project does not meet** — no test runner, no locale layer, no
+  migrations, no BE — is declared `N/A` in one line with the reason, keeping any numbering a
+  later stage consumes. Never leave it blank, and never install machinery to satisfy the step.
 
 ## 5. Chaining
 
@@ -78,16 +78,14 @@ run it in the same turn. Never auto-run without agreement.
 ## 6. Skills — look them up at run time
 
 The installed skill set changes over time (the user adds new ones regularly). **Never assume a
-skill exists.** Before any design or UI work:
+skill exists.** Before any design or UI work, list `~/.claude/skills` and
+`<project>/.claude/skills`, read the `description` in each candidate's `SKILL.md`, pick the
+closest match and invoke it via the Skill tool. Say which you picked and why when several
+overlap; if nothing fits, say so plainly rather than inventing a name.
 
-```bash
-ls ~/.claude/skills
-ls <project>/.claude/skills 2>/dev/null
-```
-
-Read the `description` line in each candidate's `SKILL.md`, pick the closest match, invoke it via
-the Skill tool. If several overlap, pick one and say which and why. If nothing fits, say so
-plainly — do not invent a skill name.
+**A directory is not an available skill.** Cross-check the names against the skills actually
+available in the session and ignore any that exist only on disk — a shadowed name resolves to a
+different skill of the same name, silently. `/sk` reports which ones are shadowed.
 
 ## 7. Must not look AI-generated
 
@@ -95,7 +93,8 @@ This is a hard requirement, not a preference. What ships to the customer must re
 an in-house design team.
 
 **Rule one: match the existing app, do not introduce a new style.** Before writing any UI, read
-the components and tokens already in the repo and reuse them.
+the components and tokens already in the repo and reuse them. With no existing app this clause
+is inert — the brief and the chosen skill set the direction instead.
 
 Tells to avoid:
 - Purple/indigo gradients, glassmorphism, glowing borders — unless the app already uses them
@@ -104,15 +103,16 @@ Tells to avoid:
 - Hollow marketing copy translated from English
 - Three perfectly symmetrical feature columns
 - `shadow-lg` sprinkled on everything
-- Default icons attached to every row "for visual interest"
-- Metronomic, identical spacing rhythm in every section
+- Default icons on every row, and one metronomic spacing rhythm repeated in every section
 - Grey placeholder images, sample data like "John Doe" or lorem ipsum
 
-Instead: real Vietnamese HR labels and data, information density suited to internal users who key
-in data all day, and reuse of existing components.
+Instead: the real labels and data of the domain, at the information density its actual users
+need, built from components that already exist.
 
-If any installed skill ships a checker for this (a `slop-test.md`, `anti-patterns.md` or
-equivalent), use it as the checklist in `/c`.
+**A tell the requester supplied verbatim is sign-off, not slop.** When the request specifies one
+of these deliberately — exact CSS, a named font, a spacing value over a cap — record it under
+"Business rule conflicts" in `00-request.md`, leave `needs_approval` false, and `/c` reports it
+without changing it. §7 governs what the agent chose, never what the customer asked for.
 
 ## 8. Per-project config
 
@@ -124,7 +124,8 @@ The commands are global, so they hard-code no project detail. Details come from:
 
 That file declares build/test commands, how to run the app, known traps, locked business rules,
 and deploy targets. If a project has no such file, ask the user for what you need and offer to
-create it — do not guess.
+create it — do not guess. A greenfield project has none **by design**: do not block on it, and
+let `/s` write it at the end of the build so later runs inherit the traps this one found.
 
 ## 9. Friction log — how this process improves itself
 
@@ -137,6 +138,9 @@ line, appended to `~/.claude/flow/friction.jsonl` (never committed — it quotes
  "cost":"20 min, two failed builds","fix":"add the MSB3021 trap",
  "target":"HR_APP/.claude/flow.md · Known traps","promoted":null}
 ```
+
+Write every path with forward slashes. A lone backslash in a JSON string is either invalid —
+`\P` in `D:\Project` — or a silent escape: `\f` in `\flow.md` ate the `f`. Both corrupt the log.
 
 `kind` decides where the fix belongs:
 
