@@ -85,4 +85,5 @@ Set `status: verify` **only** when every item passes and no untested case is lef
 Otherwise keep `status: build` and say exactly what is missing — `/ship` is a hard gate and will
 block.
 
-Then ask: "Run `/ship`?"
+`verify` is where a ticket rests. Report how many tickets in this project now sit there, and offer
+`/ship` as a release of that whole batch rather than as this ticket's next step.

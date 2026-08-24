@@ -37,6 +37,10 @@ Code never lives there; it stays in the real repo. The ticket store is outside t
 | 04 | `/c` | Prove the real app works — not merely that the suite is green | soft |
 | 05 | `/ship` | Ask the target, back up, confirm the migration, smoke test, changelog | **hard** |
 
+`/ship` is last but **optional**, and it ships a batch: tickets accumulate at `verify` and one
+release closes them all, recorded once in `releases/<date>-NN.md`. A ticket resting at `verify` is
+waiting for a release, not stalled — `/ls` never flags it.
+
 Soft gate: warn about what is missing, then continue. Hard gate: stop, with no override flag.
 
 After each stage the command prints a summary and asks whether to run the next one. It never

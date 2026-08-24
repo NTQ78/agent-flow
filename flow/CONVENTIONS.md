@@ -7,12 +7,13 @@ Every command in the chain MUST read this file before doing anything else.
 Root: `D:\Agent-Projects\` — grouped by project, then one folder per request:
 
 ```
-D:\Agent-Projects\<project>\<REQ-ID>-<slug>\
-  00-request.md      <- /intake writes
-  01-spec.md         <- /p writes
-  02-build-log.md    <- /s writes
-  03-verify\         <- /c writes (screenshots, logs, report)
-  04-deploy.md       <- /ship writes
+D:\Agent-Projects\<project>\
+  releases\<YYYY-MM-DD>-NN.md    <- /ship writes, one file per deploy
+  <REQ-ID>-<slug>\
+    00-request.md                <- /intake writes
+    01-spec.md                   <- /p writes
+    02-build-log.md              <- /s writes
+    03-verify\                   <- /c writes (screenshots, logs, report)
 ```
 
 - `<project>` = the folder name of the project root you are working in (`HR_APP`, `aiur--hr`,
@@ -33,7 +34,6 @@ to the next stage when it finishes:
 ```yaml
 ---
 id: REQ-2026-08-21-01
-slug: night-shift-attribution
 title: Night shift crossing midnight is attributed to the wrong day
 requester: Julia Mai
 source: paste | docs | outlook | teams
@@ -41,12 +41,12 @@ type: bug | feature | rule-change | report
 priority: urgent | high | normal | low
 deadline: 2026-08-25 | null
 size: S | M | L
-status: intake | spec | build | verify | ship | done
+status: intake | spec | build | verify | done
+release: 2026-08-21-01 | null   # set by /ship
 project: D:\Work_Space\HR_APP
 targets: [BE, FE, migration, i18n, permission]
 open_questions: 3        # count still unanswered
 needs_approval: false    # true when it conflicts with a locked business rule
-created: 2026-08-21
 ---
 ```
 
@@ -58,15 +58,16 @@ deploy notes, terminal output. Never translate identifiers.
 Keep Vietnamese only where a Vietnamese-speaking person is the reader: the draft message asking
 the requester a question, and the end-user changelog (bilingual, English first).
 
-Quote the requester's original words **verbatim in whatever language they used**; a translated
-quote is no longer evidence.
+Quote the requester's words **verbatim in whatever language they used** — a translation is not evidence.
 
 ## 4. Gates
 
 - `/intake` → `/p` → `/s` → `/c`: **soft**. If the previous stage is incomplete, print a clear
   warning (what is missing, what the risk is) and continue anyway.
-- `/ship`: **hard**. If `status` has not reached `verify`, or `/c` did not pass → STOP, do not
-  deploy. No exceptions, no override flag.
+- `/ship`: **hard, and across the whole batch**. One deploy covers every ticket at `verify`, so
+  if any of them has not passed `/c` → STOP for all of them. No exceptions, no override flag.
+- `/ship` is **last but optional**. Tickets accumulate at `verify` and one release ships them
+  together, so a ticket resting at `verify` is waiting, not stalled.
 - A step whose **precondition the project does not meet** — no test runner, no locale layer, no
   migrations, no BE — is declared `N/A` in one line with the reason, keeping any numbering a
   later stage consumes. Never leave it blank, and never install machinery to satisfy the step.
@@ -100,9 +101,8 @@ is inert — the brief and the chosen skill set the direction instead.
 Tells to avoid:
 - Purple/indigo gradients, glassmorphism, glowing borders — unless the app already uses them
 - Emoji in headings, buttons, or table labels
-- Cards nested inside cards inside cards
+- Cards nested inside cards inside cards, or three perfectly symmetrical feature columns
 - Hollow marketing copy translated from English
-- Three perfectly symmetrical feature columns
 - `shadow-lg` sprinkled on everything
 - Default icons on every row, and one metronomic spacing rhythm repeated in every section
 - Grey placeholder images, sample data like "John Doe" or lorem ipsum — when real assets do not

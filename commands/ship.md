@@ -1,18 +1,24 @@
 ---
 description: Deploy — ask the target first (IIS/Vercel/other), backup, confirmed migration, smoke test, changelog
-argument-hint: REQ-ID (empty = newest verified ticket)
+argument-hint: (empty = every verified ticket in this project) | REQ-ID [REQ-ID ...]
 ---
 
 Read `~/.claude/flow/CONVENTIONS.md` first, then the project's `.claude/flow.md`.
 
-Ticket: $ARGUMENTS — if empty, take the newest ticket with `status: verify`.
+Batch: $ARGUMENTS — if empty, take **every** ticket in this project with `status: verify`. One
+deploy ships them all, because their code is already in the same build; shipping one while
+leaving the others open would push their work out with nobody closing the ticket.
 
-## 0. Hard gate — no exceptions
+Print the batch before doing anything — REQ-ID, title, whether it carries a migration — and ask
+which to drop, if any.
 
-Read `00-request.md`. If `status` is not `verify`, or `03-verify/report.md` still has failing
-items: **STOP**. Print the reason and what needs doing. Do not deploy. There is no override flag.
+## 0. Hard gate — no exceptions, across the whole batch
 
-If `needs_approval: true` and the ticket records no sign-off: **STOP** as well.
+For **every** ticket in the batch, read `00-request.md`. If any has `status` other than `verify`,
+or a `03-verify/report.md` with failing items, or `needs_approval: true` with no sign-off
+recorded: **STOP the whole deploy**. Print which ticket and why. There is no override flag.
+
+One ticket short of verified blocks the release, because the build already contains its code.
 
 ## 1. Ask for the deploy target
 
@@ -30,15 +36,14 @@ to add them to that file — so the next run does not have to ask.
 
 If the ticket has a migration or a data-fixing script: back up the database first. For an internal
 SQL Server project, the backup path is declared in `.claude/flow.md`. Record the backup file path
-in `04-deploy.md` **before** running anything.
+in the release file **before** running anything.
 
 No successful backup means no migration.
 
 ## 3. Build the artifact
 
-Build the FE and publish the BE using the commands in `.claude/flow.md`. If the build is blocked
-because a running process is holding the DLLs, handle it the way the traps section of
-`.claude/flow.md` prescribes — do not kill the user's processes on your own initiative.
+Build the FE and publish the BE using the commands in `.claude/flow.md`. If a running process is
+holding the DLLs, follow that file's traps section — never kill the user's processes.
 
 ## 4. Migration — stop and confirm
 
@@ -59,7 +64,7 @@ the chosen environment.
 ## 6. Smoke test
 
 - Open the main page, log in
-- Call a few critical endpoints, plus this ticket's new endpoint
+- Call a few critical endpoints, plus the new endpoint of each ticket in the batch
 - Visit the affected screen and capture a screenshot into `03-verify/`
 - **Diagnose correctly:** on IIS, a `500.31` (missing runtime/assembly) surfaces in the browser as
   a CORS error. If a "CORS error" appears after deploy, read the IIS response body before changing
@@ -69,7 +74,7 @@ A failing smoke test means rolling back per §7, not leaving it as is.
 
 ## 7. Rollback notes
 
-Write into `04-deploy.md` **as soon as the deploy finishes**, not when it is needed:
+Write into `releases/<YYYY-MM-DD>-NN.md` **as soon as the deploy finishes**, not when needed:
 
 - the previous version/commit or artifact, and where it is
 - the database backup file path
@@ -89,15 +94,16 @@ record the divergences, the out-of-scope fixes and the untested cases. Distil wh
 missed into entries; do not re-observe from scratch.
 
 Then count entries in `~/.claude/flow/friction.jsonl` with `promoted: null`. At five or more, print
-one line: `N unpromoted friction entries — run /retro`. Nothing else; this is not the moment to act
-on them.
+one line: `N unpromoted friction entries — run /retro`. Nothing else; not the moment to act.
 
 ## 9. After deploying
 
-- Set `status: done`, record the deploy date and target in the frontmatter
-- **Bilingual changelog** for end users, written into `04-deploy.md`: English first, then
-  Vietnamese. Written for HR staff, no technical vocabulary, stating what is new and what they now
-  need to do differently.
+Write the release file `releases/<YYYY-MM-DD>-NN.md` (NN = sequence for that day in this
+project): target, date, every ticket in the batch, the migration that ran, backup path, rollback
+notes from §7, and **one bilingual changelog** covering the whole release — English first, then
+Vietnamese, written for the people who use the app, no technical vocabulary.
 
-Print a summary: deploy target, whether the migration ran, smoke test result, backup path,
-changelog path.
+Then, on **each** ticket in the batch: set `status: done` and `release: <YYYY-MM-DD>-NN`.
+
+Print a summary: target, tickets closed, whether the migration ran, smoke test result, and the
+release file path.

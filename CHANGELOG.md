@@ -1,7 +1,33 @@
 # Changelog
 
-Every entry here comes from a `/retro` run: what changed in the flow, why, and the friction entries
-that justified it. The raw friction log stays out of git.
+What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
+Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
+
+## 2026-08-21 — /ship becomes optional and batched (direct decision)
+
+Not from the friction log: many `/intake` runs accumulate, and only one `/ship` is needed, because
+by the time a ticket reaches `verify` its code is already in the same build as the others.
+
+- **`verify` is a legitimate resting state.** `status` drops `ship` from its values — a ticket sits
+  at `verify` until a release happens, and `/ls` never flags that as stalled. New flag:
+  `awaiting release`, and a `Pending release` section listing what one `/ship` would deploy together.
+- **`/ship` takes the whole batch.** With no arguments it collects every ticket at `verify` in the
+  project, prints them with their migrations, and asks which to drop. The hard gate now applies
+  across the batch: one unverified ticket blocks the release, because the build already contains its
+  code. Shipping one while leaving the others open would push their work out with nobody closing the
+  ticket.
+- **One release file per deploy.** `releases/<YYYY-MM-DD>-NN.md` at the project root holds the
+  target, the ticket list, the migration, the backup path, the rollback notes and a single bilingual
+  changelog for the release. `04-deploy.md` is retired; each ticket keeps a `release:` field instead.
+- **`/c` no longer offers `/ship` as this ticket's next step.** It reports how many tickets now sit
+  at `verify` and offers a release of that batch.
+
+Two schema fields dropped as redundant, which funded the additions: `slug` (the folder name carries
+it) and `created` (`REQ-ID` carries the date, and `/ls` now computes age from it — one source of
+truth rather than two that can disagree). Existing tickets keep the extra fields harmlessly.
+
+`CONVENTIONS.md` 168/170 unchanged · `ship.md` 103 → 109/110 · `ls.md` 36 → 40/110 ·
+`c.md` 88 → 89/110.
 
 ## 2026-08-21 — second /retro run
 
