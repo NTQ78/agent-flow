@@ -7,8 +7,9 @@ state living in a ticket on disk rather than in the conversation.
 /intake  →  /p  →  /s  →  /c  →  /ship
 ```
 
-Plus three support commands: `/ls` (open ticket overview), `/sk` (audit and update global skills),
-and `/retro` (turn accumulated friction into changes to the flow itself).
+Plus three support commands: `/ls` (open ticket overview, `/ls board` for the same as a shareable
+HTML dashboard), `/sk` (audit and update the global skills, `/sk trending` for what exists that you
+do not have), and `/retro` (turn accumulated friction into changes to the flow itself).
 
 ## Why a ticket, not a conversation
 

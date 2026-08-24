@@ -3,6 +3,35 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-08-24 — /ls gets a board, /sk gets a trending scan (direct decision)
+
+Not from the friction log. Two support commands were doing less than they could: `/ls` had one
+output shape, and `/sk` could only look inward at what was already installed.
+
+- **`/ls` draws a real table.** Box-drawing, capped at 120 columns with truncation rather than
+  wrapping, `REQ-` and the year dropped from the ID, and the stage rendered as a five-cell progress
+  bar instead of an arrow chain. Flags became symbols with a legend naming only the ones in use, so
+  the column stays narrow. Columns adapt: with no deadline anywhere, `Due` is not drawn at all.
+- **`/ls board` publishes the same data as an HTML page.** One column per stage, tickets as cards,
+  and underneath the two panels that carry the decisions — every open question quoted as written,
+  and the `verify` batch one `/ship` would deploy. It always writes `~/.claude/flow/board.html`, so
+  it redeploys to one stable URL and a link handed out last week keeps working; from a later session
+  the URL is recovered with the Artifact `list` action rather than published a second time. The page
+  is stamped with its generation date, because an undated dashboard keeps being trusted once stale.
+- **`/sk trending` reports three sources, kept apart.** Official marketplace, npm, then GitHub and
+  the web — in that order, never merged, because they do not carry the same weight of evidence. Each
+  candidate is judged on which stage of the chain would use it; one that maps to no stage is named
+  as noise rather than listed. Overlap and name shadowing are called out per candidate.
+- **`/sk install <name>` is a separate, named step.** `trending` ends at a shortlist and stops. A
+  skill runs with full permissions and lands in a store shared by every project, so installation
+  reads the candidate's `SKILL.md` in full first, refuses to overwrite a same-named folder, and
+  afterwards confirms the skill is actually *available* and not merely present on disk.
+
+Rejected: auto-installing whatever ranked highest. It is the one version of this that cannot be
+undone by reading the report — the code is already on the machine, possibly shadowing a skill in use.
+
+Line budgets after: `ls.md` 78, `sk.md` 89, both against 110.
+
 ## 2026-08-21 — /ship becomes optional and batched (direct decision)
 
 Not from the friction log: many `/intake` runs accumulate, and only one `/ship` is needed, because
