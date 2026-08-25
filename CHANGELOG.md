@@ -32,6 +32,43 @@ undone by reading the report — the code is already on the machine, possibly sh
 
 Line budgets after: `ls.md` 78, `sk.md` 89, both against 110.
 
+## 2026-08-24 — /c scales its gates to reach (direct decision)
+
+Not from the friction log. The complaint was that `/c` takes too long on small tickets. Measured on
+WCL-HR before changing anything, because the complaint and the cost turned out to disagree:
+
+| | wide | confined |
+|---|---|---|
+| `tsc -b` | 15s | 15s — never scoped |
+| lint | 19s | 3s |
+| tests | 26s | 10s (`vitest related`) |
+| build | 16s | skipped when the change adds no import, dependency, config or entry point |
+| **total** | **77s** | **29s** |
+
+So the gates are 77s, not the minutes it felt like. The real cost on that ticket was the gate set
+running **three times** (~230s) and a browser driver being **rebuilt from scratch** — about twenty
+attempts. Both are now fixed, and the second one mattered more than the tiering.
+
+- **`/c` §1 scales to reach, not to the size label.** One line in a shared component reaches forty
+  files; a large change to a leaf page reaches nothing else. `02-build-log.md`'s file list decides the
+  tier, and the report says which ran and why. Typecheck stays project-wide in both tiers — it is the
+  cheapest whole-app guarantee there is.
+- **The full set is deferred, not skipped.** `/ship` now runs it once across the whole batch before
+  building. A release earns its guarantee once instead of once per ticket, and a ticket that never
+  ships never needed it.
+- **`/s` stops re-running the full suite.** Its per-part checks are the confined set; `/c` runs the
+  authoritative pass once.
+- **`/c` §3 reuses a driver instead of writing one.** If the project has a driver script, use it;
+  otherwise write one into the project and record it in `flow.md`, so the next ticket does not pay.
+  `WCL-HR/scripts/drive_app.py` was extracted from that first ticket and smoke-tested: sign in, open
+  Positions, expand, screenshot — one call, 53 rows, no console errors.
+
+Funded by nine cuts across `c.md` and `ship.md`; both landed on 110/110 after `c.md` first came out at
+121 and `ship.md` at 113. The measured timings moved into HR_APP's `flow.md`, where project-specific
+numbers belong, rather than sitting in a global command.
+
+`c.md` 101 → 110/110 · `ship.md` 109 → 110/110 · `s.md` 81 → 84/110 · `CONVENTIONS.md` 168/170.
+
 ## 2026-08-24 — third /retro run
 
 Five fixes from 12 entries, the first batch drawn mostly from a real HR_APP ticket rather than from

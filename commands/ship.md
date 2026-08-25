@@ -22,15 +22,15 @@ One ticket short of verified blocks the release, because the build already conta
 
 ## 1. Ask for the deploy target
 
-**Always ask; never assume.** The same ticket may go to internal IIS or to Vercel. Offer the
-options with their consequences:
+**Always ask; never assume.** A batch may go to internal IIS or to Vercel. The options and their
+consequences:
 
-- **Internal IIS** — using the server/site/app-pool details declared in `.claude/flow.md`
-- **Vercel** — standalone FE project; ask preview or production, and which project
-- **Other / prepare artifact only** — build into a folder and print the manual step checklist
+- **Internal IIS** — server/site/app-pool from `.claude/flow.md`
+- **Vercel** — standalone FE project; ask preview or production, and which one
+- **Other** — build into a folder and print the manual checklist
 
-If `.claude/flow.md` does not declare the matching target, ask for the missing details and offer
-to add them to that file — so the next run does not have to ask.
+If `.claude/flow.md` does not declare the target, ask for what is missing and offer to add it
+there, so the next run need not ask.
 
 ## 2. Back up before touching data
 
@@ -42,16 +42,19 @@ No successful backup means no migration.
 
 ## 3. Build the artifact
 
-Build the FE and publish the BE using the commands in `.claude/flow.md`. If a running process is
-holding the DLLs, follow that file's traps section — never kill the user's processes.
+**Run the project's full declared check set once, across the whole batch**, before building. The
+tickets were verified on the confined set (`/c` §1); this is where a release pays the difference,
+once rather than once per ticket. A failure here stops the deploy like any other gate.
+
+Then build the FE and publish the BE using the commands in `.claude/flow.md`. If a running process
+is holding the DLLs, follow that file's traps section — never kill the user's processes.
 
 ## 4. Migration — stop and confirm
 
 Before running a migration, print:
 
 - the migration name and **the SQL it will execute**
-- the target database, with an explicit warning if dev and production **share one database**
-  (the change hits both immediately)
+- the target database, warning explicitly if dev and production **share one** (it hits both)
 - the backup path just created
 
 Then **stop and ask for confirmation.** Run only on an explicit yes.
@@ -83,15 +86,13 @@ Write into `releases/<YYYY-MM-DD>-NN.md` **as soon as the deploy finishes**, not
 
 ## 8. Record friction
 
-Two passes. First, entries from this stage:
+First, from this stage: a deploy step you had to work out that `flow.md` should have declared
+(`missing-fact`, applied to `flow.md`), or a safety step that turned out to be missing
+(`missing-rule` or `wrong-gate`).
 
-- a deploy step you had to work out that `flow.md` should have declared → `missing-fact`, applied
-  to `flow.md`
-- a safety step that turned out to be missing → `missing-rule` or `wrong-gate`
-
-Second, a look back over the whole ticket — `02-build-log.md` and `03-verify/report.md` already
-record the divergences, the out-of-scope fixes and the untested cases. Distil what the stages
-missed into entries; do not re-observe from scratch.
+Second, a look back over each ticket — `02-build-log.md` and `03-verify/report.md` already record
+the divergences, out-of-scope fixes and untested cases. Distil what the stages missed; do not
+re-observe.
 
 Then count entries in `~/.claude/flow/friction.jsonl` with `promoted: null`. At five or more, print
 one line: `N unpromoted friction entries — run /retro`. Nothing else; not the moment to act.

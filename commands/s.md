@@ -21,7 +21,10 @@ Ticket: $ARGUMENTS — if empty, take the newest ticket with `status: spec`.
 
 ## Execution order
 
-Follow this order, and **build each part as soon as it is done** to surface errors early:
+Follow this order, and **check each part as soon as it is done** to surface errors early. Use the
+confined set — typecheck, plus lint and related tests over what you touched (`/c` §1) — not the
+full suite. `/c` runs the authoritative pass once; running it here as well buys nothing and costs
+a minute each time:
 
 1. **Domain + Application** → build BE
 2. **Infrastructure + migration** → build BE, and verify the generated migration is what you meant
