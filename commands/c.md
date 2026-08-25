@@ -11,10 +11,18 @@ Ticket: $ARGUMENTS — if empty, take the newest ticket with `status: build`.
 The purpose of this command is to catch **green tests over a broken app**. A passing suite is not
 evidence the app works.
 
+**The unit of verification is the file list in `02-build-log.md`, not the working tree.** A project
+whose tree carries unrelated uncommitted work has no usable "current diff"; scope every
+file-level check and the review to that list.
+
 ## 1. Tests and builds
 
 Run all of them, using the commands declared in `.claude/flow.md`: BE tests, FE tests, typecheck,
 FE build, BE build. Record each command's result under `03-verify/`.
+
+Also run the project's formatter in check mode over the ticket's files, **even when the project's
+own list of required checks omits it**: lint, tsc, test and build all pass over a file rewritten
+with the wrong line endings.
 
 ## 2. Cross-check the /p test case checklist
 
@@ -33,6 +41,10 @@ Skip if the ticket is BE-only. Otherwise:
 - **Interactive states are verified by dispatching real input** — hover, focus, click — never by
   reading computed style off an element nobody is touching. A hover an animation has overridden
   passes tsc, lint, build and every static DOM assertion
+- When the environment cannot supply the identity the ticket is about — a dev API pointing at a
+  real backend with no low-privilege test account — drive the branch at the client boundary,
+  never by writing to the server, and **say in the report that the identity was simulated, not
+  authenticated**
 - **Compare the DTO the FE calls against the API actually running.** The dev API usually lands
   after the FE; if the FE reads a field the API does not yet return, report it as an environment
   gap rather than a code defect — but still confirm the FE does not break without that field.
@@ -55,8 +67,8 @@ Record both in `03-verify/slop-test.md`.
 
 ## 5. Code review
 
-Run `/code-review` on the current diff. Fold the findings into the verify report, grouped as: must
-fix now / should fix / noted.
+Run `/code-review` scoped to the ticket's files. Fold the findings into the verify report, grouped
+as: must fix now / should fix / noted.
 
 ## 6. Handling failures
 

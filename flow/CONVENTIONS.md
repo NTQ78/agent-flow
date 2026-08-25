@@ -36,7 +36,6 @@ to the next stage when it finishes:
 id: REQ-2026-08-21-01
 title: Night shift crossing midnight is attributed to the wrong day
 requester: Julia Mai
-source: paste | docs | outlook | teams
 type: bug | feature | rule-change | report
 priority: urgent | high | normal | low
 deadline: 2026-08-25 | null
@@ -71,6 +70,10 @@ Quote the requester's words **verbatim in whatever language they used** — a tr
 - A step whose **precondition the project does not meet** — no test runner, no locale layer, no
   migrations, no BE — is declared `N/A` in one line with the reason, keeping any numbering a
   later stage consumes. Never leave it blank, and never install machinery to satisfy the step.
+- For an access, permission or validation change, **map the path, not the files**: every entry
+  point that reaches the guarded state, and the layer that already enforces it. Listing affected
+  surfaces answers neither, and missing either half has cost a mis-sized ticket and a
+  nearly-shipped bug.
 
 ## 5. Chaining
 
@@ -85,9 +88,9 @@ skill exists.** Before any design or UI work, list `~/.claude/skills` and
 closest match and invoke it via the Skill tool. Say which you picked and why when several
 overlap; if nothing fits, say so plainly rather than inventing a name.
 
-**A directory is not an available skill.** Cross-check the names against the skills actually
-available in the session and ignore any that exist only on disk — a shadowed name resolves to a
-different skill of the same name, silently. `/sk` reports which ones are shadowed.
+**A directory is not an available skill.** Cross-check against the skills actually available in the
+session and ignore any that exist only on disk — a shadowed name silently resolves to a different
+skill. `/sk` reports which ones are shadowed.
 
 ## 7. Must not look AI-generated
 
@@ -102,14 +105,12 @@ Tells to avoid:
 - Purple/indigo gradients, glassmorphism, glowing borders — unless the app already uses them
 - Emoji in headings, buttons, or table labels
 - Cards nested inside cards inside cards, or three perfectly symmetrical feature columns
-- Hollow marketing copy translated from English
-- `shadow-lg` sprinkled on everything
+- Hollow marketing copy translated from English, or `shadow-lg` sprinkled on everything
 - Default icons on every row, and one metronomic spacing rhythm repeated in every section
 - Grey placeholder images, sample data like "John Doe" or lorem ipsum — when real assets do not
   exist the direction changes to one that does not need them, it does not fall back to these
 
-Instead: the real labels and data of the domain, at the information density its actual users
-need, built from components that already exist.
+Instead: the domain's real labels and data, at the density its users need, from existing components.
 
 **Precedence, when something else mandates a tell.** The requester outranks §7: a tell they
 supplied verbatim — exact CSS, a named font, a spacing over a cap — is sign-off. Record it under
@@ -137,30 +138,29 @@ Every stage records where **the process itself** fell short, as it happens. One 
 line, appended to `~/.claude/flow/friction.jsonl` (never committed — it quotes project internals):
 
 ```json
-{"id":"F-2026-08-21-01","date":"2026-08-21","project":"HR_APP","req":"REQ-2026-08-21-01",
- "stage":"s","kind":"missing-fact","what":"OutDir had to be redirected; flow.md did not say so",
+{"id":"F-2026-08-21-01","project":"HR_APP","req":"REQ-2026-08-21-01","stage":"s",
+ "kind":"missing-fact","what":"OutDir had to be redirected; flow.md did not say so",
  "cost":"20 min, two failed builds","fix":"add the MSB3021 trap",
  "target":"HR_APP/.claude/flow.md · Known traps","promoted":null}
 ```
 
-Write every path with forward slashes. A lone backslash in a JSON string is either invalid —
-`\P` in `D:\Project` — or a silent escape: `\f` in `\flow.md` ate the `f`. Both corrupt the log.
-Allocate `id` as the highest existing number + 1, read at write time; two sessions appending by
-eye have already collided twice.
+Write every path with forward slashes: a lone backslash is either invalid JSON (`\P`) or a silent
+escape (`\f` in `\flow.md` ate the `f`). Allocate `id` as the highest existing number + 1, read at
+write time — two sessions appending by eye have already collided twice.
 
 `kind` is one of: **`missing-fact`** a project fact nobody wrote down · **`missing-step`** a
 question not asked or a check not run · **`missing-rule`** something that should hold for every
 project · **`wrong-order`** · **`wrong-gate`** · **`missing-skill`** no installed skill covered
-the work · **`noise`** work with no value, a deletion candidate. Where each one's fix lands is
+the work · **`noise`** work with no value, a deletion candidate. Where each fix lands is
 `/retro`'s call — see `flow/FRICTION.md`.
-
-Two rules for writing entries:
 
 - **No vague entries.** An entry must name what it cost and a concrete change with a target file.
   If you cannot name the target, it is not friction worth logging. "The spec was unclear" is not an
   entry; "the spec never says which timezone, and `/s` had to guess" is.
 - **`missing-fact` applies itself.** Append it to that project's `.claude/flow.md` in the same run
   and set `promoted` — that file is project-local, gitignored, and the change is purely additive.
+  A greenfield project has no `flow.md` yet (§8), so the fact goes into `01-spec.md` instead and
+  becomes the final `/s` task; `/s` sets `promoted` when it writes the file.
   **Everything else waits for `/retro`**, which clusters the entries, proposes a diff and asks. A
   stage command never edits this file or another command file on its own.
 

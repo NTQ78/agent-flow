@@ -38,6 +38,11 @@ broke and how it was fixed.
 Following the test case checklist in `01-spec.md`, write the test as you write the corresponding
 code — BE unit tests, FE component tests. Do not defer to `/c`; `/c` only runs and cross-checks.
 
+**An assertion that something is absent proves nothing until its container is proven present.**
+`queryByRole` returns null whether the gate works or the page rendered nothing at all. The helper
+that locates the subject must throw when it finds none, so an empty render fails the test instead
+of satisfying it.
+
 ## When the spec is wrong
 
 If the spec turns out to be wrong, incomplete or unworkable:

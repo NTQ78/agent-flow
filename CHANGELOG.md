@@ -32,6 +32,52 @@ undone by reading the report — the code is already on the machine, possibly sh
 
 Line budgets after: `ls.md` 78, `sk.md` 89, both against 110.
 
+## 2026-08-24 — third /retro run
+
+Five fixes from 12 entries, the first batch drawn mostly from a real HR_APP ticket rather than from
+building the flow itself.
+
+- **Map the path, not the files** (F-24-24, F-24-27) — for an access, permission or validation change,
+  `CONVENTIONS.md` §4 now asks for every entry point that reaches the guarded state and the layer that
+  already enforces it. Both halves had been missed on one ticket: the backend already enforced the
+  rule, which would have mis-sized it into a security fix; and a second control reached the edit form,
+  which following the spec literally would have left open.
+- **§8 and §9 stopped contradicting each other** (F-21-20) — §9 said a `missing-fact` applies itself to
+  the project's `flow.md`; §8 said a greenfield project has none until `/s` writes it. The fact now
+  goes into `01-spec.md` and becomes the final `/s` task, which sets `promoted`.
+- **An absence proves nothing until its container is proven present** (F-24-28) — `s.md`. `queryByRole`
+  returns null whether the gate works or the page rendered nothing, and six negative assertions were
+  green for exactly that reason until an unrelated failure exposed them. The helper that locates the
+  subject must now throw when it finds none.
+- **One file list for the whole of `/c`** (F-24-32, F-24-34) — the unit of verification is
+  `02-build-log.md`'s file list, not the working tree, because a tree carrying unrelated uncommitted
+  work has no usable "current diff". The same list now scopes the review *and* a formatter check that
+  the project's own four required checks omit — lint, tsc, test and build all pass over a file
+  rewritten with the wrong line endings.
+- **A simulated identity has to say so** (F-24-31, partial) — `/c` step 3. When the environment cannot
+  supply the identity under test, drive the branch at the client boundary, never by writing to the
+  server, and record in the report that the identity was simulated rather than authenticated.
+
+Funded by seven cuts: `source` left the §2 schema (nothing reads it), `date` left the §9 example (it
+duplicates the id prefix, as `created` did), and §6, §7 and §9 lost a line each to compression.
+`CONVENTIONS.md` came out at 171 on the first pass — over budget — and was cut back rather than the
+ceiling being raised.
+
+**Rejected: F-21-18**, whether `/p` should choose the stack version on greenfield work. Declined three
+times across two `/retro` runs: one project, one occurrence, and no second project has reproduced it.
+Marked rejected so it stops consuming a judgement every run; reopen if it recurs elsewhere.
+
+**Still watching:** F-21-23 (animation vs transition precedence — the `/c` gate bounds it), F-24-25
+(mining a screenshot for state), F-24-26 (inspect-then-decide — the spec named both branches and it
+worked), F-24-29 (repo-mandated companion artifacts).
+
+**Logged during the run: F-24-35**, `noise`. §4 is titled "Gates" but now holds two rules that are not
+gates, including one added by this run. Rules land there because it is the section with room, which is
+how a spine becomes unreadable — but renaming it breaks the literal "§4" references in three files, so
+the decision is queued rather than taken.
+
+`CONVENTIONS.md` 168/170 unchanged · `s.md` 76 → 81/110 · `c.md` 89 → 101/110.
+
 ## 2026-08-21 — /ship becomes optional and batched (direct decision)
 
 Not from the friction log: many `/intake` runs accumulate, and only one `/ship` is needed, because
