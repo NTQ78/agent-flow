@@ -3,6 +3,63 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-08-28 — the bible model, then the fourth `/retro` run
+
+Two changes in one day, kept apart because they came from opposite directions.
+
+**First, a model taken from `aiursoftware/bible`'s `/pm /p /s /pp`** (direct decision, not from the
+log). That chain keeps durable state in Plane and Outline and treats plan files as ephemeral; ours
+is filesystem-only and stays that way. What was worth taking was the shape, not the infrastructure:
+
+- **A release is a group somebody chose.** `release` is now assigned at `/intake` as a batch name
+  and replaced by the dated id at `/ship`; a shipped release is **sealed**. Before this, a batch was
+  whatever happened to sit at `verify` on the day — nine unrelated tickets shipped together because
+  they shared a working tree.
+- **Effective state.** `status` is what a ticket claims; what is true is `status` plus whether its
+  build log's files are in the repo. `/ls` and `/ship` read both, and `/ship` now stops when a
+  ticket *outside* the batch has code in the build — it deploys either way, so it is named in the
+  release file or verified into the batch. Four tickets reached production at `build` on 2026-08-28
+  with every gate green.
+- **Reconcile the spec against the code** (`/c` §2), from `/pp`'s Deep Research gate: read every
+  file the spec named and confirm the code says what the spec says. Code wins on a small
+  divergence — fix the spec so it stops lying; a contradiction big enough to change the design goes
+  back to the user.
+- **Decisions go where a sibling ticket will find them** (`/p`): dated, into the project's
+  `flow.md`, not buried in one ticket folder.
+
+Not taken: Plane, Outline, the node scripts — and `/pp` does not replace `/c`. `/pp` asks whether
+the documentation matches the code. It would not have found the banner that could never render.
+
+**Second, `/retro` over 101 entries** (2026-08-21 → 2026-08-28, 4 projects). Six changes:
+
+- **REQ-ID allocation is a claim, not a scan** — `CONVENTIONS.md` §1. Three collisions in one day,
+  two tickets still sharing an id. Create the folder first, then re-scan; the later one moves.
+  `F-2026-08-27-11/-13/-33/-43/-92`, `F-2026-08-28-114/-141`
+- **A question that decides a permission, a route or a stored value is a HARD stop at `/p`** — §4.
+  Nine unanswered questions once ran the whole chain; three were wrong, one rewrote the access path
+  after `/c`. `F-2026-08-27-93`, `F-2026-08-28-110/-139`
+- **`/s` runs the whole suite at close-out and maps the spec's cases one by one.** A `--filter` run
+  reported 40 green while the suite was red with 8 failures the ticket had caused; "34 tests for 34
+  cases" was a true count and a false claim. Resolves a contradiction: the old rule said a full run
+  at `/s` "buys nothing". `F-2026-08-26-10/-32/-34`, `F-2026-08-27-26/-31/-97/-120/-132`,
+  `F-2026-08-28-154`
+- **Never `Write` a file you have not read this session** — a Write destroyed a 113-line test file
+  carrying six tests. `F-2026-08-27-16`
+- **`/s` step 0: is anyone else in this tree?** Three sessions shared one uncommitted tree and
+  avoided collisions only because a peer asked first. `F-2026-08-27-07/-17/-20/-24/-28`
+- **Every path and symbol a spec names must be one you opened** — `/p` step 4. `Reference/` never
+  existed, "the same guard" was two conditions, "three call sites" was four.
+  `F-2026-08-27-09/-12/-19/-23/-96/-112`, `F-2026-08-28-134`
+
+Rejected: `F-2026-08-27-03` — friction.jsonl unparseable. Stale; 208/208 lines parse today.
+Watching (56): intake source coverage and impact-scope gaps, both of which were touched this same
+day; the design-skill scope question, one project only; `/c` verifying through a proxy, where two
+new rules landed today and deserve a run before a third. A `missing-skill` entry
+(`html-to-pdf` on disk, absent from the session) is a `/sk` job, not a flow change.
+
+Budget after both: `CONVENTIONS.md` 170/170, `/intake` 110, `/p` 110, `/c` 110, `/ship` 110,
+`/s` 99, `/ls` 80, `/retro` 80. Every addition was paid for with a deletion.
+
 ## 2026-08-24 — /ls gets a board, /sk gets a trending scan (direct decision)
 
 Not from the friction log. Two support commands were doing less than they could: `/ls` had one

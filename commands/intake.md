@@ -49,15 +49,16 @@ Scan `D:\Agent-Projects\<project>\` (read the frontmatter of each `00-request.md
 ## Step 5 — Impact scope
 
 Survey the real code (grep and read; do not guess) and list — the point is to catch work that
-looks small and spreads:
+looks small and spreads: affected FE screens; BE endpoints / handlers / entities; which roles see
+the change; reports, exports, jobs and email templates depending on the touched code.
 
-- affected FE screens
-- affected BE endpoints / handlers / entities
-- which roles see the change
-- reports, exports, background jobs and email templates that depend on the touched code
+**Name the tickets that touch the same files**, open or not, and say which must land first. Four
+tickets rewrote one wizard in parallel on 2026-08-27 with nobody sequencing them.
 
-## Step 6 — Priority, deadline, size
+## Step 6 — Release, priority, deadline, size
 
+- `release`: the batch name this ships in. Reuse this project's current **unshipped** name; a
+  shipped release is sealed (CONVENTIONS §2), so a later ticket starts a new name. Say which
 - `priority` and `deadline`: if the requester did not say, add it to the open questions, set
   `priority: normal`, `deadline: null`
 - `size`: `S` (under half a day) | `M` (1–2 days) | `L` (more). Rough only; `/p` breaks it down.

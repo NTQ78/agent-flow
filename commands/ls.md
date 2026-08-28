@@ -48,8 +48,10 @@ drop the `Due` column entirely when no ticket has a deadline.
   most useful part, because tickets usually stall here rather than in the code
 - **Awaiting business rule sign-off**: tickets with `needs_approval: true`
 - **Ready for the next stage**: which ticket can move with which command, right now
-- **Pending release**: every ticket at `verify`, with a count — this is what one `/ship` would
-  deploy together
+- **Pending release**: grouped by `release` id, with a count each — one `/ship` deploys one group
+- **Already in the build**: any ticket NOT at `verify`/`done` whose `02-build-log.md` names files
+  that exist in the repo. Its code ships with the next release whatever its status says
+  (CONVENTIONS §2) — listing it is the only thing standing between that and a silent release
 - **Suspected stalled**: no status change in over 7 days
 
 Close with one line: total open tickets, how many are blocked, which one to pick up next and why.

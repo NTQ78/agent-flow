@@ -23,24 +23,20 @@ can be reused.
 ## Step 2 — UI/UX design (only when there is new FE work)
 
 **A skill must be invoked before writing this section.** Per CONVENTIONS §6: list the installed
-skills, pick the closest design skill, invoke it via the Skill tool, and only then settle layout,
-tokens and components. Say which skill you picked and why.
-
-Apply CONVENTIONS §7 from the design stage onward: match the existing app, introduce no new style.
-Decide: layout, reused components, empty/loading/error states, responsive behaviour.
-
-Skip this whole step if the request is BE-only.
+skills, pick the closest, invoke it, and only then settle layout, tokens and components — saying
+which and why. Apply §7 from here on: match the existing app, introduce no new style. Decide
+layout, reused components, empty/loading/error states, responsive behaviour. **For anything that
+renders conditionally, name the user path that produces the condition** — if there is none, that
+is the finding. Skip the whole step if the request is BE-only.
 
 ## Step 3 — Diagram
 
-When the flow branches (approval chains, evaluations, shift handover, status lifecycles): draw a
-mermaid `flowchart` for the data flow or `stateDiagram-v2` for the lifecycle. A single-branch
-request needs no diagram — do not draw one for decoration.
+When the flow branches (approval chains, evaluations, status lifecycles): draw a mermaid
+`flowchart` or `stateDiagram-v2`. A single-branch request needs no diagram — not for decoration.
 
 ## Step 4 — Technical spec
 
-Detail level: **file names plus signatures**. Enough for `/s` to execute without guessing, without
-writing the logic twice.
+Detail level: **file names plus signatures** — enough for `/s` to execute without guessing.
 
 For each layer, list files to **create** or **modify**, with signatures:
 
@@ -50,17 +46,21 @@ For each layer, list files to **create** or **modify**, with signatures:
 - **API** — route, HTTP verb, request/response shape, required permission
 - **FE** — components, hooks/stores, API service, routes
 
+**Every path, symbol and call site the spec names must be one you opened** — not inferred from a
+sibling spec, not from the folder's shape. `WCL.Application/Reference/` never existed, "the same
+guard `UpdateAsync` uses" was two conditions, "three call sites" was four, and `ViewBag` did not
+survive the renderer. Grep-verify it or do not name it.
+
 Hard constraints (re-check the traps section of the project's `.claude/flow.md`):
 
 - Migrations are **additive-only**. Never drop or rename a column in use.
-- New fields on a response DTO must be **optional on the FE side** — the dev API is always
-  implemented after the FE, and the FE has to keep working against the older API.
+- New fields on a response DTO must be **optional on the FE side** — the dev API lands after the
+  FE, which has to keep working against the older API.
 - Permissions: request the minimum. Never widen a grant for convenience.
 - Anything whose shape an installed dependency or generator decides — a plugin's flat-config
-  export, a utility class Tailwind will emit, a type a major version removed — is **inspected,
-  not recalled**. If a brief supplies hand-written CSS class names, check each against what the
-  config would generate and name one source of truth. If nothing is installed yet, order the
-  work so it is inspected first.
+  export, a class Tailwind will emit, a type a major version removed — is **inspected, not
+  recalled**. Check hand-written class names against what the config generates and name one source
+  of truth; if nothing is installed yet, order the work so it is inspected first.
 
 ## Step 5 — i18n
 
@@ -100,6 +100,11 @@ Append friction entries per CONVENTIONS §9 before writing. What to look for at 
 Then:
 
 Write `01-spec.md`, set `status: spec` in `00-request.md`.
+
+**And put every decision somewhere a sibling ticket will find it.** A choice made here — a stored
+format, a vocabulary, which surface owns a rule — binds tickets nobody has written yet, and inside
+one ticket folder it is invisible to them. Append it dated to the project's `.claude/flow.md`
+under its locked rules, one line each, and cite it from the spec rather than restating it.
 
 Print: files created/modified, whether there is a migration, i18n key count, test case count, the
 largest risk, and any `[ASSUMPTION]` still outstanding. Then ask: "Run `/s`?"

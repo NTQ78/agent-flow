@@ -18,13 +18,22 @@ Ticket: $ARGUMENTS — if empty, take the newest ticket with `status: spec`.
    small.
 3. **Apply CONVENTIONS §7** (must not look AI-generated) to every line of UI produced.
 4. Read the traps section of `.claude/flow.md` **before building**, not after hitting an error.
+5. **Never `Write` a file you have not read in this session.** Write replaces: a file that already
+   existed comes back holding only what you retyped. This destroyed a 113-line test file carrying
+   six tests. Read first and Edit — or Write only files you created.
+
+## Step 0 — is anyone else in this tree?
+
+Check whether another session is writing the files the spec names — recent mtimes, a peer's build
+log. If so, negotiate ownership **by file** before the first edit and record it in the log. Three
+sessions once shared one uncommitted tree and only avoided collisions because a peer asked first.
+A failure in a file outside your list is the peer's, not yours to chase.
 
 ## Execution order
 
-Follow this order, and **check each part as soon as it is done** to surface errors early. Use the
-confined set — typecheck, plus lint and related tests over what you touched (`/c` §1) — not the
-full suite. `/c` runs the authoritative pass once; running it here as well buys nothing and costs
-a minute each time:
+Follow this order, and **check each part as soon as it is done** to surface errors early. Per part
+use the confined set — typecheck, plus lint and related tests over what you touched (`/c` §1). The
+full suite runs once, at close-out, before you declare anything:
 
 1. **Domain + Application** → build BE
 2. **Infrastructure + migration** → build BE, and verify the generated migration is what you meant
@@ -78,7 +87,13 @@ already in `02-build-log.md`:
 
 ## Close out
 
-Set `status: build`. Print: files created/modified, build result per part, tests written, fixes
-made outside scope, anything blocked awaiting an answer.
+**Run the whole suite — never a `--filter` or a scoped run.** A filtered run once reported 40
+passed while the full suite was red with 8 failures this ticket had caused, and the ticket was
+declared built on it. Then walk `01-spec.md`'s numbered cases one at a time and say which have a
+test and which do not: a matching count is not a mapping — "34 tests for 34 cases" was true and
+wrong. Cases with no test do not block `status: build`, but going unmentioned does.
+
+Set `status: build`. Print: files created/modified, build result per part, tests written **and
+cases still untested**, fixes made outside scope, anything blocked awaiting an answer.
 
 Then ask: "Run `/c`?"
