@@ -3,6 +3,60 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-09-17 — fifth `/retro` run: what a gate is for
+
+97 unpromoted entries, 2026-08-24 → 2026-09-17, two real projects. Six clusters earned a change;
+53 stay watching. Every file was at its line cap, so each addition below is funded by a deletion
+in the same file — the budget did the editing it was written to do.
+
+- **`/p` Step 0 now implements the hard gate instead of contradicting it.** The spine said a
+  question deciding a permission, a route or a stored value is a HARD stop; `/p`'s own step was
+  titled "Soft gate" and said *continue anyway*. Twice the contradiction was resolved in favour of
+  continuing, and the whole chain ran on a guess — once producing a month picker that was built,
+  verified and screenshotted against an unanswered "month or date range". The step now states the
+  stop, names the tier below it, and keeps `[ASSUMPTION]` for that tier only.
+  *(F-2026-09-03-171, -196, -160, F-2026-09-16-220)*
+- **A test case now has to be able to exist, and to fail.** Ten recorded cases could not do one or
+  the other: a case written against a service with no harness, an `internal` class with no
+  `InternalsVisibleTo`, a state no user path reaches, a negative assertion with no positive
+  control, two ids that are both `1` in a fresh database, and three green tests over a payslip
+  freeze that was broken in the shipped build. Split by stage — `/p` Step 6 names the fixture that
+  expresses each case, `/s` owns whether it can fail, next to the absent-assertion rule it extends.
+  *(F-2026-08-27-08, -85, -88, -119, -130, F-2026-09-03-165, -178, -186, -191, -193)*
+- **`/intake` Step 1 stops enumerating sources.** Seven requests arrived in a form the list did not
+  name — a SharePoint link, a returned form, a design mockup, a screenshot a tool hands back only
+  as base64, a description written *for* the requester, mail whose `hasAttachments` lied — and each
+  carried the fact that sized the ticket. The four cases are now two sentences and a principle:
+  open whatever came, say so when you cannot, and resolve the project from the request, not the cwd.
+  *(F-2026-08-24-25, F-2026-08-26-03, F-2026-08-27-02, F-2026-08-28-128, F-2026-09-03-170, -173,
+  F-2026-09-08-200, -201)*
+- **The design-skill mandate gets a scale clause and a once-per-session clause.** It was firing on
+  one shadcn `Select` dropped into an existing actions slot, and on one label string copied from a
+  sibling tab. A skill is for work carrying design decisions; an invocation in `/p` now carries
+  through `/s` in the same session. *(F-2026-08-25-39, F-2026-08-27-05, F-2026-09-03-161, -162, -183)*
+- **`/c` verifies the outcome, not the mechanism that should produce it.** A 302 with the right
+  `Location` whose target bounced back; a page-load screenshot with no English on it while every
+  sheet, toast and Zod message behind a click was still English; two timeout increases shipped
+  against what turned out to be a refusal, not a timeout. `/c` §3 gains the rule, §6 gains
+  "reproduce the failing external call standalone before changing any code".
+  *(F-2026-08-27-42, -122, F-2026-08-28-136, -143, -149, -151, F-2026-09-16-232)*
+- **`/ship`'s gate answers to the artefact, not only to the tickets.** Its effective-state check
+  reads `02-build-log.md`, so work built from a brief with no ticket folder is invisible to it —
+  two features reached a production artefact that way. And the base config an artefact carries is
+  now read block by block: one shipped with a punch mirror pointing at a host on a developer's
+  laptop. *(F-2026-09-17-234, -236)*
+
+Rejected as already covered, so they stop resurfacing: the `friction.jsonl` concurrency and
+backslash entries (§9 carries both rules, added in response to them), the stale-date-in-a-long-
+session entry (§1), the un-renderable banner (`/c` §3 cites that incident by name), and pending
+migrations at `/ship` (§0 already runs the migrations-list check).
+
+Deletions that funded the above: `§7`'s tells list compressed to four lines — in 289 entries not
+one has ever cited a tell, while the two that cite `§7` cite its precedence clause; `/c` §4's
+slop-test split, which restated `§7` in full; `/ship` §5 and §6's IIS restatements; and four
+anecdotes in `/p` and `/intake` that had earned their place and have now been absorbed into the
+rules they justified.
+
 ## 2026-08-28 — the bible model, then the fourth `/retro` run
 
 Two changes in one day, kept apart because they came from opposite directions.

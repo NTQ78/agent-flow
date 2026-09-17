@@ -55,6 +55,13 @@ code — BE unit tests, FE component tests. Do not defer to `/c`; `/c` only runs
 that locates the subject must throw when it finds none, so an empty render fails the test instead
 of satisfying it.
 
+**And a test that cannot fail is not a test.** A negative assertion needs a positive control — a
+stub nobody wired up satisfies "was never called" perfectly. Two ids that are both `1` in a fresh
+database make "the subject is the owner, not the payslip" unreadable. A test of the mechanism is
+not a test of the guarantee: three passed over a payslip freeze that was broken in the shipped
+build. When the deliverable renders — a workbook, a PDF, a letter — produce one specimen and look
+at it; 31 cell assertions could not see the sheet.
+
 ## When the spec is wrong
 
 If the spec turns out to be wrong, incomplete or unworkable:

@@ -10,14 +10,15 @@ Input: $ARGUMENTS
 
 ## Step 1 — Get the raw request
 
-Work out the source from the input:
+Work out the source from the input. `outlook` and `teams` mean the requester's recent mail or
+thread — read the body *and* the attachments, and collect the amendments scattered through a
+thread, not just the first message. Anything else is a path, a link or the description itself.
 
-- **Nothing / a direct description** → use $ARGUMENTS itself. If empty, ask the user.
-- **A file or image path** → read it. Screenshots of Word forms and emails: read with the Read tool.
-- **`outlook`** → find recent mail from the requester (see `requester` in `.claude/flow.md`); read
-  the body *and* the attachments.
-- **`teams`** → read the recent Teams conversation with the requester. Collect the amendments
-  scattered through the thread, not just the first message.
+**Open every artefact the request points at, whatever form it took.** A link to a data file, a
+returned form, a design mockup, a screenshot a tool hands back only as base64, a description
+written *for* the requester — each arrived, each fell outside an earlier version of this list, and
+each carried the fact that sized the ticket. If you cannot open one, say so in `00-request.md`
+rather than proceed as if it were empty. Resolve the project from the REQUEST, not the cwd.
 
 Extract the request verbatim. Keep the requester's original wording — **in their own language** —
 in its own section. When scope is disputed later, that quote is the evidence.
@@ -52,8 +53,7 @@ Survey the real code (grep and read; do not guess) and list — the point is to 
 looks small and spreads: affected FE screens; BE endpoints / handlers / entities; which roles see
 the change; reports, exports, jobs and email templates depending on the touched code.
 
-**Name the tickets that touch the same files**, open or not, and say which must land first. Four
-tickets rewrote one wizard in parallel on 2026-08-27 with nobody sequencing them.
+**Name the tickets that touch the same files**, open or not, and say which must land first.
 
 ## Step 6 — Release, priority, deadline, size
 

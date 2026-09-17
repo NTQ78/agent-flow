@@ -102,23 +102,23 @@ overlap; if nothing fits, say so plainly rather than inventing a name.
 **A directory is not an available skill.** Cross-check against what the session actually offers; a
 name that exists only on disk resolves to a different skill. `/sk` reports which are shadowed.
 
+**Scale it, and once per session.** A skill is for work carrying design decisions — a screen, a
+component, a layout. One control in an existing slot, a label copied from a sibling tab, a CSS
+property on an email table: name the app pattern you are matching and move on. An invocation in
+`/p` carries through `/s` in the same session; say which, do not re-run it.
+
 ## 7. Must not look AI-generated
 
 A hard requirement: what ships must read as the work of an in-house design team.
 
-**Rule one: match the existing app, do not introduce a new style.** Before writing any UI, read
-the components and tokens already in the repo and reuse them. With no existing app this clause
-is inert — the brief and the chosen skill set the direction instead.
+**Rule one: match the existing app, do not introduce a new style.** Read the components and tokens
+already in the repo and reuse them; with no existing app the brief and the skill set the direction.
 
-Tells to avoid:
-- Purple/indigo gradients, glassmorphism, glowing borders — unless the app already uses them
-- Emoji in headings, buttons, or table labels
-- Cards nested inside cards inside cards, or three perfectly symmetrical feature columns
-- Hollow marketing copy, `shadow-lg` everywhere, default icons on every row, one metronomic
-  spacing rhythm — and grey placeholders or "John Doe" data: when real assets do not exist the
-  direction changes to one that does not need them, it does not fall back to these
-
-Instead: the domain's real labels and data, at the density its users need, from existing components.
+Tells to avoid, unless the app already uses them: purple/indigo gradients, glassmorphism, glowing
+borders, emoji in headings or buttons, cards inside cards inside cards, symmetrical feature
+columns, hollow marketing copy, `shadow-lg` everywhere, an icon on every row, one metronomic
+rhythm, grey placeholders and "John Doe" data. Use the domain's real labels and data instead, at
+the density its users need, from components the repo already has.
 
 **Precedence, when something else mandates a tell.** The requester outranks §7: a tell they
 supplied verbatim — exact CSS, a named font, a spacing over a cap — is sign-off. Record it under

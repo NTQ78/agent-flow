@@ -8,11 +8,14 @@ Read `~/.claude/flow/CONVENTIONS.md` first, then the project's `.claude/flow.md`
 Ticket: $ARGUMENTS — if empty, take the newest ticket with `status: intake` under
 `D:\Agent-Projects\<project>\`.
 
-## Step 0 — Soft gate
+## Step 0 — Gate
 
-Read `00-request.md`. If `open_questions > 0` or `needs_approval: true`: print a warning naming
-the unanswered questions and the risk of guessing wrong, then **continue anyway**, marking every
-guessed decision `[ASSUMPTION]` in the spec.
+Read `00-request.md`. **A question whose answer decides a permission, a route, a stored value or
+which of two shapes the user gets is a HARD stop** (CONVENTIONS §4) — ask it; do not spec past it.
+Twice it was read as soft and the whole chain ran on a guess, once to a month picker that was
+built, verified and screenshotted against an unanswered "month or date range". Everything else —
+copy, wording, a count nobody stores — warns, continues, and marks each guess `[ASSUMPTION]`.
+`needs_approval: true` with no sign-off is always a stop.
 
 ## Step 1 — Survey the code before writing
 
@@ -47,9 +50,8 @@ For each layer, list files to **create** or **modify**, with signatures:
 - **FE** — components, hooks/stores, API service, routes
 
 **Every path, symbol and call site the spec names must be one you opened** — not inferred from a
-sibling spec, not from the folder's shape. `WCL.Application/Reference/` never existed, "the same
-guard `UpdateAsync` uses" was two conditions, "three call sites" was four, and `ViewBag` did not
-survive the renderer. Grep-verify it or do not name it.
+sibling spec, not from the folder's shape. A folder that never existed, a guard that was two
+conditions, "three call sites" that were four. Grep-verify it or do not name it.
 
 Hard constraints (re-check the traps section of the project's `.claude/flow.md`):
 
@@ -64,28 +66,25 @@ Hard constraints (re-check the traps section of the project's `.claude/flow.md`)
 
 ## Step 5 — i18n
 
-Only when the project has a locale layer (CONVENTIONS §4). List **every** key to add, with
-translations for **both locales**, as a table:
-
-| key | vi | en |
-
-A missing locale is a defect, not a follow-up task. A project with no locale layer gets one
-line: `N/A — single locale, no i18n library`.
+Only when the project has a locale layer (CONVENTIONS §4). List **every** key to add with
+translations for **both locales**, as a `| key | vi | en |` table. A missing locale is a defect,
+not a follow-up. No locale layer gets one line: `N/A — single locale, no i18n library`.
 
 ## Step 6 — Test case checklist
 
 List every case, numbered, grouped: BE unit / integration / FE component / business edge case.
 Each case states input → expected result. `/c` checks against exactly this list, so write it for
-coverage, not for looks. With no test runner and installing one out of scope, keep the numbering
+coverage, not for looks. **Each case names the fixture that expresses it** — a symbol with no
+harness, an `internal` class with no `InternalsVisibleTo`, a state no user path reaches: that is
+the finding, not the case. With no test runner and installing one out of scope, keep the numbering
 and write the cases as **verification steps** naming their method — a toolchain gate, or the
 browser over CDP — so `/c` knows they are observations, not assertions.
 
 ## Step 7 — Risks and task breakdown
 
 - Risks: what is fragile, whether existing data stays compatible, who is affected if it is wrong
-- Break the work down in the order `/s` will run it: BE → migration → FE → i18n. For a greenfield
-  FE scaffold that order is manifest → install → tooling config → code, so plugin and config
-  shapes are read from what is installed rather than from memory
+- Break the work down in the order `/s` will run it: BE → migration → FE → i18n (greenfield FE:
+  manifest → install → config → code, so shapes are read from what is installed, per Step 4)
 - Re-estimate `size` if the survey disagrees with `/intake`
 
 ## Step 8 — Record friction, write, close out

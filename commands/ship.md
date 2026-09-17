@@ -28,19 +28,22 @@ the one thing this step forbids — on 2026-08-28 four such tickets reached prod
 equivalent) against the target and check that every pending migration belongs to a ticket in the
 batch. One that does not is an unverified schema change riding a verified release.
 
+**A build log is not the only way code gets in.** Diff the repo against the last release's commit:
+any source file no ticket's build log names is folderless work, and it ships as surely as the rest
+— name it in the release file. Then read the base config the artefact carries **block by block**:
+a value that is environment-specific but lives in the base file needs an override on the target,
+named in the release file. One pointed every production punch at a host on a developer's laptop.
+
 ## 1. Ask for the deploy target
 
-**Always ask; never assume.** **Internal IIS** — server/site/app-pool from `.claude/flow.md`;
-**Vercel** — ask preview or production, and which project; **other** — build into a folder and
-print the manual checklist. If `flow.md` does not declare the target *or how the artifact reaches
-it* — paths, app-pool names, copy mechanism — ask, and add the answer there so the next run need
-not.
+**Always ask; never assume.** IIS — server/site/app-pool from `.claude/flow.md`; Vercel — preview
+or production, and which project; other — build into a folder and print the checklist. If `flow.md`
+does not declare the target *or how the artifact reaches it*, ask and record the answer there.
 
 ## 2. Back up before touching data
 
-If any ticket carries a migration or a data-fixing script: back up first, to the path `flow.md`
-declares, and record it in the release file **before** running anything. No successful backup means
-no migration — and if the requester waives it, say so once, in the release file, and proceed.
+A migration or a data-fixing script means back up first, to the path `flow.md` declares, recorded in
+the release file **before** anything runs. No backup, no migration; a waiver is said once, in the file.
 
 ## 3. Build the artifact
 
@@ -62,8 +65,8 @@ Then **stop and ask for confirmation.** Run only on an explicit yes.
 
 ## 5. Deploy
 
-Execute against the chosen target. IIS: copy the artifact, restart the app pool. Vercel: deploy to
-the chosen environment.
+Execute against the chosen target: IIS copies the artifact and restarts the app pool, Vercel
+deploys to the chosen environment.
 
 ## 6. Smoke test
 
@@ -71,20 +74,17 @@ the chosen environment.
 - Call a few critical endpoints, plus the new endpoint of each ticket in the batch. **Prove the
   build is the NEW one** — hit a route only this batch added; a healthy old build answers 200 too
 - Visit the affected screen, screenshot into `03-verify/`
-- **Diagnose correctly:** on IIS, a `500.31` (missing runtime/assembly) surfaces in the browser as
-  a CORS error. If a "CORS error" appears after deploy, read the IIS response body before changing
-  any CORS configuration — changing CORS will fix nothing.
+- **Diagnose correctly:** on IIS a `500.31` surfaces in the browser as a CORS error. Read the
+  response body before touching any CORS configuration — changing it will fix nothing.
 
 A failing smoke test means rolling back per §7, not leaving it as is.
 
 ## 7. Rollback notes
 
-Write into `releases/<YYYY-MM-DD>-NN.md` **as soon as the deploy finishes**, not when needed:
-
-- the previous version/commit or artifact, and where it is
-- the database backup file path
-- the exact commands to go back: restore files, restore DB, restart the app pool
-- whether this migration is reversible (if not, say so)
+Write into `releases/<YYYY-MM-DD>-NN.md` **as soon as the deploy finishes**, not when needed: the
+previous version/commit or artifact and where it is, the database backup path, the exact commands
+to go back (restore files, restore DB, restart the app pool), and whether the migration is
+reversible — if it is not, say so.
 
 ## 8. Record friction
 

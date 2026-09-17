@@ -61,19 +61,16 @@ the cases **with no test** — that finding matters more than the suite passing.
   FE, so a field it does not yet return is an environment gap — but confirm the FE survives it.
 - **A conditional affordance needs the state that produces it.** If you cannot reach that state by
   using the app, that is the finding: a banner nobody can trigger shipped green on 2026-08-28.
+- **Verify the outcome, not the mechanism that should produce it.** A 302 with the right
+  `Location` whose target bounces back is an infinite loop; a page-load screenshot with no English
+  on it says nothing about the sheet, the toasts and the Zod messages behind a click
 
 ## 4. Slop-test the new UI
 
-Only when there is new or substantially changed UI.
-
-Per CONVENTIONS §6, look for an installed skill shipping a checker (`slop-test.md`,
-`anti-patterns.md`); if none, use CONVENTIONS §7 directly. Compare the screenshots just captured
-against it, and split the failures in two:
-
-- **Fix now** — anything the agent chose. Fix the UI; do not note it and move on.
-- **Report only** — any value the requester specified verbatim, cross-referenced to the §7
-  sign-off in `00-request.md`. Never silently rewrite what the customer asked for.
-Record both in `03-verify/slop-test.md`.
+Only when there is new or substantially changed UI. Per CONVENTIONS §6, look for an installed
+skill shipping a checker (`slop-test.md`, `anti-patterns.md`); if none, use §7 directly. Compare
+the screenshots just captured against it and apply §7's precedence clause: fix what the agent
+chose, report what the requester specified. Record both in `03-verify/slop-test.md`.
 
 ## 5. Code review
 
@@ -86,6 +83,8 @@ name it for its own ticket instead of widening this one.
 - **Technical failures** (wrong type, missing key, imports, lint, build config): fix, re-run,
   record. A **deployment-config** defect counts — fix it in the repo, not in a paragraph `/ship`
   must notice.
+- **Reproduce a failing external call standalone before changing any code.** A log line names the
+  symptom; the response body names the cause. Two timeout increases shipped against a refusal.
 - **Business-logic failures** (wrong result, wrong transition, wrong permission): **STOP**.
   Diagnose, propose options, ask — and set `blocked:` per §8. Guessing here is expensive.
 
