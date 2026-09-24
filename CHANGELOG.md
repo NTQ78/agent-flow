@@ -3,6 +3,94 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-09-24 — sixth `/retro` run: the order of the checks
+
+179 unpromoted entries, 2026-08-24 → 2026-09-24, four projects. **19 were rejected outright**: the
+flow was rewritten to board-first mid-log, so every entry aimed at `00-request`, frontmatter,
+`status:` or a release name now targets a system `CONVENTIONS.md` no longer contains. Four clusters
+of the surviving 160 earned a change; 146 stay watching.
+
+- **`/code-review` now runs BEFORE the app is driven.** Three cards running, the worst defect of
+  the card came out of the review — and it came out *after* `/c` had already driven the screen and
+  written the numbers down as correct. On LF-99 six of seven defects were review findings, one of
+  them a cascade delete that destroyed a user's own checklist rows; on LF-85 the review found a
+  period comparison that reported a team at steady pace as down 26%. Driving a screen you have not
+  reviewed means reading numbers with nothing to be suspicious of. The reason lives in the heading
+  so it costs no line. *(F-2026-09-23-315, F-2026-09-24-331)*
+- **`/c` drives every locale, and screenshots the longest one.** An English pass was clean and
+  would have been the whole of step 3; the same screen in Vietnamese immediately showed a
+  hard-coded English label that two earlier cards had walked past. Separately a pay-type label
+  20 characters long in English is 40 in Vietnamese and overflowed the column it was sized for —
+  shipped, and found by the owner rather than by a gate. The language toggle was being treated as
+  a translation concern; it is a layout input. *(F-2026-09-21-267, -274, F-2026-09-23-310)*
+- **`/p` Step 2 stops contradicting the spine.** The fifth run gave CONVENTIONS §6 a scale clause
+  and a once-per-session clause, and left `/p` Step 2 opening with a flat *"A skill must be
+  invoked before writing this section"* whose only escape was "BE-only". Four entries since then,
+  all recording the same collision — the mandate firing on a control dropped into an existing slot
+  and on a surface copying a sibling panel. Step 2 now defers to §6 instead of restating it.
+  *(F-2026-09-18-242, F-2026-09-22-308, -321, F-2026-09-23-321)*
+- **A browser measurement must prove its own subject first — into `HR_APP/.claude/flow.md`, not
+  the spine.** Three entries, one project, so it lands project-local next to the driver it is
+  about. `all(...)` over a collection that came back empty passed all three of its assertions
+  against a toolbar that had not painted; twice more the same day an empty collection reported a
+  correctly rendering page as five FAILs; and three runs in a row reported the measurement as the
+  product — an echo regex matching the hint line, a click landing on the header toggle because the
+  page has two `role=group` toggles, an index of `[3]` against a DOM ordered start, end,
+  breakStart, breakEnd. `s.md` already carries this rule for absent assertions; measurements are
+  where it is easier to miss, because a measurement looks like data.
+  *(F-2026-09-21-279, -285, F-2026-09-23-304)*
+
+Rejected as already covered: what to do when no design skill fits (§6 says to say so plainly
+rather than invent a name), and a skill recommending Phosphor against a `flow.md` that locks
+lucide (§7's precedence clause already decides it, and `/c` applied it).
+
+Deletions that funded the above: `/c` §4's hunt for an installed skill shipping a `slop-test.md`
+or `anti-patterns.md` checker — **not once cited in 496 entries**, and the fifth run deleted the
+same pointer from §7 for the same reason while missing this copy; and the second example in `/c`'s
+"verify the outcome" anecdote, which the rule no longer needs.
+
+`c.md` 110 → 110/110 · `p.md` 110 → 110/110 · `CONVENTIONS.md` untouched at 170/170.
+
+Left watching, and worth naming: **`/intake` treats a diagnosis inside the request as a finding** —
+six entries across two projects, where mail headers said staging had diverged, a doc comment put a
+helper out of scope, and two timing numbers named the wrong latency mechanism, one of them written
+into `flow.md` as a project fact. It earned a change and did not get one: `intake.md` is at
+110/110 and this run found no three lines in it dead enough to cut. That is F-2026-09-24-328's
+warning working as intended — cutting to fit the budget risks cutting meaning — but it means the
+budget is now blocking a qualified change, which is the next thing to decide.
+
+Also logged and not acted on: two entries in this same log share the id `F-2026-09-24-341`. §9's
+"allocate `id` as highest + 1, read at write time" exists because of exactly this, and two
+concurrent sessions still lost the read-then-write race.
+
+## 2026-09-23 — the board becomes the ticket (direct decision)
+
+Recorded after the fact: this was in force in `~/.claude` before the sixth `/retro` run and reached
+git only with it.
+
+Tickets lived as markdown under `D:\Agent-Projects\`, with `status` in YAML frontmatter and a
+board that knew nothing about them — one person, on one machine, could see where the work was. The
+axis is now inverted. **A card on a LynkFlow board is the ticket**, its column is its status, and
+the drive keeps only what will not fit in a description: screenshots and gate logs.
+
+- One command, one column: `/intake` Backlog → `/p` Todo → `/s` In progress → `/c` Review →
+  `/ship` Done. A card made by hand in Todo and a card `/intake` opened in Backlog travel the same
+  road from `/p` onwards.
+- `flow/lf.js` holds the whole protocol — link parsing, `ensureBoard`, and `putSection`, which
+  replaces only the block between its own markers so no command can overwrite what a person wrote.
+  Labels merge rather than replace, because a board has other people on it.
+- `/ship` stopped being the deploy command and became the **close** command: it writes the release
+  block, moves the card to Done, and then asks whether to deploy. **Done now means finished and
+  verified, not live** — the release block has to say which. No safety step was dropped; backup,
+  migration confirmation, smoke test and rollback notes all still run, now conditionally.
+- `/c` failing pushes the card back to In progress with a comment, so the board says out loud that
+  the work is stuck. That visibility is the main thing the move was for.
+- `REQ-…` ids are gone; a card number is already unique. Two tickets had been sharing
+  `REQ-2026-08-27-01`, and `CONVENTIONS` §1 no longer spends six lines preventing that.
+
+`lf.js`, `board.json` and `.env` stay untracked — `sync.ps1` carries only `*.md`, and the API key
+must not reach git. The protocol the whole chain now depends on therefore has no history here.
+
 ## 2026-09-17 — fifth `/retro` run: what a gate is for
 
 97 unpromoted entries, 2026-08-24 → 2026-09-17, two real projects. Six clusters earned a change;

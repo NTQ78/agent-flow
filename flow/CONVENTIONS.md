@@ -4,62 +4,61 @@ Every command in the chain MUST read this file before doing anything else.
 
 ## 1. Where things live
 
-Root: `D:\Agent-Projects\` — grouped by project, then one folder per request:
+**The card on the LynkFlow board IS the ticket.** One board per project, named after the project
+folder (`HR_APP`, `ManageTask`, `velorah-hero`, ...). `lf.js board <project>` creates it if it is
+missing, with the five default columns.
+
+Everything the chain writes goes into that card's description, each stage in its own block:
 
 ```
-D:\Agent-Projects\<project>\
-  releases\<YYYY-MM-DD>-NN.md    <- /ship writes, one file per deploy
-  <REQ-ID>-<slug>\
-    00-request.md                <- /intake writes
-    01-spec.md                   <- /p writes
-    02-build-log.md              <- /s writes
-    03-verify\                   <- /c writes (screenshots, logs, report)
+<what the requester wrote — no command ever touches this>
+<!-- flow:spec -->  /p    <!-- flow:build -->   /s
+<!-- flow:verify --> /c   <!-- flow:release --> /ship
 ```
 
-- `<project>` = the folder name of the project root (`HR_APP`, `aiur--hr`, `VILOG`), or the one a
-  new project will get. Derive it; never invent a second name for the same project.
-- `REQ-ID` = `REQ-YYYY-MM-DD-NN`. **`NN` is global per calendar day across every project**, and
-  scanning is not enough: three collisions happened in one day because two sessions read the same
-  empty gap. **Claim the number by creating the folder first**, then re-scan — if the id now
-  appears twice, the later folder moves. An empty folder holds its number as loudly as a real one.
-  Get the date with `date +%Y-%m-%d` **every run**; **never guess it**, and never carry yesterday's
-  date through a session that has crossed midnight. `slug` = kebab ASCII, no diacritics, ≤6 words.
-- **Code never lives here.** This folder holds documents and artifacts only; code stays in the
-  real repo. Single exception: the request is a brand-new project with no repo yet — then create
-  `src\` inside the request folder and state that explicitly in `00-request.md`.
+Blocks are **appended after** the requester's text, never before it: the board renders a
+description as plain text clamped to two lines, so a marker at the top shows on the card face.
+
+**The only thing left on disk** is what a description cannot hold — screenshots and gate logs, in
+`D:\Agent-Projects\<project>\LF-<n>\`. Code stays in the real repo, as it always did.
+
+`C:\Users\VNT\.claude\flow\lf.js` is the one tool that speaks to the board. Call it by
+absolute path: PowerShell does not expand `~` in a native command's arguments.
 
 ## 2. State
 
-The frontmatter of `00-request.md` is the single source of truth; each command advances `status`
-to the next stage when it finishes:
+**The column the card sits in is the state.** Nothing else records it, so nothing can drift:
 
-```yaml
----
-id: REQ-2026-08-21-01
-title: Night shift crossing midnight is attributed to the wrong day
-requester: Julia Mai
-type: bug | feature | rule-change | report
-priority: urgent | high | normal | low
-deadline: 2026-08-25 | null
-size: S | M | L
-status: intake | spec | build | verify | done
-release: wizard-completion | 2026-08-21-01 | null   # batch NAME at /intake, dated id at /ship
-project: D:\Work_Space\HR_APP
-targets: [BE, FE, migration, i18n, permission]
-open_questions: 3        # count still unanswered
-needs_approval: false    # true when it conflicts with a locked business rule
----
-```
+| Column | Means | Reached by |
+|---|---|---|
+| Backlog | requested, not specced | `/intake` |
+| Todo | spec written | `/p` |
+| In progress | being built | `/s` |
+| Review | verified, waiting to close | `/c` |
+| Done | closed | `/ship` |
 
-`status` is what a ticket **claims**; *effective state* is what is **true**. Code lives in one
-shared tree, so a ticket's work ships with the next release whether or not its ticket closed —
-`/ls` and `/ship` read `status` **plus** whether `02-build-log.md`'s files are in the repo. On
-2026-08-28 four tickets reached production at `build`, every gate green.
+A card may also be typed by hand straight into Todo; `/p` accepts one from Backlog or Todo.
 
-`release` is assigned at `/intake`, not at deploy: a kebab **name** for the batch this belongs to,
-which `/ship` replaces with the dated id it deploys under. A batch is a group somebody chose, not
-whatever sits at `verify` on the day. A shipped release is **sealed** — a late ticket gets the next
-name, never the shipped id.
+Every card carries the checklist `Spec / Build / Verify / Ship`, ticked as each stage finishes, so
+progress reads off the card face without opening it.
+
+**The same checklist holds the work tree.** A row's `kind` column says who owns it — `gate`,
+`work`, `defer`, or `user` — and it **defaults to `user`**, so anything a person types by hand is
+never a command's to delete. Nesting is `parent_id`, order is the `order` column, and the number
+you see (`1.2`) is computed from position, never stored. `/intake` and `/p` decide that order
+against the code; `/s` obeys it and never re-sorts. Depth is unlimited; a row is a title and a
+tick. A command deletes only what it wrote: `LF work --file` replaces `kind='work'` and nothing
+else. **No command opens a second card**; `/c` writes a `defer` row on the card it is on.
+
+**Done means finished and verified — not necessarily deployed.** `/ship` closes the ticket, then
+asks whether to deploy, and the release block records which was chosen.
+
+`/c` failing pulls the card back to **In progress** and comments why. A board that hides a stuck
+ticket is worse than no board.
+
+Code lives in one shared tree, so a card's work reaches production with the next deploy whether or
+not its card closed. `/ship` reads the columns **plus** whether the build block's files are in the
+repo. On 2026-08-28 four tickets shipped while still mid-flow, every gate green.
 
 ## 3. Language
 
@@ -72,11 +71,11 @@ language** — a translation is not evidence.
 
 - `/intake` → `/p` → `/s` → `/c`: **soft**. If the previous stage is incomplete, print a clear
   warning (what is missing, what the risk is) and continue anyway.
-- `/ship`: **hard, across the whole batch** — the batch being every ticket sharing one `release`.
-  One of them short of `verify` → STOP for all. No exceptions, no override flag.
-- **Stop too when a ticket OUTSIDE the batch has code in the build** (effective state, §2). It
-  deploys either way; verify it into the batch, or record in the release file why it rides along.
-- `/ship` is **last but optional** — a ticket resting at `verify` is waiting, not stalled.
+- `/ship`: **hard, across every card you pass it.** One of them short of **Review** → STOP for
+  all. No exceptions, no override flag.
+- **Stop too when a card OUTSIDE the batch has code in the build** (§2). It deploys either way;
+  verify it into the batch, or record in the release block why it rides along.
+- `/ship` is **last but optional** — a card resting at Review is waiting, not stalled.
 - **A question whose answer decides a permission, a route, or a stored value is a HARD stop at
   `/p`** — cosmetic and copy questions keep the soft gate. Nine unanswered questions once ran the
   whole chain: three were wrong, and one rewrote the access path after `/c` had passed.
@@ -89,7 +88,8 @@ language** — a translation is not evidence.
 
 ## 5. Chaining
 
-After each command: print a summary, then ask "Run `<next>`?" — run it only if the user agrees.
+After each command: move the card to its column (§2), tick its gate, print a summary with the
+card link, then ask "Run `<next>`?" — run it only if the user agrees.
 
 ## 6. Skills — look them up at run time
 
@@ -122,7 +122,7 @@ the density its users need, from components the repo already has.
 
 **Precedence, when something else mandates a tell.** The requester outranks §7: a tell they
 supplied verbatim — exact CSS, a named font, a spacing over a cap — is sign-off. Record it under
-"Business rule conflicts" in `00-request.md`, leave `needs_approval` false, and `/c` reports it
+"Business rule conflicts" in the card’s spec block, do not flag it for approval, and `/c` reports it
 without changing it. **A skill does not outrank §7.** A skill sets direction — palette, type,
 layout — but a tell it mandates stays banned; `/p` records the deviation in a table `/c` then
 treats as settled. §7 governs what the agent chose, including what a skill chose for it.
@@ -162,7 +162,7 @@ asked or a check not run · **`missing-rule`** something true for every project 
   unclear" is not an entry; "the spec never says which timezone, and `/s` guessed" is.
 - **`missing-fact` applies itself.** Append it to that project's `.claude/flow.md` in the same run
   and set `promoted` — project-local, gitignored, purely additive. A greenfield project has none
-  (§8), so it goes into `01-spec.md` and becomes the final `/s` task, which sets `promoted`.
+  (§8), so it goes into the card’s spec block and becomes the final `/s` task, setting `promoted`.
   **Everything else waits for `/retro`**, which clusters, proposes a diff and asks. A stage command
   never edits this file or another command file on its own.
 
