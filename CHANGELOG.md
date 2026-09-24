@@ -3,6 +3,66 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-09-24 — seventh `/retro` run: proving the negative
+
+169 unpromoted entries, and **21 of them arrived in the five hours since the sixth run** — two
+cards produced fourteen. That density is the finding: the log is now recording a stage mid-flight
+rather than a month in arrears. Four clusters earned a change; 160 stay watching.
+
+- **A result you have not tried to falsify is not a result — lifted from `/s` into the spine.**
+  The check that mattered here was the *second* one in FRICTION.md: `s.md` already said "a test
+  that cannot fail is not a test", so the right move was to generalise it, not to write a second
+  rule. Two places it did not reach. First, a **measurement used to read a result**: an empty
+  selector reported five FAILs against a page rendering correctly, a `sed` that matched nothing
+  produced a control file identical to the original so the "must go red" run came back green, and
+  a colour read mid-transition made two themes look identical. Second, a **claim written into a
+  document**: twice a guarantee — a cascade that could not touch user rows, a `status` that always
+  wins — was written into a migration comment, a `flow.md` and a commit message *in the same
+  build*, and was false both times. Four minutes of trying to break it would have caught either.
+  *(F-2026-09-24-355, -356, and F-2026-09-21-279, -285, F-2026-09-23-304 which set the
+  second-project threshold from HR_APP.)*
+- **Design for the second one.** `note = 'auto'` was a reasonable marker for one marker; it did
+  not survive the second, and `note === "auto"` became a silent false. A duplicate-guard keyed on
+  action type was reasonable for one rule per type; it did not survive the second, and would have
+  silently refused to seed the rule the next card existed to add. Both decisions passed review,
+  tests and a real drive on the card that made them. **The cost of a shape lands on the next card,
+  and no estimate sees it.** *(F-2026-09-24-365, -366, -371 — one project, one card's post-mortem,
+  which is weaker evidence than three independent failures; adopted anyway because the two broken
+  decisions were distinct, and because the same project's `kind` column, designed as a set from
+  the start, survived exactly this pressure.)*
+- **Gates are the last thing you do.** `/s` ran the full set, then added one test case, then ticked
+  and wrote "green" into the build log. `/c` re-ran it and typecheck was red. Nothing in `s.md`
+  stopped the sequence run-gates → edit → close. One occurrence, adopted because what breaks is
+  the honesty of the record. *(F-2026-09-24-369)*
+- **`/retro` now syncs the vendored copies it leaves behind.** This run's predecessor edited `c.md`
+  and `p.md`, synced them to this repo, committed here, and left ManageTask's own `flow/` folder
+  stale. They sat wrong for an hour until an unrelated card's `/s` happened to diff them — and
+  then entered git under *that card's* name. `sync.ps1` does not know those copies exist.
+  *(F-2026-09-24-353, -363)*
+
+`§4` is renamed **"Gates, and what counts as evidence"**. It has held non-gate rules since August
+and `F-2026-08-24-35` said so; adding two more without renaming would have made it worse. That
+entry is now closed by the rename.
+
+Deletions that funded the above: `§2`'s five-row state table, whose "Reached by" column is `§5`
+restated and whose rows every command file already declares in its own first line; and the general
+half of `/s`'s positive-control paragraph, now that the spine carries it — `/s` keeps only what is
+specific to tests.
+
+`CONVENTIONS.md` 170 → 170/170 · `s.md` 106 → 106/110 · `retro.md` 80 → 84/110.
+
+Left watching, and worth naming because each will qualify on one repeat: adding a value to an
+existing set requires driving **every** screen that reads the set, not just the card's own (a
+board-settings screen rendered `auto.actionSTART_TIMER` raw); `/ship` now *writes data outside the
+card*, because moving to Done fires an automation rule, and no step checks what it wrote; and
+calling something a **regression** requires naming the path that produces it — one such claim
+reached a commit message and turned out to be unreachable.
+
+Still unfixed, third run in a row: two entries in this log share the id `F-2026-09-24-370`, and two
+more share `-371`. `§9`'s "allocate `id` as highest + 1, read at write time" exists for this and
+concurrent sessions keep losing the race. Promotion had to match on id **plus project plus a
+substring of the text** to stay correct.
+
 ## 2026-09-24 — sixth `/retro` run: the order of the checks
 
 179 unpromoted entries, 2026-08-24 → 2026-09-24, four projects. **19 were rejected outright**: the

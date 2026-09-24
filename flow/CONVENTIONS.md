@@ -28,14 +28,8 @@ absolute path: PowerShell does not expand `~` in a native command's arguments.
 ## 2. State
 
 **The column the card sits in is the state.** Nothing else records it, so nothing can drift:
-
-| Column | Means | Reached by |
-|---|---|---|
-| Backlog | requested, not specced | `/intake` |
-| Todo | spec written | `/p` |
-| In progress | being built | `/s` |
-| Review | verified, waiting to close | `/c` |
-| Done | closed | `/ship` |
+Backlog is requested but not specced, Todo has a spec, In progress is being built, Review is
+verified and waiting to close, Done is closed. Each stage moves the card to its own column (§5).
 
 A card may also be typed by hand straight into Todo; `/p` accepts one from Backlog or Todo.
 
@@ -67,7 +61,7 @@ only where a Vietnamese-speaking person reads: the draft message to the requeste
 end-user changelog (bilingual, English first). Quote the requester **verbatim in their own
 language** — a translation is not evidence.
 
-## 4. Gates
+## 4. Gates, and what counts as evidence
 
 - `/intake` → `/p` → `/s` → `/c`: **soft**. If the previous stage is incomplete, print a clear
   warning (what is missing, what the risk is) and continue anyway.
@@ -85,6 +79,12 @@ language** — a translation is not evidence.
 - For an access, permission or validation change, **map the path, not the files**: every entry
   point reaching the guarded state, and the layer that enforces it. Missing either half has cost a
   mis-sized ticket and a nearly-shipped bug.
+- **A result you have not tried to falsify is not a result.** Show a check can go red before
+  reading its green; try to make X happen before writing "X cannot happen" into a migration, a
+  `flow.md` or a commit message. Twice a guarantee was asserted in three documents in one build
+  and was false; and a measurement is a check — an empty selector reports the product, not itself.
+- **Design for the second one.** A marker column, a uniqueness guard, a status flag: say what the
+  second marker or the second rule looks like before choosing the shape, or the next card pays.
 
 ## 5. Chaining
 

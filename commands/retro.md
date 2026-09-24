@@ -73,6 +73,10 @@ whole reason the process is allowed to change itself at all.
 - Append to the repo's `CHANGELOG.md`: date, what changed, why, entry ids.
 - In the repo, run `.\sync.ps1 -Pull`, then one commit for this run, the message naming the changes.
   Do not push; leave that to the user.
+- Some projects vendor a copy of the flow (a `flow/` folder holding `CONVENTIONS.md`). `sync.ps1`
+  does not know about them. After committing here, scan for those copies, sync them, and say which
+  projects now carry uncommitted flow changes — otherwise they drift until some unrelated card
+  notices, and land in git under that card's name.
 
 ## 8. Report
 

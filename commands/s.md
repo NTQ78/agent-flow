@@ -52,13 +52,10 @@ code — BE unit tests, FE component tests. Do not defer to `/c`; `/c` only runs
 
 **An assertion that something is absent proves nothing until its container is proven present.**
 `queryByRole` returns null whether the gate works or the page rendered nothing at all. The helper
-locating the subject must throw when it finds none, so an empty render fails instead of passing.
-
-**And a test that cannot fail is not a test.** A negative assertion needs a positive control — a
-stub nobody wired up satisfies "was never called" perfectly. Two ids both `1` in a fresh database
-make "the subject is the owner, not the payslip" unreadable. A test of the mechanism is not a
-test of the guarantee: three passed over a payslip freeze broken in the shipped build. When the
-deliverable renders — a workbook, a PDF, a letter — produce one specimen and look at it.
+locating the subject must throw when it finds none. Per CONVENTIONS §4, give every negative a
+positive control — a stub nobody wired up satisfies "was never called" perfectly, and a test of
+the mechanism is not a test of the guarantee: three passed over a payslip freeze broken in the
+shipped build. When the deliverable renders — a workbook, a PDF, a letter — look at one specimen.
 
 ## When the spec is wrong
 
@@ -90,6 +87,9 @@ already in the build log:
 - no installed skill covered the design work → `missing-skill`
 
 ## Close out
+
+**Gates are the last thing you do.** Edit anything after running them and the result you write
+into the build log describes a tree that no longer exists — re-run, or say in the log that it does.
 
 **Run the whole suite — never a `--filter` or a scoped run.** A filtered run once reported 40
 passed while the full suite was red with 8 failures this ticket had caused, and the ticket was

@@ -12,10 +12,9 @@ oldest. `LF` means `node C:\Users\VNT\.claude\flow\lf.js` — always the absolut
 
 `LF get <card>` writes the requester's half to a `.request.md` file. That is your brief and you
 never edit it. **A question whose answer decides a permission, a route, a stored value or
-which of two shapes the user gets is a HARD stop** (CONVENTIONS §4) — ask it; do not spec past it.
-Twice it was read as soft and the whole chain ran on a guess, once to a month picker that was
-built, verified and screenshotted against an unanswered "month or date range". Everything else —
-copy, wording, a count nobody stores — warns, continues, and marks each guess `[ASSUMPTION]`.
+which of two shapes the user gets is a HARD stop** (CONVENTIONS §4) — ask it, do not spec past
+it; twice it was read as soft and a whole chain ran on a guess. Everything else — copy, wording,
+a count nobody stores — warns, continues, and marks each guess `[ASSUMPTION]`.
 A `needs-approval` label with no sign-off is always a stop.
 
 ## Step 1 — Survey the code before writing
@@ -26,11 +25,10 @@ architecture. Note the pattern already used for similar work, and what can be re
 ## Step 2 — UI/UX design (only when there is new FE work)
 
 **Settle the design before writing this section.** CONVENTIONS §6 decides whether a skill is
-invoked — scale it to the design decisions carried; one control in an existing slot gets the app
-pattern named instead. Apply §7: match the existing app, introduce no new style. Decide
-layout, reused components, empty/loading/error states, responsive behaviour. **For anything that
-renders conditionally, name the user path that produces the condition** — if there is none, that
-is the finding. Skip the whole step if the request is BE-only.
+invoked — scale it to the decisions carried; one control in an existing slot gets the app pattern
+named instead. Apply §7: match the existing app, introduce no new style. Decide layout, reused
+components, empty/loading/error states, responsive behaviour. **Anything rendering conditionally:
+name the user path that produces it** — no such path is the finding. BE-only: skip the step.
 
 ## Step 3 — Diagram
 
@@ -81,10 +79,12 @@ write the cases as **verification steps** naming their method, so `/c` reads the
 ## Step 7 — Risks and the work tree
 
 - Risks: what is fragile, whether existing data stays compatible, who is affected if it is wrong
-- Break the work into a nested markdown list and write it with `LF work <card> --file <f.md>`.
-  **The numbering is the run order and `/s` obeys it literally**, so the ordering reason lives
-  here now: BE → migration → FE → i18n, never i18n before the FE that uses it nor FE before the
-  API whose shape it reads (greenfield FE: manifest → install → config → code, per Step 4).
+- Break the work into a nested list, written with `LF work <card> --file <f.md>`: **four or five
+  level-1 items**, stretched to the card's complexity, each holding its own children, together
+  covering the whole card. **The numbering is the run order and `/s` obeys it literally**:
+  BE → migration → FE → i18n, never FE before the API whose shape it reads; greenfield FE is
+  manifest → install → config → code (Step 4). A **typed** locale layer inverts the i18n step —
+  a key union built from the dictionary makes the FE uncompilable without its keys, so it leads.
 - Sibling items of equal depth: smallest first. Leaves small enough to check one at a time.
 - Sizes that have line caps (a command file, `CONVENTIONS.md`): put before/after/cap in the spec.
 
