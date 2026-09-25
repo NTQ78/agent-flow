@@ -27,8 +27,16 @@ $repo   = $PSScriptRoot
 $claude = Join-Path $HOME '.claude'
 
 # The repo is the manifest: whatever lives here is tracked.
-$tracked = Get-ChildItem -Path (Join-Path $repo 'commands'), (Join-Path $repo 'flow') -Filter *.md -File |
-  ForEach-Object { $_.FullName.Substring($repo.Length).TrimStart([char]92, [char]47).Replace([char]92, [char]47) }
+# Not just markdown - lf.js is the tool the whole chain runs on, and while this filter
+# said *.md it sat untracked for a month while every command that calls it was versioned.
+$trackedExt = '.md', '.js', '.mjs', '.json'
+# board.example.json is a redacted template; its live counterpart is board.json, which is
+# machine-specific and gitignored. Nothing to compare, so it is not tracked.
+$notTracked = 'flow/board.example.json'
+$tracked = Get-ChildItem -Path (Join-Path $repo 'commands'), (Join-Path $repo 'flow') -File |
+  Where-Object { $trackedExt -contains $_.Extension } |
+  ForEach-Object { $_.FullName.Substring($repo.Length).TrimStart([char]92, [char]47).Replace([char]92, [char]47) } |
+  Where-Object { $notTracked -notcontains $_ }
 
 if (-not $tracked) { throw "No tracked files found under $repo. Is this the right folder?" }
 

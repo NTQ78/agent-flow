@@ -10,6 +10,11 @@ Agent-Projects/
 .DS_Store
 Thumbs.db
 
+# Board wiring is machine-specific: real board UUIDs, the owner's email, a workspace id.
+# Only the redacted template belongs in git.
+flow/board.json
+flow/tmp/
+
 # Friction log: operational data, and it quotes project internals. Conclusions live in
 # CHANGELOG.md and in the history of CONVENTIONS.md instead.
 friction*.jsonl

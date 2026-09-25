@@ -1,0 +1,9 @@
+{
+  "apiUrl": "https://<your-supabase-ref>.supabase.co/functions/v1/api",
+  "appBaseUrl": "https://<your-app>.vercel.app",
+  "owner": "<board owner email>",
+  "boards": {
+    "<project-name>": "<board uuid>"
+  },
+  "workspaceId": "<workspace uuid>"
+}
