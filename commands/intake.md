@@ -78,7 +78,7 @@ Write the body to a scratch `.md` first, then:
 
 ```
 LF new <project> --title "<≤80 chars>" --desc-file <scratch.md> --column Backlog \
-  --labels "<type>,<priority>" --points <2|5|8> [--priority H|M|L] [--due YYYY-MM-DD] [--assignee <email>]
+  --labels "<type>,<priority>" --points <2|5|8> [--priority LOW|MEDIUM|HIGH] [--due YYYY-MM-DD] [--assignee <email>]
 ```
 
 Assigned to you by default (`owner` in `board.json`); `--assignee ""` leaves it unassigned.

@@ -1,20 +1,20 @@
 ---
 description: Write the technical spec onto a board card — files, signatures, migration, i18n, tests
-argument-hint: card link | LF-N (empty = oldest card in Backlog)
+argument-hint: card link | LF-N (empty = this session's card, else oldest in Backlog)
 ---
 
 Read `~/.claude/flow/CONVENTIONS.md` first, then the project's `.claude/flow.md`.
 
-Card: $ARGUMENTS — a link, or `LF-N`. If empty, `LF ls <project> --column Backlog` and take the
-oldest. `LF` means `node C:\Users\VNT\.claude\flow\lf.js` — always the absolute path.
+Card: $ARGUMENTS — a link, or `LF-N`. If empty, this session's card, else the oldest in Backlog
+(`LF ls <project> --column Backlog`). `LF` means `node C:\Users\VNT\.claude\flow\lf.js`, absolute.
 
 ## Step 0 — Gate
 
 `LF get <card>` writes the requester's half to a `.request.md` file. That is your brief and you
 never edit it. **A question whose answer decides a permission, a route, a stored value or
-which of two shapes the user gets is a HARD stop** (CONVENTIONS §4) — ask it, do not spec past
-it; twice it was read as soft and a whole chain ran on a guess. Everything else — copy, wording,
-a count nobody stores — warns, continues, and marks each guess `[ASSUMPTION]`.
+which of two shapes the user gets is a HARD stop** (CONVENTIONS §4) — ask it, with a worked
+example per option (a named person, real dates), and do not spec past it. Everything else —
+copy, wording, a count nobody stores — warns, continues, and marks each guess `[ASSUMPTION]`.
 A `needs-approval` label with no sign-off is always a stop.
 
 ## Step 1 — Survey the code before writing
@@ -32,8 +32,7 @@ name the user path that produces it** — no such path is the finding. BE-only: 
 
 ## Step 3 — Diagram
 
-When the flow branches (approval chains, evaluations, lifecycles): draw a mermaid `flowchart` or
-`stateDiagram-v2`. A single-branch request needs no diagram — not for decoration.
+Branching flow (approvals, evaluations, lifecycles): a mermaid `flowchart` or `stateDiagram-v2`.
 
 ## Step 4 — Technical spec
 
@@ -56,16 +55,16 @@ Hard constraints (re-check the traps section of the project's `.claude/flow.md`)
 - New fields on a response DTO must be **optional on the FE side** — the dev API lands after the
   FE, which has to keep working against the older API.
 - Permissions: request the minimum. Never widen a grant for convenience.
-- Anything whose shape an installed dependency or generator decides — a plugin's flat-config
-  export, a class Tailwind will emit, a type a major version removed — is **inspected, not
-  recalled**, against one named source of truth. Nothing installed yet? Order the work so it is
-  inspected first.
+- Anything whose shape an installed dependency or generator decides — a plugin's export, a class
+  Tailwind emits, a type a major version removed — is **inspected, not recalled**, against one
+  named source of truth. Nothing installed yet? Order the work so it is inspected first.
+- A new value in a shared vocabulary — enum member, status word, DTO or form field — lists every
+  reader and writer of it and what each does with it; the default branch is where it goes wrong.
 
 ## Step 5 — i18n
 
-Only when the project has a locale layer (CONVENTIONS §4). List **every** key to add with
-translations for **both locales**, as a `| key | vi | en |` table. A missing locale is a defect,
-not a follow-up. No locale layer? One line: `N/A — single locale, no i18n library`.
+No locale layer (CONVENTIONS §4)? One line: `N/A — single locale, no i18n library`. Otherwise list
+**every** key with **both locales**, as a `| key | vi | en |` table — a missing locale is a defect.
 
 ## Step 6 — Test case checklist
 
@@ -73,8 +72,9 @@ List every case, numbered, grouped: BE unit / integration / FE component / busin
 Each case states input → expected result. `/c` checks against exactly this list, so write it for
 coverage, not looks. **Each case names the fixture that expresses it** — a symbol with no harness,
 an `internal` class with no `InternalsVisibleTo`, a state no user path reaches: that is the
-finding, not the case. No test runner and installing one out of scope? Keep the numbering and
-write the cases as **verification steps** naming their method, so `/c` reads them as observations.
+finding, not the case. No test runner, or a project rule against new tests (read flow.md and the
+repo's CLAUDE.md first)? Keep the numbering and write **verification steps**, each naming its
+method and the seeded record that produces its state, so `/c` reads them as observations.
 
 ## Step 7 — Risks and the work tree
 

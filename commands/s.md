@@ -1,21 +1,21 @@
 ---
 description: Execute the spec — BE → migration → FE → i18n, without touching git
-argument-hint: card link | LF-N (empty = oldest card in Todo)
+argument-hint: card link | LF-N (empty = this session's card, else oldest in Todo)
 ---
 
 Read `~/.claude/flow/CONVENTIONS.md` first, then the project's `.claude/flow.md` for build
 commands and the list of known traps.
 
-Card: $ARGUMENTS — a link, or `LF-N`. If empty, `LF ls <project> --column Todo` and take the
-oldest. `LF` means `node C:\Users\VNT\.claude\flow\lf.js`. Start with `LF get <card>` and read
+Card: $ARGUMENTS — a link, or `LF-N`. If empty, the card this session last touched; failing that,
+`LF ls <project> --column Todo` and the oldest. `LF` means `node C:\Users\VNT\.claude\flow\lf.js`. Start with `LF get <card>` and read
 the spec block; `LF assign <card> <your email>` so the board says who is holding it.
 
 ## Absolute rules
 
 1. **Run no git command that changes state.** No `checkout`, `restore`, `stash`, `reset`, `clean`,
    `commit`, no branch creation. The tree may hold months of uncommitted work. Read-only is fine.
-2. **Invoke a skill before writing UI.** Per CONVENTIONS §6: list the installed skills, pick the
-   closest, invoke it via the Skill tool, then write code. Not optional for a small change.
+2. **Invoke a skill before writing UI when CONVENTIONS §6 calls for one** — `/p`'s Design section
+   records that call; follow it, and when it named an app pattern instead, match that pattern.
 3. **Apply CONVENTIONS §7** (must not look AI-generated) to every line of UI produced.
 4. Read the traps section of `.claude/flow.md` **before building**, not after hitting an error.
 5. **Never `Write` a file you have not read in this session.** Write replaces: a file that existed
@@ -28,6 +28,8 @@ Check whether another session is writing the files the spec names — recent mti
 log. If so, negotiate ownership **by file** before the first edit and record it. Three sessions
 once shared one uncommitted tree and only avoided collisions because a peer asked first. A
 failure in a file outside your list is the peer's, not yours to chase.
+**Repeat the check before every full build and at close-out** (ListAgents + mtimes): peers arrive
+mid-run, and a half-written peer file breaks the whole-solution build.
 
 ## Execution order
 

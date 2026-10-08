@@ -3,6 +3,51 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-10-08 — eighth `/retro` run: rules nobody could find
+
+508 unpromoted entries over two weeks (2026-09-24 → 2026-10-08), 382 from HR_APP. Eleven clusters
+earned a change; the owner approved seven and declined one. 440 entries stay watching, most of
+them one-off survey misses ("the spec missed a call site") that the grep-verify and map-the-path
+rules already cover. The pattern this time: several gaps were **already written down somewhere**
+— in a project's flow.md, in a repo CLAUDE.md, in a memory file — and recurred anyway, because the
+stage that needed the rule never read the place it lived.
+
+- **`intake.md` Step 8 says `--priority LOW|MEDIUM|HIGH`.** The template advertised `H|M|L`,
+  which the board API has refused with a 400 since September; twelve entries across two projects
+  logged the same failed first call. *(F-2026-09-24-338, -348, -368, F-2026-09-25-464,
+  F-2026-09-28-477, -508, F-2026-09-30-556, F-2026-10-02-556, F-2026-10-06-631 + three without id)*
+- **`/p` and `/s` with no card take this session's card first**, then the oldest in the column.
+  Three times the oldest card belonged to another session. *(F-2026-09-24-341, F-2026-09-25-423, -431)*
+- **`/p` Step 6 reads the project's test policy before writing cases**, and a verification step
+  names the seeded record that produces its state. HR_APP forbids new FE tests (repo CLAUDE.md,
+  owner 2026-09-10) and flow.md said so; `/p` still wrote FE test files ten times, and five browser
+  cases had no seed that could reach them. Relocated into the step that writes the cases.
+  *(F-2026-09-18-244, F-2026-09-21-271, F-2026-09-22-301, -311, F-2026-09-24-342, F-2026-10-06-621,
+  F-2026-09-25-418, F-2026-09-28-498, -505, F-2026-09-30-574 + five without id)*
+- **`/p` Step 4: a new value in a shared vocabulary lists every reader and writer.** An enum member
+  defaulting to 'unpaid', a status word with no slot in a DTO, a form field reaching two create
+  paths the spec never named. *(F-2026-08-27-107, F-2026-09-24-328, F-2026-10-02-606, F-2026-10-06-649 + two)*
+- **`/p` Step 0: hard-stop questions carry a worked example per option.** The owner could not
+  answer bare option labels until they were re-asked with named people and dates. *(F-2026-09-29-519,
+  F-2026-09-29-111500, F-2026-10-06-626, F-2026-09-25-438 + one)*
+- **`/s` re-checks peers before every full build and at close-out**, and **rule 2 follows CONVENTIONS
+  §6** instead of contradicting it ("not optional for a small change" vs "scale it"). Peer half-edits
+  broke whole-solution builds eight times; the absolute skill rule loaded a skill for one text field.
+  *(F-2026-09-08-211, F-2026-09-18-245, F-2026-09-29-133000, F-2026-10-06-638, F-2026-10-06-623 + three)*
+- **CONVENTIONS: owner work outside a card gets a card before the first edit** (§2); **questions to
+  a Vietnamese-speaking person are in Vietnamese** (§3, the owner's correction); **file-editing
+  scripts run from a file and read/write bytes** (§9) — heredoc and `-c` backslash escapes and
+  CRLF flips hit two projects nine times, the last one during this run's own apply. Paid for by
+  deleting §1's lf.js paragraph, which every command already repeats. *(F-2026-09-29-554,
+  F-2026-09-30-580, F-2026-10-01-582, F-2026-09-25-433, F-2026-09-29-537, -550, F-2026-10-06-642,
+  F-2026-10-06-645 + seven without id)*
+- **Declined by the owner:** `lf.js label --remove` and `ls` refusing to create a board. Entries
+  marked rejected. *(F-2026-09-25-466, F-2026-09-28-496, F-2026-09-29-520, F-2026-10-02-599 + one)*
+- One unparseable log line (a raw `\a`) was repaired so the log round-trips again.
+
+Watching, and pointed elsewhere: two test-harness flakes (Mapster global-config race,
+`grant-leave-dialog` timeouts) recur on every HR_APP full run; they need a card, not a rule.
+
 ## 2026-09-24 — seventh `/retro` run: proving the negative
 
 169 unpromoted entries, and **21 of them arrived in the five hours since the sixth run** — two

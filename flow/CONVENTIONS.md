@@ -22,9 +22,6 @@ description as plain text clamped to two lines, so a marker at the top shows on 
 **The only thing left on disk** is what a description cannot hold — screenshots and gate logs, in
 `D:\Agent-Projects\<project>\LF-<n>\`. Code stays in the real repo, as it always did.
 
-`C:\Users\VNT\.claude\flow\lf.js` is the one tool that speaks to the board. Call it by
-absolute path: PowerShell does not expand `~` in a native command's arguments.
-
 ## 2. State
 
 **The column the card sits in is the state.** Nothing else records it, so nothing can drift:
@@ -43,6 +40,8 @@ you see (`1.2`) is computed from position, never stored. `/intake` and `/p` deci
 against the code; `/s` obeys it and never re-sorts. Depth is unlimited; a row is a title and a
 tick. A command deletes only what it wrote: `LF work --file` replaces `kind='work'` and nothing
 else. **No command opens a second card**; `/c` writes a `defer` row on the card it is on.
+**Work the owner asks for outside any card gets a card before the first edit** (`/intake`, even
+one line) — card-less code otherwise reaches `/ship` with nothing to verify it against.
 
 **Done means finished and verified — not necessarily deployed.** `/ship` closes the ticket, then
 asks whether to deploy, and the release block records which was chosen.
@@ -57,7 +56,7 @@ repo. On 2026-08-28 four tickets shipped while still mid-flow, every gate green.
 ## 3. Language
 
 **English** for everything the chain writes and prints; never translate identifiers. Vietnamese
-only where a Vietnamese-speaking person reads: the draft message to the requester, and the
+only where a Vietnamese-speaking person reads: questions put to them, the draft message, and the
 end-user changelog (bilingual, English first). Quote the requester **verbatim in their own
 language** — a translation is not evidence.
 
@@ -151,7 +150,8 @@ line, appended to `~/.claude/flow/friction.jsonl` (never committed — it quotes
 ```
 
 Write every path with forward slashes: a lone backslash is either invalid JSON (`\P`) or a silent
-escape. Allocate `id` as highest + 1, read at write time — two sessions have collided before.
+escape. Allocate `id` as highest + 1, read at write time. Write any script that edits files to a
+FILE and run it by path — never a heredoc or `-c` — and read/write bytes so CRLF never flips.
 
 `kind`: **`missing-fact`** a project fact nobody wrote down · **`missing-step`** a question not
 asked or a check not run · **`missing-rule`** something true for every project · **`wrong-order`**
