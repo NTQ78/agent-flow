@@ -9,10 +9,9 @@ commands and how to run the app.
 Card: $ARGUMENTS — a link, or `LF-N`. If empty, `LF ls <project> --column "In progress"` and take
 the oldest. `LF` means `node C:\Users\VNT\.claude\flow\lf.js`. `LF get <card>` first.
 
-This command exists to catch **green tests over a broken app**. A passing suite is not evidence
-the app works. **The unit of verification is the file list in the card's build block, not the
-working tree** — a tree carrying unrelated uncommitted work has no usable "current diff", so
-scope every file-level check and the review to that list.
+This command exists to catch **green tests over a broken app**. **The unit of verification is the
+build block's file list, not the working tree** — a tree carrying unrelated uncommitted work has no
+usable "current diff", so scope every file-level check and the review to that list.
 
 ## 1. Gates, scaled to reach
 
@@ -28,11 +27,14 @@ or the card carries a migration or a BE change. Run the project's full declared 
   check that still sees the files this change did not touch
 - lint and the formatter over the card's files only — never skip the formatter, it is what
   catches an editing tool rewriting line endings, which every other gate passes
-- tests **related to** those files — `vitest related --run <files>`, or the equivalent
+- tests **related to** those files — `vitest related --run <files>`, or the equivalent; "No test
+  files found" exits 0 and is reported as *no coverage reaches these files*, never a pass
 - the production build **only** when the change adds an import, dependency, config or entry point
 
 Logs and screenshots go in `D:\Agent-Projects\<project>\LF-<n>\` (§1). **The full set is not
 skipped, only deferred:** `/ship` runs it once across the batch, where a release earns it.
+**Peers in the tree** (`/s` Step 0): note the card files' mtimes before and after the gates and
+re-run what moved; a peer's red whole-tree build is deferred to `/ship` with its files named.
 
 ## 2. Reconcile the spec against the code, then the test list
 
@@ -53,21 +55,19 @@ fix now / should fix / noted. A finding in code this card only moved past is **n
 ## 4. Drive the real app (only when FE changed)
 
 - Start the app per `flow.md`. **Use the project's driver script if it has one** — rebuilding a
-  browser driver per card costs more than every gate in §1 combined; if none, write one and
-  record it in `flow.md`
-- Log in, reach the affected screen, screenshot into the card's folder, and check for console
-  errors, 4xx/5xx requests, raw i18n keys (`some.key.name`), broken layout
-- **Drive every locale the project ships**, and screenshot the one whose strings are longest — a
-  VN-only overflow and a hard-coded English label both shipped past an English-only pass
+  driver per card costs more than every gate; if none, write one and record it in `flow.md`
+- Log in, reach **every screen that renders what changed** — each route importing a changed
+  component, each screen reading a set the card added a value to, each consumer of a changed token
+  format (grep, do not recall) — screenshot, and check for console errors, 4xx/5xx requests, raw
+  i18n keys (`some.key.name`), broken layout
+- **Drive every locale the project ships**; screenshot the one whose strings are longest
 - **Interactive states are verified by dispatching real input** — hover, focus, click — never by
-  reading computed style off an element nobody is touching. A hover an animation has overridden
-  passes tsc, lint, build and every static DOM assertion
+  reading computed style off an element nobody is touching
 - When the environment cannot supply the identity the card is about, drive the branch at the
   client boundary, never by writing to the server, and **say the identity was simulated**
 - **Compare the DTO the FE calls against the API actually running.** The dev API lands after the
   FE, so a field it does not yet return is an environment gap — confirm the FE survives it.
-- **A conditional affordance needs the state that produces it.** Cannot reach it by using the
-  app? That is the finding: a banner nobody can trigger shipped green on 2026-08-28.
+- **A conditional affordance needs the state that produces it** — unreachable by use is the finding
 - **Verify the outcome, not the mechanism.** A 302 whose target bounces back is a loop; a
   page-load screenshot says nothing about the sheet, toasts and Zod messages behind a click
 
@@ -83,28 +83,28 @@ requester specified. Record both in the verify block.
   record. A **deployment-config** defect counts — fix it in the repo, not in a paragraph.
 - **Reproduce a failing external call standalone before changing any code.** A log line names the
   symptom; the response body names the cause. Two timeout increases shipped against a refusal.
-- **Business-logic failures** (wrong result, wrong transition, wrong permission): **STOP**.
-  Diagnose, propose options, ask — and leave the card in In progress per §8. Guessing is costly.
+- **Business-logic failures** (wrong result, transition, permission): **STOP**. Measure the cause
+  and which paths show it, *then* offer options and ask; the card stays In progress (§8).
+- **A fix at `/c` is new code**: before closing a finding, grep its siblings (same pattern in the
+  file, every parameter on the same input path) and re-run related tests over what it touched.
+- **A red test is a claim about the product**: find which side a person decided before making the
+  assertion match. A red no card owns is raised with the owner for its own card, never parked.
 
 ## 7. Record friction
 
-Append entries per CONVENTIONS §9. Here: cases with no test (`missing-step` — why did `/p` not
-list them, or `/s` not write them?), a failure a soft gate let through (`wrong-gate`), a check
-that found nothing twice running (`noise`), an environment gap (`missing-fact`, into `flow.md`).
+Per CONVENTIONS §9: an untested case (`missing-step` on `/p` or `/s`), a failure a soft gate let
+through (`wrong-gate`), a check that found nothing twice (`noise`), an env gap (`missing-fact`).
 
 ## 8. Verdict
 
-Write the verdict to a scratch `.md`: pass/fail per item, which gate tier ran and why, cases with
-no test, spec divergences, code-review findings, slop-test result, where the screenshots are.
-**Re-check the points** against what the work took — an estimate nobody revisits teaches nothing.
+Write the verdict to a scratch `.md`: pass/fail per item, gate tier and why, untested cases, spec
+divergences, review findings, slop-test result, screenshot paths, and the points re-checked.
 
 Always `LF section <card> verify --file <scratch.md>`. Then, **pass** — every item green, no
 untested case unexplained — `LF move <card> Review` and `LF tick <card> Verify`.
 
-**Fail, or an escalation you refused to guess — the card goes back, loudly:**
-`LF move <card> "In progress"` and `LF comment <card> --text "Blocked: <what is undecided>"`.
-Never leave a blocked card in Review: prose buried in a verify block is invisible on the board,
-and a card that looks ready while a decision hangs is how a payroll bug nearly shipped on
-2026-08-28.
+**Fail, or an escalation you refused to guess — the card goes back, loudly:** `LF move <card>
+"In progress"` and `LF comment <card> --text "Blocked: <what is undecided>"`. Never leave a
+blocked card in Review: prose in a verify block is invisible on the board.
 
 Review is where a card rests. Name the other cards in Review and offer `/ship` for the group.

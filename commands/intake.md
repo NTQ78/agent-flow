@@ -18,7 +18,10 @@ thread, not just the first message. Anything else is a path, a link or the descr
 
 **Open every artefact the request points at, whatever form it took** — data file, returned form,
 mockup, a screenshot handed back only as base64. Each one carried the fact that sized the ticket.
-Cannot open one? Say so on the card. Resolve the project from the REQUEST, not the cwd.
+One missing, or its source refused you (expired login, an image that never arrived)? Ask the user
+to re-send or re-authenticate **before Step 5**; only if they cannot, size without it and say so
+on the card. Resolve the project from the REQUEST, not the cwd. A link to a card already on the
+board is enriched, never re-opened (§2): add what is missing as a comment on that card.
 
 Extract the request verbatim. Keep the requester's original wording — **in their own language** —
 in its own section. When scope is disputed later, that quote is the evidence.
@@ -47,23 +50,26 @@ Read the locked rules in `.claude/flow.md`. If the request contradicts any of th
 
 ## Step 5 — Impact scope
 
-Survey the real code (grep and read; do not guess) — the point is to catch work that looks small
-and spreads: FE screens; BE endpoints / handlers / entities; which roles see the change; reports,
-exports, jobs and email templates depending on the touched code.
+Survey the real code **and the data it reads** (grep, read, count rows; do not guess) — the point
+is to catch work that looks small and spreads: FE screens; BE endpoints / handlers / entities;
+which roles see the change; reports, exports, jobs and email templates depending on the touched
+code; every caller of a touched action; which copy of a duplicated definition the screen reads.
+
+**A claim in the request is a hypothesis** — a named culprit, a reviewer's "two places", "staging
+diverged", "it should only show X". Reproduce or measure it before Impact scope inherits it.
 
 **Name the cards that touch the same files**, open or not, and say which must land first.
 
 ## Step 6 — Priority, deadline, size
 
-- `priority` and `deadline`: if the requester did not say, add it to the open questions and use
-  `MEDIUM` with no due date
-- `size`: `S` (under half a day) | `M` (1–2 days) | `L` (more) → story points `2 / 5 / 8`.
-  Rough only; `/p` reassesses.
+- `priority` and `deadline`: unsaid → an open question, and `MEDIUM` with no due date
+- `size`: `S` (under half a day) | `M` (1–2 days) | `L` (more) → points `2 / 5 / 8`; `/p` reassesses.
 
 ## Step 7 — Open questions
 
 List every remaining ambiguity. Each question must be specific, answerable in one sentence, and
-state the consequence of guessing wrong. Do not ask what reading the code would answer.
+state the consequence of guessing wrong — for one that decides where data lives, the scope each
+answer buys (schema, migration, product change). Do not ask what reading the code would answer.
 
 Add a draft message to the requester — **written in Vietnamese**, colleague tone, every question
 gathered into a single ask.
@@ -81,28 +87,20 @@ LF new <project> --title "<≤80 chars>" --desc-file <scratch.md> --column Backl
   --labels "<type>,<priority>" --points <2|5|8> [--priority LOW|MEDIUM|HIGH] [--due YYYY-MM-DD] [--assignee <email>]
 ```
 
-Assigned to you by default (`owner` in `board.json`); `--assignee ""` leaves it unassigned.
-
-Sections in this order — this text is the **requester's half** of the description and no later
-command may touch it: `Request (verbatim)` · `Interpretation` · `Out of scope` ·
-`UX references` · `Business rule conflicts` · `Related cards` · `Impact scope` ·
+Open with one line that reads on the card face (§1), then these sections in order — the
+**requester's half**, which no later command may touch: `Request (verbatim)` · `Interpretation` ·
+`Out of scope` · `UX references` · `Business rule conflicts` · `Related cards` · `Impact scope` ·
 `Open questions` · `Draft message to requester`.
 
-Then seed a **coarse work tree** from your Impact scope — each row is a level-1 item — with
-`LF work <card> --file <tree.md>`. `/p` renumbers it later; `/s` never faces an unsplit card.
-
-The board shows only the first two lines of a description as plain text, so open with one line
-that reads well on the card face before the first heading.
+Then seed a **coarse work tree** from your Impact scope (each row a level-1 item) with
+`LF work LF-<N> --file <tree.md>` — N **read from `LF new`'s output**, never guessed or chained:
+a guessed N once replaced another session's Done card's tree. `/p` renumbers it later.
 
 ## Step 9 — Record friction and close out
 
-Before printing the summary, append friction entries per CONVENTIONS §9. What to look for at this
-stage:
-
-- a question the process should have pre-empted → `missing-step`
-- a source you could not read, or read incompletely → `missing-step` or `missing-fact`
-- locked rules not where `flow.md` said → `missing-fact`, applied to `flow.md`
-- a card section empty two cards running → `noise`
+Before printing the summary, append friction entries per CONVENTIONS §9 — here: a question the
+process should have pre-empted, or a source read incompletely → `missing-step`; locked rules not
+where `flow.md` said → `missing-fact`, applied there; a section empty two cards running → `noise`.
 
 Print: `LF-N`, type, size, open-question count, whether rule approval is needed, and the card link.
 

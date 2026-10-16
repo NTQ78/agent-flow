@@ -15,23 +15,28 @@ a migration — and ask which to drop, if any.
 unanswered escalation, or it carries a `needs-approval` label with no sign-off: **STOP the whole
 run.** Name the card and why. No override flag. This gate holds whether or not you go on to deploy.
 
+**Claim the batch first.** A card whose release block already reads `in progress` from a live
+session (ListAgents) stops the run — join that release. Otherwise write `Release <id> in progress,
+<session>` as each card's release block now; §1 overwrites it. A peer's card mid-build in the same
+tree, above all with a generated migration, blocks the artifact: name it and stop.
+
 **Then look outside the batch, because the column is a claim and the build is a fact.** Every
 other card whose build block names files that exist in the repo is shipping with you (§2). For
 each: either it joins the batch and gets verified, or you **name it in the release block** under
-"rode along unverified". Silence is forbidden — on 2026-08-28 four such tickets reached
-production unrecorded.
+"rode along unverified". Silence is forbidden.
 
 **A build block is not the only way code gets in.** Diff the repo against the last release's
 commit: any source file no card's build block names ships as surely as the rest — name it. Then
 read the base config the artefact carries **block by block**: an environment-specific value
-living in the base file needs an override on the target, named in the release block. One pointed
-every production punch at a host on a developer's laptop.
+living in the base file needs an override on the target, named in the release block. **The tree
+can also be BEHIND production:** HEAD missing a commit the live build has is a hard stop. After a
+pull or merge, a clean merge is not evidence — for each file both sides touched, show both hold.
 
 ## 1. Close the cards
 
-**Run the project's full declared check set once, across the whole batch.** The cards were
-verified on the confined set (`/c` §1) and this is where a release pays the difference. A failure
-here stops the run like any other gate.
+**Run the project's full declared check set once, across the whole batch**, one suite at a time,
+output to a file before any filter. The cards were verified on the confined set (`/c` §1); this is
+where a release pays the difference, and a failure stops the run like any other gate.
 
 Then, for each card, write the release block and close it: `LF section <card> release --file
 <scratch.md>`, `LF move <card> Done`, `LF tick <card> Ship`.
@@ -45,11 +50,13 @@ settles it, then rewrite the block with what happened.
 ## 2. Deploy — ask, do not assume
 
 Now ask the user which of three: **deploy now** (run §3–§7), **deploy by hand** (print the exact
-commands and the checklist, touch nothing), or **do not deploy** (stop here).
+commands and the checklist, touch nothing), or **do not deploy** (stop here). More than one deploy
+path, or one that already ran (push-to-deploy, a migration applied at `/s`)? Name the window each
+leaves production in, inside the question.
 
 Whichever they pick, **rewrite the release block to say so**, naming the target if one was used.
 A card in Done whose block does not say whether it is live is the one thing this command must
-never produce.
+never produce — re-read every block at the end; a leftover `not yet` means unfinished.
 
 ## 3. Target, backup, artifact
 
@@ -60,10 +67,10 @@ record the answer there.
 
 A migration or a data-fixing script means **back up first**, to the path `flow.md` declares,
 recorded in the release block **before** anything runs. No backup, no migration; a waiver is said
-once, in the block.
+once, in the block. **Keep the files being replaced too** — zip the target's folders (or the
+previous artifact) before the first copy; publishing over them destroys the rollback point.
 
-Then build the FE and publish the BE per `flow.md`. If a running process holds the DLLs, follow
-its traps — never kill user processes.
+Then build the FE and publish the BE per `flow.md`; never kill a user process holding the DLLs.
 
 ## 4. Migration — stop and confirm
 
@@ -75,28 +82,25 @@ Then **stop and ask.** Run only on an explicit yes.
 
 Execute against the chosen target. Then:
 
-- Open the main page, log in
+- Log in, visit each affected screen, screenshot into the card's folder
 - Call a few critical endpoints, plus the new endpoint of each card. **Prove the build is the NEW
   one** — hit a route only this batch added; a healthy old build answers 200 too
-- Visit the affected screen, screenshot into the card's folder
-- **Diagnose correctly:** on IIS a `500.31` surfaces in the browser as a CORS error. Read the
-  response body before touching any CORS configuration — changing it will fix nothing
 
 A failing smoke test means rolling back per §6, not leaving it as is.
 
 ## 6. Rollback notes
 
 Write into the release block **as soon as the deploy finishes**, not when needed: the previous
-version/commit or artifact and where it is, the database backup path, the exact commands to go
-back (restore files, restore DB, restart the app pool), and whether the migration is reversible —
-if it is not, say so.
+version/commit or artifact and where it is, the database backup path, and the exact commands to go
+back — **per deploy path**, saying whether undoing one half alone is safe. Split **code** from
+**data**: what the previous build does with values the new one wrote (a new stored status word, a
+backfill), whether the migration reverses, and which backup alone restores the rest.
 
 ## 7. Record friction and close out
 
-First, from this stage: a deploy step you had to work out that `flow.md` should have declared
-(`missing-fact`, applied there), or a safety step that was missing (`missing-rule`/`wrong-gate`).
-Second, a look back over each card — the build and verify blocks already record the divergences
-and untested cases. Distil what the stages missed; do not re-observe.
+First, from this stage: a deploy step `flow.md` should have declared (`missing-fact`, applied
+there), or a missing safety step (`missing-rule`/`wrong-gate`). Second, look back over each card's
+build and verify blocks and distil what the stages missed; do not re-observe.
 
 Then count entries in `~/.claude/flow/friction.jsonl` with `promoted: null`. At five or more,
 print one line: `N unpromoted friction entries — run /retro`. Nothing else.

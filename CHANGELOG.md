@@ -3,6 +3,79 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-10-16 — ninth `/retro` run: what a change reaches, and what a release can undo
+
+518 unpromoted entries (2026-08-25 → 2026-10-16), 384 from HR_APP. Each slice was clustered by stage, and the owner approved every proposal: 258 entries promoted, 28 rejected, 232 left watching. They are mostly singletons, plus the business-rule `[ASSUMPTION]`s, which are owner questions rather than flow gaps. The pattern this time: the stages verified **what the spec named**, not **what the change reaches**. That meant callers, readers, tests pinning the old behaviour, other screens rendering the same data, and the release that would have to undo it. Every file stays at or under budget.
+
+- **`intake.md`** (110 → 108):
+  - A claim in the request is a hypothesis to reproduce or measure, and the survey reads the data, not only the code.
+  - A source that refused you is re-asked before sizing.
+  - A link to an existing card is enriched, not re-opened.
+  - An open question says the scope each answer buys.
+  - The work-tree card number is read from `LF new`'s output, never guessed. A guessed number replaced another session's Done card's tree.
+  
+  *(claim-as-finding, 9 entries over three runs: F-2026-09-18-240, F-2026-09-22-299, -322, F-2026-09-24-351, -374, F-2026-09-28-478, F-2026-09-29-527, F-2026-10-15-674, F-2026-09-03-163; F-2026-10-07-655; F-2026-09-25-410, F-2026-10-09-01; F-2026-09-24-341, -375; F-2026-09-24-322, -324)*
+- **`p.md`** (110 → 110):
+  - Step 0: more than four hard questions means more rounds, never a downgrade. Survey each option before offering it, then re-read the answers against each other.
+  - Step 1: find by grep, not by browsing.
+  - Step 4: every reader of what changes is listed, with the property its use relies on. A stored pointer or rule lists the events that invalidate it. A URL or filter value states its valid set.
+  - Step 5: i18n covers every state and message, reusing existing terms.
+  - Step 6: cases cover what the feature promises, and existing tests, seeds and consumers pinning the old behaviour are listed.
+  - Step 7: compile order, and removals go last.
+  - Cut: the HR-only DTO rule (it lives in that project's flow.md) and the Step 8 noise bullet.
+  
+  *(property-not-stated ×17, callers left out ×13, function-not-promise cases ×13, pinning tests ×9, i18n ×6, stored pointer ×5, work order ×3: e.g. F-2026-10-02-603, F-2026-09-25-430, F-2026-09-23-309, F-2026-09-24-343, F-2026-10-13-670, F-2026-09-25-445, F-2026-09-30-564)*
+- **`s.md`** (108 → 110):
+  - No deploy and no live-data write at `/s`.
+  - A rendered specimen is read before the gates.
+  - A mock is a second implementation of the server.
+  - A red file in the full suite is another card's only with proof.
+  - Cut: two anecdotes and the missing-skill bullet.
+  
+  *(F-2026-09-24-335, F-2026-09-29-528; F-2026-09-23-318, F-2026-10-15-697; F-2026-08-27-102, F-2026-09-16-229, F-2026-09-24-334, F-2026-09-28-504; F-2026-09-25-453, F-2026-10-06-637, F-2026-09-22-302)*
+- **`c.md`** (110 → 110):
+  - "No test files found" is not a pass.
+  - Peer mtimes are checked around the gates.
+  - Drive every screen that renders what changed.
+  - Measure the cause before offering options.
+  - A fix at `/c` greps its siblings.
+  - A red test is a claim about the product.
+  - Cut: rationale and dated anecdotes.
+  
+  *(F-2026-09-22-303; F-2026-09-21-273, F-2026-10-15-692; F-2026-09-21-269, -275, F-2026-09-24-361; F-2026-09-23-306, -307; F-2026-09-25-401, -441, F-2026-10-15-707; F-2026-09-21-278, F-2026-09-25-455)*
+- **`ship.md`** (105 → 109):
+  - Claim the batch first; two sessions shipped one batch.
+  - The tree can be behind production.
+  - Suites run one at a time.
+  - Keep the files being replaced.
+  - Rollback is split into code and data, per deploy path.
+  - Re-read every release block for a leftover "not yet".
+  - The IIS 500.31 bullet moves out; it is a project fact.
+  
+  *(F-2026-09-25-462, -463, F-2026-10-15-678, F-2026-09-25-425, F-2026-09-28-488; F-2026-09-24-390, F-2026-09-25-403, F-2026-10-02-600; F-2026-08-28-153, F-2026-09-21-284; F-2026-09-24-341, F-2026-10-13-672, F-2026-09-23-317, F-2026-09-24-340, F-2026-09-29-532; F-2026-09-24-392; F-2026-09-22-296)*
+- **`CONVENTIONS.md`** (170 → 170):
+  - §4: the hard stop covers "is the write audited, which row".
+  - §4: mapping the access path includes FE gates and the actions a newly admitted actor is offered.
+  - §7: the owner rejected an "AI-looking" redesign on 2026-10-16, so an icon in a tinted tile on every card and decorative dot steppers are added to the tells, with a density test (an admin list item under ~80 px).
+  - §8: a worktree has no flow.md; read it by outline.
+  - Cut: three anecdotes and one §6 sentence.
+  
+  *(F-2026-08-28-138, F-2026-09-28-484…486, F-2026-09-29-542, -543, F-2026-10-15-690, F-2026-10-01-597; F-2026-10-08-661; F-2026-10-16-705; F-2026-09-16-216, F-2026-09-21-266, F-2026-09-24-367, -373)*
+- **`lf.js`**:
+  - Retry once on a 401 before dying, naming where the key lives.
+  - `work --file` refuses a card in Done without `--force`.
+  
+  *(F-2026-10-02-557, F-2026-10-09-02, F-2026-10-16-694; F-2026-10-07-655)*
+- **Outside the repo:**
+  - HR_APP `flow.md` gained the missing-fact entries that were logged as applied but never written.
+  - A mail-recipients rule was added.
+  - The "last confirmed install" line now has an update rule.
+- **Log hygiene:**
+  - 193 entries had their text under `note`/`text`; it is now copied into `what`.
+  - 116 entries without an id got one (`F-<date>-xNNNN`).
+  - 73 duplicate ids among open entries got a letter suffix.
+  - The stages had drifted from the §9 schema, and earlier `/retro` runs read those entries as blank.
+
 ## 2026-10-08 — eighth `/retro` run: rules nobody could find
 
 508 unpromoted entries over two weeks (2026-09-24 → 2026-10-08), 382 from HR_APP. Eleven clusters

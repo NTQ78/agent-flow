@@ -50,8 +50,7 @@ asks whether to deploy, and the release block records which was chosen.
 ticket is worse than no board.
 
 Code lives in one shared tree, so a card's work reaches production with the next deploy whether or
-not its card closed. `/ship` reads the columns **plus** whether the build block's files are in the
-repo. On 2026-08-28 four tickets shipped while still mid-flow, every gate green.
+not its card closed: `/ship` reads the columns **plus** whether the build block's files are in the repo.
 
 ## 3. Language
 
@@ -69,19 +68,17 @@ language** — a translation is not evidence.
 - **Stop too when a card OUTSIDE the batch has code in the build** (§2). It deploys either way;
   verify it into the batch, or record in the release block why it rides along.
 - `/ship` is **last but optional** — a card resting at Review is waiting, not stalled.
-- **A question whose answer decides a permission, a route, or a stored value is a HARD stop at
-  `/p`** — cosmetic and copy questions keep the soft gate. Nine unanswered questions once ran the
-  whole chain: three were wrong, and one rewrote the access path after `/c` had passed.
+- **A question whose answer decides a permission, a route, or a stored value — whether a write is
+  audited, which row it lands in — is a HARD stop at `/p`**; cosmetic and copy keep the soft gate.
 - A step whose **precondition the project does not meet** — no test runner, no locale layer, no
   migrations, no BE — is declared `N/A` in one line with the reason, keeping any numbering a
   later stage consumes. Never leave it blank, and never install machinery to satisfy the step.
 - For an access, permission or validation change, **map the path, not the files**: every entry
-  point reaching the guarded state, and the layer that enforces it. Missing either half has cost a
-  mis-sized ticket and a nearly-shipped bug.
+  point and right reaching the guarded state (FE gates too: menu, page guard, the query a button
+  waits on), each action a newly admitted actor is then offered, and the layer that *stops* it.
 - **A result you have not tried to falsify is not a result.** Show a check can go red before
   reading its green; try to make X happen before writing "X cannot happen" into a migration, a
-  `flow.md` or a commit message. Twice a guarantee was asserted in three documents in one build
-  and was false; and a measurement is a check — an empty selector reports the product, not itself.
+  `flow.md` or a commit; a measurement is a check — an empty selector reports the product, not itself.
 - **Design for the second one.** A marker column, a uniqueness guard, a status flag: say what the
   second marker or the second rule looks like before choosing the shape, or the next card pays.
 
@@ -95,8 +92,7 @@ card link, then ask "Run `<next>`?" — run it only if the user agrees.
 The installed skill set changes over time (the user adds new ones regularly). **Never assume a
 skill exists.** Before any design or UI work, list `~/.claude/skills` and
 `<project>/.claude/skills`, read the `description` in each candidate's `SKILL.md`, pick the
-closest match and invoke it via the Skill tool. Say which you picked and why when several
-overlap; if nothing fits, say so plainly rather than inventing a name.
+closest match and invoke it via the Skill tool — say which and why; if nothing fits, say so.
 
 **A directory is not an available skill.** Cross-check against what the session actually offers; a
 name that exists only on disk resolves to a different skill. `/sk` reports which are shadowed.
@@ -115,9 +111,11 @@ already in the repo and reuse them; with no existing app the brief and the skill
 
 Tells to avoid, unless the app already uses them: purple/indigo gradients, glassmorphism, glowing
 borders, emoji in headings or buttons, cards inside cards inside cards, symmetrical feature
-columns, hollow marketing copy, `shadow-lg` everywhere, an icon on every row, one metronomic
-rhythm, grey placeholders and "John Doe" data. Use the domain's real labels and data instead, at
-the density its users need, from components the repo already has.
+columns, hollow marketing copy, `shadow-lg` everywhere, an icon on every row, an icon in a tinted
+tile on every card, decorative dot steppers, one metronomic rhythm, grey placeholders and "John
+Doe" data. Use the domain's real labels and data instead, at the density its users need, from
+components the repo already has. **Density test:** an admin list item shows the facts a person
+decides on within ~80 px; a card whose padding outweighs its content is a defect.
 
 **Precedence, when something else mandates a tell.** The requester outranks §7: a tell they
 supplied verbatim — exact CSS, a named font, a spacing over a cap — is sign-off. Record it under
@@ -135,8 +133,10 @@ The commands are global, so they hard-code no project detail. Details come from:
 ```
 
 It declares build/test commands, how to run the app, known traps, locked business rules and
-deploy targets. No such file? Ask for what you need and offer to create it — do not guess. A
-greenfield project has none **by design**: `/s` writes it at the end of the build.
+deploy targets. It is gitignored, so **a worktree has none** — read the main checkout's
+(`git worktree list`, first line). Read it by outline (`grep -n '^## '`), then only the sections
+the card needs — never whole. No such file? Ask for what you need and offer to create it — do not
+guess. A greenfield project has none **by design**: `/s` writes it at the end of the build.
 
 ## 9. Friction log — how this process improves itself
 

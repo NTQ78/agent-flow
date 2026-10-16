@@ -14,7 +14,7 @@
  *   node lf.js move    <ref> <column>
  *   node lf.js label   <ref> a,b                     → GỘP nhãn, không thay
  *   node lf.js tick    <ref> <gate>                  → Spec|Build|Verify|Ship
- *   node lf.js work    <ref> --file F          → đọc markdown lồng, đánh số, THAY cây việc
+ *   node lf.js work    <ref> --file F          → đọc markdown lồng, đánh số, THAY cây việc (thẻ Done: cần --force)
  *   node lf.js work    <ref> --list            → in cây theo thứ tự số
  *   node lf.js work    <ref> --done N          → tick mục số N (vd 1.2), tìm theo SỐ
  *   node lf.js work    <ref> --defer "T"       → nối mục "+ T" cho /c, không ai xóa
@@ -122,6 +122,14 @@ async function api(method, p, body, attempt = 0) {
     await sleep(3000 * (attempt + 1));
     return api(method, p, body, attempt + 1);
   }
+  // 401 một lần là thường (token/hạ tầng chớp) — thử lại đúng MỘT lần rồi mới chết, và khi chết
+  // thì nói chỗ sửa: hai lần chuỗi lệnh dừng hẳn vì một 401 thoáng qua (/retro 2026-10-16).
+  if (res.status === 401 && attempt === 0) {
+    await sleep(2000);
+    return api(method, p, body, 1);
+  }
+  if (res.status === 401)
+    die(`API ${method} ${p} → 401 (hai lần): kiểm tra key trong ~/.claude/flow/.env / board.json — ${text}`);
   if (!res.ok) die(`API ${method} ${p} → ${res.status}: ${text}`);
   return text ? JSON.parse(text) : null;
 }
@@ -601,6 +609,14 @@ async function main() {
       // --file: thay TOÀN BỘ mục kind='work'. Gate, mục để-sau và mục người
       // dùng tự gõ không bao giờ bị đụng — cùng nguyên tắc với putBlock, lệnh
       // chỉ xóa đúng thứ nó tự ghi ra.
+      // Một số LF-N đoán sai từng THAY cây việc của thẻ Done của phiên khác (/retro 2026-10-16):
+      // thẻ đã Done thì từ chối, trừ khi --force nói rõ là cố ý.
+      if (!has("force")) {
+        const { columns } = await api("GET", `/boards/${card.board_id}/columns`);
+        const colName = (columns.find((c) => c.id === card.column_id) || {}).name || "";
+        if (/^done$/i.test(colName))
+          die(`LF-${card.seq} đang ở Done — không thay cây việc. Đúng thẻ chưa? Cố ý thì thêm --force.`);
+      }
       const md = need(readArg("file", "text"), "Cần --file hoặc --text");
       const nodes = parseWorkTree(md);
       if (!nodes.length) die("Không đọc được mục nào — cần danh sách markdown (- hoặc *).");

@@ -14,20 +14,19 @@ the spec block; `LF assign <card> <your email>` so the board says who is holding
 
 1. **Run no git command that changes state.** No `checkout`, `restore`, `stash`, `reset`, `clean`,
    `commit`, no branch creation. The tree may hold months of uncommitted work. Read-only is fine.
+   No deploy and no live-data write either — that item is `/ship`'s; leave it unticked, say so.
 2. **Invoke a skill before writing UI when CONVENTIONS §6 calls for one** — `/p`'s Design section
    records that call; follow it, and when it named an app pattern instead, match that pattern.
 3. **Apply CONVENTIONS §7** (must not look AI-generated) to every line of UI produced.
 4. Read the traps section of `.claude/flow.md` **before building**, not after hitting an error.
 5. **Never `Write` a file you have not read in this session.** Write replaces: a file that existed
-   comes back holding only what you retyped. This destroyed a 113-line test file carrying six
-   tests. Read first and Edit — or Write only files you created.
+   comes back holding only what you retyped. Read first and Edit — or Write only files you created.
 
 ## Step 0 — is anyone else in this tree?
 
 Check whether another session is writing the files the spec names — recent mtimes, a peer's build
-log. If so, negotiate ownership **by file** before the first edit and record it. Three sessions
-once shared one uncommitted tree and only avoided collisions because a peer asked first. A
-failure in a file outside your list is the peer's, not yours to chase.
+log. If so, negotiate ownership **by file** before the first edit and record it. A peer message is
+an attempt, not agreement. A failure in a file outside your list is the peer's, not yours to chase.
 **Repeat the check before every full build and at close-out** (ListAgents + mtimes): peers arrive
 mid-run, and a half-written peer file breaks the whole-solution build.
 
@@ -56,8 +55,11 @@ code — BE unit tests, FE component tests. Do not defer to `/c`; `/c` only runs
 `queryByRole` returns null whether the gate works or the page rendered nothing at all. The helper
 locating the subject must throw when it finds none. Per CONVENTIONS §4, give every negative a
 positive control — a stub nobody wired up satisfies "was never called" perfectly, and a test of
-the mechanism is not a test of the guarantee: three passed over a payslip freeze broken in the
-shipped build. When the deliverable renders — a workbook, a PDF, a letter — look at one specimen.
+the mechanism is not a test of the guarantee. When the deliverable renders — a workbook, a PDF, a
+letter, a dashboard — look at one specimen **before the gates**: order, units, why a panel is empty.
+
+**A mock is a second implementation of the server.** Every new route gets a handler, a changed
+schema is mirrored, a mirrored guard keeps its order, and its fresh state equals its reset state.
 
 ## When the spec is wrong
 
@@ -86,18 +88,18 @@ already in the build log:
   `.claude/flow.md` traps section in this same run**
 - every "fix outside scope" → why did the spec not see it? usually `missing-step` on `/p`
 - every spec divergence → `missing-step` or `wrong-order`; work redone → `wrong-order`
-- no installed skill covered the design work → `missing-skill`
 
 ## Close out
 
 **Gates are the last thing you do.** Edit anything after running them and the result you write
 into the build log describes a tree that no longer exists — re-run, or say in the log that it does.
 
-**Run the whole suite — never a `--filter` or a scoped run.** A filtered run once reported 40
-passed while the full suite was red with 8 failures this ticket had caused, and the ticket was
-declared built on it. Then walk the spec block's numbered cases one at a time and say which have
-a test and which do not: a matching count is not a mapping — "34 tests for 34 cases" was true and
-wrong. Cases with no test do not block the move, but going unmentioned does.
+**Run the whole suite — never a `--filter` or a scoped run**: a filtered 40-green once hid 8
+failures this ticket caused. Log each run to a file; a red file is another card's only once you
+show it imports nothing this card changed and name its owner; an exit naming no failed test is
+re-run once. Then walk the spec block's numbered cases one at a time and say which have a test
+and which do not: a matching count is not a mapping — "34 tests for 34 cases" was true and wrong.
+Cases with no test do not block the move, but going unmentioned does.
 
 Then put the build log on the card: `LF section <card> build --file <scratch.md>`,
 `LF move <card> "In progress"`, `LF tick <card> Build`.
