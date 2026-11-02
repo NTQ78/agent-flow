@@ -2,7 +2,7 @@
 // Trọng tâm là putBlock — nó là chỗ duy nhất có thể xóa chữ người dùng viết.
 
 import {
-  parseRef, putBlock, humanPart, SECTIONS, GATES,
+  parseRef, putBlock, humanPart, SECTIONS, GATES, badByteAt, hasBlock, GATE_BLOCK,
   parseWorkTree, restoreStatus, statusOf, pickStale, pickRescue, workTree, flatTree,
 } from "./lf.js";
 
@@ -19,6 +19,19 @@ function eq(name, got, want) {
 function ok(name, cond) {
   cond ? pass++ : fails.push(name);
 }
+
+// ---------- badByteAt / hasBlock (F-2026-10-21-731, F-2026-10-26-775) ----------
+
+eq("badByteAt: chữ Việt + TAB/LF/CR sạch", badByteAt("Nghỉ phép: 4 giờ\tA\r\nB"), -1);
+eq("badByteAt: BEL từ `\\a` trong đường dẫn", badByteAt("D:" + String.fromCharCode(7) + "gent"), 2);
+eq("badByteAt: NUL", badByteAt("x" + String.fromCharCode(0)), 1);
+eq("badByteAt: C1 U+0082 (cp1252 đọc nhầm)", badByteAt("ab" + String.fromCharCode(0x82)), 2);
+eq("badByteAt: rỗng", badByteAt(""), -1);
+ok("hasBlock: có khối verify", hasBlock("req\n\n<!-- flow:verify -->\nPASS\n<!-- /flow:verify -->", "verify"));
+ok("hasBlock: chưa có khối", !hasBlock("req", "verify"));
+ok("hasBlock: khối rỗng không tính", !hasBlock("req\n\n<!-- flow:verify -->\n\n<!-- /flow:verify -->", "verify"));
+ok("hasBlock: khối khác không tính", !hasBlock("<!-- flow:spec -->\nS\n<!-- /flow:spec -->", "verify"));
+ok("GATE_BLOCK: mọi gate có khối", GATES.every((g) => SECTIONS.includes(GATE_BLOCK[g])));
 
 // ---------- parseRef ----------
 

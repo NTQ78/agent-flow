@@ -13,7 +13,7 @@
  *   node lf.js section <ref> <key> --file F          → ghi ĐÈ đúng khối <key>
  *   node lf.js move    <ref> <column>
  *   node lf.js label   <ref> a,b                     → GỘP nhãn, không thay
- *   node lf.js tick    <ref> <gate>                  → Spec|Build|Verify|Ship
+ *   node lf.js tick    <ref> <gate> [--force]        → Spec|Build|Verify|Ship; cần khối tương ứng
  *   node lf.js work    <ref> --file F          → đọc markdown lồng, đánh số, THAY cây việc (thẻ Done: cần --force)
  *   node lf.js work    <ref> --list            → in cây theo thứ tự số
  *   node lf.js work    <ref> --done N          → tick mục số N (vd 1.2), tìm theo SỐ
@@ -221,6 +221,27 @@ function putBlock(desc, key, md) {
   const re = blockRe(key);
   if (re.test(desc ?? "")) return (desc ?? "").replace(re, body);
   return (desc ?? "").replace(/\s+$/, "") + body;
+}
+
+/**
+ * Vị trí byte điều khiển đầu tiên trong nội dung sắp ghi lên card, hoặc -1.
+ * C0 trừ TAB/LF/CR, và C1 (U+0080–U+009F): đó là dấu vết của heredoc / `-c` làm hỏng
+ * đường dẫn Windows (`\a` → BEL, `\0` → NUL) hay đọc UTF-8 bằng cp1252. Bốn lần
+ * (F-2026-10-21-731, F-2026-10-28-06…) một khối hỏng như thế đã lên board im lặng.
+ */
+function badByteAt(md) {
+  const m = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u0080-\u009F]/.exec(md ?? "");
+  return m ? m.index : -1;
+}
+
+/** Gate nào cần khối nào trước khi được tick (F-2026-10-26-775: Verify tick mà không có verify). */
+const GATE_BLOCK = { Spec: "spec", Build: "build", Verify: "verify", Ship: "release" };
+
+/** Card đã có khối `key` (không rỗng) chưa. */
+function hasBlock(desc, key) {
+  const m = blockRe(key).exec(desc ?? "");
+  if (!m) return false;
+  return m[0].replace(/<!--[^>]*-->/g, "").trim().length > 0;
 }
 
 /** Bỏ mọi khối của lệnh; phần còn lại là chữ người dùng viết. */
@@ -508,6 +529,11 @@ async function main() {
       const key = need(argv[2], `Thiếu <key> — một trong: ${SECTIONS.join(", ")}`);
       if (!SECTIONS.includes(key)) die(`key phải là một trong: ${SECTIONS.join(", ")}`);
       const md = need(readArg("file", "text"), "Cần --file hoặc --text");
+      const bad = badByteAt(md);
+      if (bad >= 0) {
+        const code = md.charCodeAt(bad).toString(16).padStart(4, "0");
+        die(`Nội dung có byte điều khiển U+${code} ở vị trí ${bad} — file bị hỏng (heredoc / -c / cp1252?). Sửa file rồi ghi lại.`);
+      }
       const { card } = await fetchCard(argv[1]);
       const next = putBlock(card.description ?? "", key, md);
       if (next === (card.description ?? "")) {
@@ -545,6 +571,10 @@ async function main() {
       const gate = need(argv[2], `Thiếu <gate> — một trong: ${GATES.join(", ")}`);
       if (!GATES.includes(gate)) die(`gate phải là một trong: ${GATES.join(", ")}`);
       const { card } = await fetchCard(argv[1]);
+      // Gate là lời khẳng định "khối của bước này có trên card". Không có khối thì không tick —
+      // một release đã dựa vào dấu Verify mà phía sau không có verify nào. --force nếu cố ý.
+      if (!has("force") && !hasBlock(card.description, GATE_BLOCK[gate]))
+        die(`LF-${card.seq}: chưa có khối "${GATE_BLOCK[gate]}" — ghi nó (section) trước khi tick ${gate}, hoặc --force nếu cố ý.`);
       await ensureGates(card);
       const fresh = await fetchCard(card.id);
       const item = (fresh.card.checklist_items ?? []).find((i) => i.text === gate);
@@ -727,7 +757,7 @@ async function main() {
 }
 
 export {
-  parseRef, putBlock, humanPart, blockRe, GATES, SECTIONS, api, cfg, ensureBoard, columnId,
+  parseRef, putBlock, humanPart, blockRe, badByteAt, hasBlock, GATE_BLOCK, GATES, SECTIONS, api, cfg, ensureBoard, columnId,
   parseWorkTree, restoreStatus, statusOf, pickStale, pickRescue, workTree, flatTree,
 };
 

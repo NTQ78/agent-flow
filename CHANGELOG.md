@@ -5,9 +5,9 @@ Direct decisions are recorded here too, marked as such. The raw friction log sta
 
 ## 2026-11-02 — tenth `/retro` run: work that lives outside the card
 
-**Counts:** 342 unpromoted entries (2026-08-25 → 2026-11-02), 264 of them from HR_APP. 72 were promoted, 28 rejected, and 242 left watching.
+**Counts:** 342 unpromoted entries (2026-08-25 → 2026-11-02), 264 of them from HR_APP. 89 were promoted, 28 rejected, and 228 left watching.
 
-**What the owner approved:** D1, D2, D4 and D5. D3 (lf.js gate and byte guards), D6 (HR_APP flow.md cleanup and three missing traps) and D7 (memory note, sa-ban flow.md) came back unanswered, so their entries stay watching.
+**What the owner approved:** D1, D2, D4 and D5 first, then D3, D6 and D7 in a second answer.
 
 **The pattern:** misses came from what sits outside the card. A remote branch or `origin/main`, a requester who was sitting right there, a writer of the value the spec changed, a test found by name instead of by the literal it pins, and a script whose id or bytes collided with another session's. Every file stays at budget.
 
@@ -37,10 +37,21 @@ Direct decisions are recorded here too, marked as such. The raw friction log sta
   - 5 entries already covered by p.md's work-tree order rule.
   - 26 business-rule `[ASSUMPTION]`s, which are owner questions rather than flow gaps.
   - 1 stale fact (the kiosk is now translated).
+- **D3, D6, D7: approved the same day in a second answer.**
+  - **D3, `lf.js`:**
+    - `tick` refuses a gate whose block (Spec→spec, Build→build, Verify→verify, Ship→release) is missing or empty, unless `--force` is given.
+    - `section` refuses a body carrying C0 control bytes (other than TAB, LF and CR) or C1 bytes (U+0080–U+009F), and names the offset.
+    - New pure helpers `badByteAt`, `hasBlock` and `GATE_BLOCK`, with tests in `lf.test.mjs` (91 pass).
+    - *(F-2026-10-26-775, F-2026-09-24-376)*
+  - **D6, HR_APP `flow.md`:**
+    - Adds a `gen-error-codes.py --check` line to the FE wide tier. At the time of writing it already exits 1 on the tree.
+    - Adds three traps: the Policy VN guard has no default arm; a peer branch can migrate the shared DB; the BE suite outruns the 600 s tool cap.
+    - Deletes the FE failure baselines resolved since 10-06, the superseded evaluator-email lines, and LF-193 v1's withdrawn batch design.
+    - *(F-2026-09-22-312, F-2026-10-07-652, F-2026-10-21-728, F-2026-10-28-06 (p), LF-198's suite-cap entry)*
+  - **D7, outside the flow:**
+    - A user-memory note: an owner's quick ask gets a one-line card and a locked-rules grep before the first edit. *(F-2026-10-15-679, F-2026-10-27-11, -12, -23, F-2026-10-30-779, F-2026-10-02-613)*
+    - sa-ban gets a `.claude/flow.md` seeded from its CLAUDE.md, carrying its five card-found facts. *(F-2026-11-02-03, -10, -13, -14)*
 - **Left watching, not dropped:**
-  - lf.js `tick` refusing a gate with no block, and `section` refusing control bytes (D3).
-  - HR_APP flow.md: a `gen-error-codes.py --check` gate, three unapplied traps, and stale sections (D6).
-  - The owner's ad-hoc asks reaching main without a card (D7).
   - The lf.js `label --remove` request, raised twice since the owner declined it on 10-08.
   - The `missing-skill` entry F-2026-09-30-566 is a `/sk` job.
 
