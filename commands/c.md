@@ -20,7 +20,7 @@ component reaches forty files, a large leaf-page change reaches nothing. The bui
 list decides the tier; the verify block says which and why.
 
 **Wide** — a changed file is shared (UI primitives, `lib/`, hooks, i18n, config, an entry point),
-or the card carries a migration or a BE change. Run the project's full declared set.
+or the card carries a migration or a BE change. Run the project's full declared set, one suite at a time.
 **Confined** — every changed file is a leaf nothing else imports:
 
 - **typecheck project-wide and unscoped** — the cheapest whole-app guarantee there is, and the one

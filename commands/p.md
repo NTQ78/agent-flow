@@ -32,9 +32,7 @@ match the existing app. Decide layout, reused components, empty/loading/error st
 behaviour. **Anything rendering conditionally: name every user path that produces it** and check
 its copy against each — no such path is the finding. BE-only: skip the step.
 
-## Step 3 — Diagram
-
-Branching flow (approvals, evaluations, lifecycles): a mermaid `flowchart` or `stateDiagram-v2`.
+## Step 3 — Diagram: a mermaid `flowchart` or `stateDiagram-v2`, for branching flow only
 
 ## Step 4 — Technical spec
 
@@ -48,8 +46,9 @@ Per layer, files to **create** or **modify** with **signatures** — enough for 
 
 **Every path, symbol, call site and screen the spec names is one you opened, with the property its
 use relies on stated** (a signature, an error or audit shape, a slot's layout, the save that
-persists it) — and so is every reader of what it changes: a route, a guard, a derived figure, a
-legend, a reused export. List them, or show why one is untouched. Grep-verify or do not name it.
+persists it) — and so is every reader **and writer** of what it changes: a route, a guard, a derived
+figure, a legend, a reused export, a form posting it back, a job or path setting it. List them, or
+show why one is untouched. Grep-verify or do not name it.
 
 Hard constraints (re-check the traps section of the project's `.claude/flow.md`):
 
@@ -79,7 +78,8 @@ the feature promises, not what each function does:** the invariant functions sha
 UI prints, every input shape, edit and exit beside create. **Each case names the fixture that
 expresses it** — a symbol with no harness, an `internal` class with no `InternalsVisibleTo`, a
 state no user path reaches: that is the finding. **List the existing tests, seeds and consumers
-pinning the old behaviour** — which go red, which stay as the net. No test runner, or a project
+pinning the old behaviour** — grep the test tree for the old literal, the route string and the
+method, never by test name — which go red, which stay as the net. No test runner, or a project
 rule against new tests (read flow.md and the repo's CLAUDE.md first)? Keep the numbering and write
 **verification steps**, each naming its method and the seeded record that produces its state.
 

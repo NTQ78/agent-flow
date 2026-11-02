@@ -3,6 +3,47 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-11-02 — tenth `/retro` run: work that lives outside the card
+
+**Counts:** 342 unpromoted entries (2026-08-25 → 2026-11-02), 264 of them from HR_APP. 72 were promoted, 28 rejected, and 242 left watching.
+
+**What the owner approved:** D1, D2, D4 and D5. D3 (lf.js gate and byte guards), D6 (HR_APP flow.md cleanup and three missing traps) and D7 (memory note, sa-ban flow.md) came back unanswered, so their entries stay watching.
+
+**The pattern:** misses came from what sits outside the card. A remote branch or `origin/main`, a requester who was sitting right there, a writer of the value the spec changed, a test found by name instead of by the literal it pins, and a script whose id or bytes collided with another session's. Every file stays at budget.
+
+- **`intake.md`** (108 → 110):
+  - Step 5: after naming the cards on the same files, `git fetch` and name the remote branches and `origin/main` commits since your base that touch them.
+  - Step 7: when the requester, or a scope owner, is at the keyboard, ask the hard questions now with AskUserQuestion and keep the draft only for what is left.
+  - Step 9 is shortened to one line to stay in budget.
+
+  *(asked-not-drafted ×6, 3 projects: F-2026-09-24-371-b, F-2026-10-02-561, F-2026-10-08-x0931, F-2026-11-02-02, -09, -11. Git outside the board ×5: F-2026-10-29-01, -04, F-2026-10-30-03, F-2026-10-20-743 and LF-198's id-less entry. Tin's feature on origin/main made LF-193 v1's design obsolete.)*
+- **`CONVENTIONS.md`** (170 → 170):
+  - §9: a friction `id` is `F-<date>-<LF-n or project>-<n>`, uses exactly the schema keys, is appended (never rewritten) and parsed back. This replaces "highest + 1, read at write time", which collides under concurrent sessions.
+  - §4: the script-runs-from-a-file rule moves up from §9, where it read as friction-only, and widens to board blocks plus a control-byte scan.
+  - §8: a missing flow.md is offered seeded from the repo's CLAUDE.md.
+  - §1 and §6 are each shortened by one line to stay in budget.
+
+  *(id collisions: F-2026-10-20-740, F-2026-11-02-15, F-2026-09-22-294. Heredoc and `-c` corruption: F-2026-10-21-731, F-2026-10-27-04, F-2026-10-28-06 (ship), F-2026-11-02-06, F-2026-09-28-x0669. No flow.md: F-2026-11-02-01, -04, -08.)*
+- **`c.md`** (110 → 110): the wide tier runs the full declared set **one suite at a time**, as ship.md already says. *(F-2026-10-07-x0920, F-2026-10-08-x0932, F-2026-10-21-763, F-2026-10-30-02)*
+- **`p.md`** (110 → 110):
+  - Step 4 lists every reader **and writer** of what changes: a form posting the value back, a job or path setting it.
+  - Step 6 finds tests pinning the old behaviour by grepping the old literal, the route string and the method, never by test name.
+  - Step 3 (Diagram), which no entry has ever cited, collapses to its heading.
+
+  *(writers missed ×11: e.g. F-2026-10-12-x0984, F-2026-10-20-761, F-2026-10-29-03, F-2026-10-30-01, F-2026-09-28-501. Pinned tests found by name ×7: F-2026-10-07-x0907, F-2026-10-21-723, F-2026-10-26-766, -769, F-2026-10-28-07, F-2026-10-29-06, F-2026-10-30-05.)*
+- **Promoted with no text change:** 20 HR_APP `missing-fact` entries were verified present and findable in that project's flow.md.
+- **Rejected:**
+  - 5 entries fixed on 10-16 (claim the batch; peer message is an attempt).
+  - 5 entries already covered by p.md's work-tree order rule.
+  - 26 business-rule `[ASSUMPTION]`s, which are owner questions rather than flow gaps.
+  - 1 stale fact (the kiosk is now translated).
+- **Left watching, not dropped:**
+  - lf.js `tick` refusing a gate with no block, and `section` refusing control bytes (D3).
+  - HR_APP flow.md: a `gen-error-codes.py --check` gate, three unapplied traps, and stale sections (D6).
+  - The owner's ad-hoc asks reaching main without a card (D7).
+  - The lf.js `label --remove` request, raised twice since the owner declined it on 10-08.
+  - The `missing-skill` entry F-2026-09-30-566 is a `/sk` job.
+
 ## 2026-10-16 — ninth `/retro` run: what a change reaches, and what a release can undo
 
 518 unpromoted entries (2026-08-25 → 2026-10-16), 384 from HR_APP. Each slice was clustered by stage, and the owner approved every proposal: 258 entries promoted, 28 rejected, 232 left watching. They are mostly singletons, plus the business-rule `[ASSUMPTION]`s, which are owner questions rather than flow gaps. The pattern this time: the stages verified **what the spec named**, not **what the change reaches**. That meant callers, readers, tests pinning the old behaviour, other screens rendering the same data, and the release that would have to undo it. Every file stays at or under budget.

@@ -16,8 +16,7 @@ Everything the chain writes goes into that card's description, each stage in its
 <!-- flow:verify --> /c   <!-- flow:release --> /ship
 ```
 
-Blocks are **appended after** the requester's text, never before it: the board renders a
-description as plain text clamped to two lines, so a marker at the top shows on the card face.
+Blocks are **appended after** the requester's text, never before it: the card face shows two lines.
 
 **The only thing left on disk** is what a description cannot hold — screenshots and gate logs, in
 `D:\Agent-Projects\<project>\LF-<n>\`. Code stays in the real repo, as it always did.
@@ -76,6 +75,8 @@ language** — a translation is not evidence.
 - For an access, permission or validation change, **map the path, not the files**: every entry
   point and right reaching the guarded state (FE gates too: menu, page guard, the query a button
   waits on), each action a newly admitted actor is then offered, and the layer that *stops* it.
+- **A script that edits a file or writes a board block runs from a FILE, by path** — never a
+  heredoc or `-c` — reads and writes bytes, and its output is scanned for control bytes before use.
 - **A result you have not tried to falsify is not a result.** Show a check can go red before
   reading its green; try to make X happen before writing "X cannot happen" into a migration, a
   `flow.md` or a commit; a measurement is a check — an empty selector reports the product, not itself.
@@ -94,8 +95,7 @@ skill exists.** Before any design or UI work, list `~/.claude/skills` and
 `<project>/.claude/skills`, read the `description` in each candidate's `SKILL.md`, pick the
 closest match and invoke it via the Skill tool — say which and why; if nothing fits, say so.
 
-**A directory is not an available skill.** Cross-check against what the session actually offers; a
-name that exists only on disk resolves to a different skill. `/sk` reports which are shadowed.
+**A directory is not an available skill**: cross-check what the session offers (`/sk` names shadows).
 
 **Scale it, and once per session.** A skill is for work carrying design decisions — a screen, a
 component, a layout. One control in an existing slot, a label copied from a sibling tab, a CSS
@@ -135,8 +135,8 @@ The commands are global, so they hard-code no project detail. Details come from:
 It declares build/test commands, how to run the app, known traps, locked business rules and
 deploy targets. It is gitignored, so **a worktree has none** — read the main checkout's
 (`git worktree list`, first line). Read it by outline (`grep -n '^## '`), then only the sections
-the card needs — never whole. No such file? Ask for what you need and offer to create it — do not
-guess. A greenfield project has none **by design**: `/s` writes it at the end of the build.
+the card needs — never whole. No such file? Offer to create it, seeded from the repo's CLAUDE.md —
+do not guess. A greenfield project has none **by design**: `/s` writes it at the end of the build.
 
 ## 9. Friction log — how this process improves itself
 
@@ -150,8 +150,8 @@ line, appended to `~/.claude/flow/friction.jsonl` (never committed — it quotes
 ```
 
 Write every path with forward slashes: a lone backslash is either invalid JSON (`\P`) or a silent
-escape. Allocate `id` as highest + 1, read at write time. Write any script that edits files to a
-FILE and run it by path — never a heredoc or `-c` — and read/write bytes so CRLF never flips.
+escape. Use exactly the keys above, as compact JSON; `id` is `F-<date>-<LF-n or project>-<n>`, so
+two sessions cannot collide. Append, never rewrite, then parse the line back before moving on.
 
 `kind`: **`missing-fact`** a project fact nobody wrote down · **`missing-step`** a question not
 asked or a check not run · **`missing-rule`** something true for every project · **`wrong-order`**

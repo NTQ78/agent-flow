@@ -58,7 +58,8 @@ code; every caller of a touched action; which copy of a duplicated definition th
 **A claim in the request is a hypothesis** — a named culprit, a reviewer's "two places", "staging
 diverged", "it should only show X". Reproduce or measure it before Impact scope inherits it.
 
-**Name the cards that touch the same files**, open or not, and say which must land first.
+**Name the cards that touch the same files**, open or not, and say which must land first — then
+`git fetch` and name the remote branches and `origin/main` commits since your base that touch them.
 
 ## Step 6 — Priority, deadline, size
 
@@ -72,7 +73,9 @@ state the consequence of guessing wrong — for one that decides where data live
 answer buys (schema, migration, product change). Do not ask what reading the code would answer.
 
 Add a draft message to the requester — **written in Vietnamese**, colleague tone, every question
-gathered into a single ask.
+gathered into a single ask. **The requester, or a scope owner who can answer for them, is at the
+keyboard** (no mail, thread or file source)? Ask the hard questions now with AskUserQuestion, record
+who answered, and keep the draft only for what is left.
 
 **Greenfield floor.** A new product needs five answers before it can be named: brand, page list,
 does it transact, language/currency, where assets come from. Missing any → name the board from
@@ -104,5 +107,4 @@ where `flow.md` said → `missing-fact`, applied there; a section empty two card
 
 Print: `LF-N`, type, size, open-question count, whether rule approval is needed, and the card link.
 
-If open questions remain, say plainly that the message should go out before `/p`. Then ask:
-"Run `/p`?"
+Open questions left? Say the message goes out before `/p`. Then ask: "Run `/p`?"
