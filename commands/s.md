@@ -6,17 +6,18 @@ argument-hint: card link | LF-N (empty = this session's card, else oldest in Tod
 Read `~/.claude/flow/CONVENTIONS.md` first, then the project's `.claude/flow.md` for build
 commands and the list of known traps.
 
-Card: $ARGUMENTS — a link, or `LF-N`. If empty, the card this session last touched; failing that,
-`LF ls <project> --column Todo` and the oldest. `LF` means `node C:\Users\VNT\.claude\flow\lf.js`. Start with `LF get <card>` and read
-the spec block; `LF assign <card> <your email>` so the board says who is holding it.
+Card: $ARGUMENTS — a link or `LF-N`; empty = this session's card, else the oldest in Todo. `LF` means
+`node C:\Users\VNT\.claude\flow\lf.js`. `LF get <card>`, read the spec block, `LF assign <card> <email>`.
 
 ## Absolute rules
 
 1. **Run no git command that changes state.** No `checkout`, `restore`, `stash`, `reset`, `clean`,
    `commit`, no branch creation. The tree may hold months of uncommitted work. Read-only is fine.
    No deploy and no live-data write either — that item is `/ship`'s; leave it unticked, say so.
-2. **Invoke a skill before writing UI when CONVENTIONS §6 calls for one** — `/p`'s Design section
-   records that call; follow it, and when it named an app pattern instead, match that pattern.
+2. **Look up skills per level-1 item, by the kind of work** (CONVENTIONS §6): match it against the
+   session's skill list — UI, an Excel/PDF/Word deliverable, animation, 3D, an LLM call, tests — and
+   invoke the closest before writing it; `/p`'s Design call carries, so follow it. The build log
+   names every skill considered for each item: used, or why not (owner, 2026-11-02).
 3. **Apply CONVENTIONS §7** (must not look AI-generated) to every line of UI produced.
 4. Read the traps section of `.claude/flow.md` **before building**, not after hitting an error.
 5. **Never `Write` a file you have not read in this session.** Write replaces: a file that existed
@@ -73,11 +74,8 @@ If the spec turns out to be wrong, incomplete or unworkable:
 ## Related bugs outside the spec
 
 Small blockers (a missing older i18n key, a wrong type, a circular import, an existing test broken
-by a legitimate change): fix them, and record them under "Fixes outside scope" in the build log.
-No need to ask.
-
-But if the fix starts changing business behaviour, or touches a locked business rule → follow the
-"When the spec is wrong" procedure above.
+by a legitimate change): fix them and record them under "Fixes outside scope" — no need to ask.
+One that changes business behaviour or a locked rule follows "When the spec is wrong" above.
 
 ## Record friction
 
@@ -90,6 +88,10 @@ already in the build log:
 - every spec divergence → `missing-step` or `wrong-order`; work redone → `wrong-order`
 
 ## Close out
+
+**Before the gates, run the `simplify` skill on the card's files only** — pass the build log's file
+list, never the tree's diff (it holds others' work). It cleans; anything it would change in
+behaviour is reverted. Log what it changed (owner, 2026-11-02).
 
 **Gates are the last thing you do.** Edit anything after running them and the result you write
 into the build log describes a tree that no longer exists — re-run, or say in the log that it does.
@@ -104,7 +106,5 @@ Cases with no test do not block the move, but going unmentioned does.
 Then put the build log on the card: `LF section <card> build --file <scratch.md>`,
 `LF move <card> "In progress"`, `LF tick <card> Build`.
 
-Print: files created/modified, build result per part, tests written **and cases still untested**,
-fixes made outside scope, anything blocked awaiting an answer, and the card link.
-
-Then ask: "Run `/c`?"
+Print: files created/modified, build result per part, skills used, tests written **and cases still
+untested**, fixes outside scope, anything blocked, and the card link. Then ask: "Run `/c`?"

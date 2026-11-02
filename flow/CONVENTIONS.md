@@ -91,13 +91,12 @@ card link, then ask "Run `<next>`?" — run it only if the user agrees.
 ## 6. Skills — look them up at run time
 
 The installed skill set changes over time (the user adds new ones regularly). **Never assume a
-skill exists.** Before any design or UI work, list `~/.claude/skills` and
-`<project>/.claude/skills`, read the `description` in each candidate's `SKILL.md`, pick the
-closest match and invoke it via the Skill tool — say which and why; if nothing fits, say so.
+skill exists.** Match each kind of work to the skills the session offers — a screen or component,
+an Excel/PDF/Word/slide deliverable, animation, 3D, an LLM call, a test strategy, a cleanup — read
+the candidates' descriptions, invoke the closest via the Skill tool and say which and why; if
+nothing fits, say so. **A directory is not an available skill** (`/sk` names shadows).
 
-**A directory is not an available skill**: cross-check what the session offers (`/sk` names shadows).
-
-**Scale it, and once per session.** A skill is for work carrying design decisions — a screen, a
+**Scale it, and once per session.** A design skill is for work carrying design decisions — a screen, a
 component, a layout. One control in an existing slot, a label copied from a sibling tab, a CSS
 property on an email table: name the app pattern you are matching and move on. An invocation in
 `/p` carries through `/s` in the same session; say which, do not re-run it.

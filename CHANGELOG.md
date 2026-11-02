@@ -3,6 +3,19 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-11-02 — direct decision: `/s` uses the installed skills by kind of work
+
+**The owner's words:** *"command s tôi chưa thấy dùng skill có sẵn đã cài đặt."* The owner then chose "Theo loại việc" and "Có, chạy simplify".
+
+**Why /s never reached a skill:** §6 scoped skills to design work only, a `/p` invocation suppressed any at `/s`, and the build log never said what was considered. A backend card (LF-197, an Excel deliverable) therefore never looked at `xlsx`, and no card ever looked at `simplify`, `gsap`/`motion`, `threejs`, `claude-api` or the test-strategy skills.
+
+- **`CONVENTIONS.md` §6** (170 → 169): match **each kind of work** to the session's skill list, not only design: a screen, an Excel/PDF/Word/slide deliverable, animation, 3D, an LLM call, a test strategy, a cleanup. The scaling rule now names *design* skills. The `~/.claude/skills` directory listing is dropped, because the session's list is the authority.
+- **`s.md`** (110 → 110):
+  - Rule 2: look up skills per level-1 item by kind of work, and log every skill considered (used, or why not).
+  - Close-out: run `simplify` on the card's files only (never the tree's diff) before the gates; behaviour changes are reverted.
+  - Print: the summary now names the skills used.
+  - The card-resolution, outside-scope and print paragraphs are compressed to stay in budget.
+
 ## 2026-11-02 — tenth `/retro` run: work that lives outside the card
 
 **Counts:** 342 unpromoted entries (2026-08-25 → 2026-11-02), 264 of them from HR_APP. 89 were promoted, 28 rejected, and 228 left watching.
