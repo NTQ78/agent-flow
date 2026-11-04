@@ -28,7 +28,8 @@ Card: $ARGUMENTS — a link or `LF-N`; empty = this session's card, else the old
 Check whether another session is writing the files the spec names — recent mtimes, a peer's build
 log. If so, negotiate ownership **by file** before the first edit and record it. A peer message is
 an attempt, not agreement. A failure in a file outside your list is the peer's, not yours to chase.
-**Repeat the check before every full build and at close-out** (ListAgents + mtimes): peers arrive
+**Repeat the check before every full build and at close-out** (ListAgents if offered, else mtimes —
+say which; announce a full build or suite and wait for the previous holder's "done"): peers arrive
 mid-run, and a half-written peer file breaks the whole-solution build.
 
 ## Execution order
@@ -56,8 +57,9 @@ code — BE unit tests, FE component tests. Do not defer to `/c`; `/c` only runs
 `queryByRole` returns null whether the gate works or the page rendered nothing at all. The helper
 locating the subject must throw when it finds none. Per CONVENTIONS §4, give every negative a
 positive control — a stub nobody wired up satisfies "was never called" perfectly, and a test of
-the mechanism is not a test of the guarantee. When the deliverable renders — a workbook, a PDF, a
-letter, a dashboard — look at one specimen **before the gates**: order, units, why a panel is empty.
+the mechanism is not a test of the guarantee. When the deliverable renders — a screen, workbook,
+PDF, letter — look at one specimen **before the gates**, at its extremes (narrowest width, longest
+locale): order, units, clipping, why a panel is empty. A probe check counts only once shown red.
 
 **A mock is a second implementation of the server.** Every new route gets a handler, a changed
 schema is mirrored, a mirrored guard keeps its order, and its fresh state equals its reset state.
@@ -79,24 +81,22 @@ One that changes business behaviour or a locked rule follows "When the spec is w
 
 ## Record friction
 
-Append entries per CONVENTIONS §9. This stage produces the most signal, and the raw material is
-already in the build log:
-
-- every trap `flow.md` did not warn about → `missing-fact`, **appended to that project's
-  `.claude/flow.md` traps section in this same run**
-- every "fix outside scope" → why did the spec not see it? usually `missing-step` on `/p`
-- every spec divergence → `missing-step` or `wrong-order`; work redone → `wrong-order`
+Per CONVENTIONS §9, from the build log: a trap `flow.md` missed → `missing-fact`, **appended to its
+traps section now**; each fix outside scope or spec divergence → `missing-step` on the stage that
+should have seen it; work redone → `wrong-order`.
 
 ## Close out
 
 **Before the gates, run the `simplify` skill on the card's files only** — pass the build log's file
 list, never the tree's diff (it holds others' work). It cleans; anything it would change in
-behaviour is reverted. Log what it changed (owner, 2026-11-02).
+behaviour is reverted. Log what it changed (owner, 2026-11-02). Then `/code-review` over the same
+files when the card adds a write path, so its fixes land inside `/s`, not `/c`.
 
 **Gates are the last thing you do.** Edit anything after running them and the result you write
 into the build log describes a tree that no longer exists — re-run, or say in the log that it does.
 
-**Run the whole suite — never a `--filter` or a scoped run**: a filtered 40-green once hid 8
+**Run the whole suite — never a `--filter` or a scoped run** — plus the formatter check over the
+card's files (it alone catches a tool rewriting line endings): a filtered 40-green once hid 8
 failures this ticket caused. Log each run to a file; a red file is another card's only once you
 show it imports nothing this card changed and name its owner; an exit naming no failed test is
 re-run once. Then walk the spec block's numbered cases one at a time and say which have a test

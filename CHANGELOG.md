@@ -3,6 +3,45 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-11-04 — eleventh `/retro` run: the rule existed, the reader it named did not
+
+**Counts:** 307 unpromoted entries (2026-08-25 → 2026-11-04): HR_APP 214, sa-ban 37, ManageTask 31, wcl-admin-timeclock 4, 21 without a project. 70 promoted, 6 rejected, 230 left watching.
+
+**What the owner approved:** P1–P8, plus the promotions and rejections.
+
+**The pattern:** about 60% of the entries are one gap. `/p` missed a reader, writer or consumer of what it changed. p.md Step 4 already demands "every reader and writer", but the misses were always the same concrete kinds: another importer of a component, a caller that builds the input, a string stating the same rule, the FE test tree. The fix names them instead of adding a rule. Every file stays at budget.
+
+- **`p.md`** (110 → 110):
+  - Step 2: a column, chip or header item added to an existing table or shell states its measured slack at 375 px and at the widest breakpoint.
+  - Step 4: the reader list now names every other importer of a changed component, every caller that builds its input, and every string stating the same rule.
+  - Step 6: read the repo's CLAUDE.md and flow.md test rules before listing a case. Grep EVERY test tree (BE, FE, mock tests). Each case names its fixture, seeded record and signed-in identity, cited file:line.
+  - **Deleted to stay in budget:** Step 8's friction paragraph is now one line, and the "cross-project `[ASSUMPTION]` → `missing-rule`" hint is gone (CONVENTIONS §9 keeps the kind list). Step 7's last bullet is merged into the one before it.
+  - Entries: F-2026-11-04-LF-216-3, F-2026-11-03-LF-211-6, F-2026-11-02-LF-206-2, F-2026-10-08-x0972, F-2026-10-13-x0988, F-2026-10-20-734, F-2026-11-04-LF-218-3, F-2026-11-02-LF208-s-3, F-2026-11-03-LF208-c-2, F-2026-10-20-748, F-2026-10-15-675, F-2026-09-25-444, F-2026-11-04-LF-216-5, F-2026-10-28-08, F-2026-10-13-x0986, F-2026-10-21-725, F-2026-10-20-759, F-2026-10-07-x0913, F-2026-10-15-702, F-2026-09-28-x0688, F-2026-09-25-470, F-2026-10-19-716, F-2026-09-24-331, F-2026-09-25-416, F-2026-09-29-190000-HR_APP, F-2026-10-15-708, F-2026-09-25-395, and three ts-keyed HR_APP entries from 2026-11-04.
+- **`s.md`** (110 → 110):
+  - Step 0: use ListAgents if it is offered, otherwise mtimes, and say which. Announce a full build or suite and wait for the previous holder's "done".
+  - Tests alongside the code: the specimen rule now covers screens too, at their extremes (narrowest width, longest locale). A probe check counts only once it has been shown red.
+  - Close out: run `/code-review` after `simplify` when the card adds a write path. The formatter check over the card's files joins the gates.
+  - **Deleted to stay in budget:** "Record friction" went from 9 lines to 3 (it repeated CONVENTIONS §9).
+  - Entries: F-2026-11-04-LF-218-6, F-2026-10-20-737, F-2026-11-03-LF212-s-4, F-2026-10-19-717, F-2026-11-03-LF212-s-1, F-2026-10-16-704, F-2026-10-27-18, F-2026-09-25-434, F-2026-11-03-LF212-s-2, F-2026-11-02-LF205-c-2, F-2026-10-20-719, F-2026-10-20-750, F-2026-10-20-753, F-2026-11-02-05, F-2026-09-03-185, F-2026-11-02-LF200-c1.
+- **`intake.md`** (110 → 110):
+  - Step 7: a question carries the follow-ups its answer opens (who is told, where it lives, one record or many, its siblings in the same family), each with a proposed default.
+  - Step 8: independent parts touching disjoint files become one card each. Each card quotes the full verbatim request, and the cards are cross-linked.
+  - **Deleted to stay in budget:** the greenfield floor and the draft-message paragraph are compressed. Step 9 drops "a section empty two cards running → `noise`".
+  - Entries: F-2026-10-20-732, F-2026-10-20-756, F-2026-10-06-625, F-2026-10-06-622, F-2026-10-15-698, F-2026-11-03-LF-211-2, F-2026-10-06-615, F-2026-11-03-LF212-p-2, F-2026-09-22-287, F-2026-09-23-320, F-2026-11-02-LF207-intake-1.
+- **`ship.md`** (109 → 110): §1 changelog: each card's line comes from its spec's main change, and every label is quoted from the locale files, never from a card title. Entries: F-2026-10-08-x0962, F-2026-11-04-REL1104-1.
+- **Promoted without a diff:** 11 HR_APP `missing-fact` entries, each verified present in HR_APP's flow.md.
+- **Rejected:**
+  - F-2026-11-04-LF-217-1: not true.
+  - F-2026-10-07-x0919: covered by the flow.md Deploy trap.
+  - F-2026-11-02-LF-206-1 and F-2026-11-03-REL-1: covered by CONVENTIONS §4.
+  - F-2026-10-21-762: covered by the ship.md §0 claim.
+  - F-2026-10-06-641: covered by c.md §6.
+- **Watching:**
+  - 10 sa-ban `missing-fact` entries: sa-ban's flow.md was not found on this machine.
+  - The vitest/e2e flake `noise` entries: the fix belongs in test code (needs an owner card).
+  - The lf.js asks (`priority`, `unlabel`, title count): these are tool changes.
+  - About 210 single entries.
+
 ## 2026-11-02 — direct decision: `/s` uses the installed skills by kind of work
 
 **The owner's words:** *"command s tôi chưa thấy dùng skill có sẵn đã cài đặt."* The owner then chose "Theo loại việc" and "Có, chạy simplify".

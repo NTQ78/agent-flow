@@ -30,7 +30,8 @@ contract you change, every FE caller of a route you gate. Reuse the pattern simi
 **Settle the design before writing this section** — a skill only as CONVENTIONS §6 scales it; §7:
 match the existing app. Decide layout, reused components, empty/loading/error states, responsive
 behaviour. **Anything rendering conditionally: name every user path that produces it** and check
-its copy against each — no such path is the finding. BE-only: skip the step.
+its copy against each — no such path is the finding. **A column, chip or header item added to an
+existing table or shell states its measured slack at 375 px and the widest breakpoint.** BE-only: skip.
 
 ## Step 3 — Diagram: a mermaid `flowchart` or `stateDiagram-v2`, for branching flow only
 
@@ -47,8 +48,9 @@ Per layer, files to **create** or **modify** with **signatures** — enough for 
 **Every path, symbol, call site and screen the spec names is one you opened, with the property its
 use relies on stated** (a signature, an error or audit shape, a slot's layout, the save that
 persists it) — and so is every reader **and writer** of what it changes: a route, a guard, a derived
-figure, a legend, a reused export, a form posting it back, a job or path setting it. List them, or
-show why one is untouched. Grep-verify or do not name it.
+figure, a legend, a reused export, a form posting it back, a job or path setting it, **every other
+importer of a changed component, every caller that builds its input, every string stating the same
+rule**. List them, or show why one is untouched. Grep-verify or do not name it.
 
 Hard constraints (re-check the traps section of the project's `.claude/flow.md`):
 
@@ -72,16 +74,16 @@ locale's existing term for a concept, and grep each touched component for raw te
 
 ## Step 6 — Test case checklist
 
-List every case, numbered, grouped: BE unit / integration / FE component / business edge case.
-Each case states input → expected result. `/c` checks against exactly this list. **Cases cover what
-the feature promises, not what each function does:** the invariant functions share, the string the
-UI prints, every input shape, edit and exit beside create. **Each case names the fixture that
-expresses it** — a symbol with no harness, an `internal` class with no `InternalsVisibleTo`, a
-state no user path reaches: that is the finding. **List the existing tests, seeds and consumers
-pinning the old behaviour** — grep the test tree for the old literal, the route string and the
-method, never by test name — which go red, which stay as the net. No test runner, or a project
-rule against new tests (read flow.md and the repo's CLAUDE.md first)? Keep the numbering and write
-**verification steps**, each naming its method and the seeded record that produces its state.
+**Read the repo's CLAUDE.md and flow.md test rules first.** List every case, numbered, grouped (BE
+unit / integration / FE / edge), each input → expected result; `/c` checks exactly this list. **Cases
+cover what the feature promises, not what each function does:** the invariant functions share, the
+string the UI prints, every input shape, edit and exit beside create. **Each case names the
+fixture, seeded record and signed-in identity that express it, cited file:line** — a symbol with no
+harness, an `internal` class with no `InternalsVisibleTo`, a state no user path reaches: that is the
+finding. **List the existing tests, seeds and consumers pinning the old behaviour** — grep EVERY test
+tree (BE, FE, mock tests) for the old literal, route, method and changed field, never by test name —
+which go red, which stay as the net. No test runner, or a rule against new tests? Keep the
+numbering and write **verification steps**, each naming its method and the seeded record behind it.
 
 ## Step 7 — Risks and the work tree
 
@@ -91,14 +93,12 @@ rule against new tests (read flow.md and the repo's CLAUDE.md first)? Keep the n
   covering the whole card. **The numbering is the run order and `/s` obeys it literally**:
   BE → migration → FE → i18n, and **whatever an item needs to compile goes before it**; a removal
   goes after its last user. Greenfield FE: manifest → install → config → code (Step 4). A **typed**
-  locale layer puts i18n first — its key union makes the FE uncompilable without the keys.
-- Siblings smallest first, leaves checkable one at a time; a line-capped file carries before/after/cap.
+  locale layer puts i18n first — its key union makes the FE uncompilable without the keys. Siblings
+  smallest first, leaves checkable one at a time; a line-capped file carries before/after/cap.
 
 ## Step 8 — Record friction, write, close out
 
-Append friction per CONVENTIONS §9 before writing: a fact found by reading code → `missing-fact`,
-into `flow.md` now; a cross-project `[ASSUMPTION]` no rule covers → `missing-rule` (a business
-rule nobody decided is an open question for the owner, not friction).
+Append friction per CONVENTIONS §9 first (a fact found in code → `missing-fact`, into `flow.md` now).
 
 Then put the spec on the card: `LF section <card> spec --file <scratch.md>`, `LF move <card> Todo`,
 `LF tick <card> Spec`; `LF points <card> <n>` only when the survey disagrees with `/intake`.

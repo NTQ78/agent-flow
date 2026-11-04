@@ -71,19 +71,20 @@ diverged", "it should only show X". Reproduce or measure it before Impact scope 
 List every remaining ambiguity. Each question must be specific, answerable in one sentence, and
 state the consequence of guessing wrong — for one that decides where data lives, the scope each
 answer buys (schema, migration, product change). Do not ask what reading the code would answer.
+A question carries the follow-ups its answer opens — who is told, where it lives, one record or
+many, its siblings in the same family — each with a proposed default.
 
-Add a draft message to the requester — **written in Vietnamese**, colleague tone, every question
-gathered into a single ask. **The requester, or a scope owner who can answer for them, is at the
-keyboard** (no mail, thread or file source)? Ask the hard questions now with AskUserQuestion, record
-who answered, and keep the draft only for what is left.
+Add a draft message to the requester — **in Vietnamese**, colleague tone, every question in one ask.
+**The requester or a scope owner is at the keyboard** (no mail, thread or file source)? Ask the hard
+questions now with AskUserQuestion, record who answered, and keep the draft only for what is left.
 
-**Greenfield floor.** A new product needs five answers before it can be named: brand, page list,
-does it transact, language/currency, where assets come from. Missing any → name the board from
-the request slug, say on the card the name is **provisional** (§1's one sanctioned exception).
+**Greenfield floor:** brand, page list, does it transact, language/currency, asset source. Missing
+any → name the board from the request slug, marked **provisional** (§1's one sanctioned exception).
 
 ## Step 8 — Open the card
 
-Write the body to a scratch `.md` first, then:
+Independent parts touching disjoint files → one card each, each quoting the full verbatim request,
+cross-linked under Related cards. Write each body to a scratch `.md` first, then:
 
 ```
 LF new <project> --title "<≤80 chars>" --desc-file <scratch.md> --column Backlog \
@@ -101,9 +102,8 @@ a guessed N once replaced another session's Done card's tree. `/p` renumbers it 
 
 ## Step 9 — Record friction and close out
 
-Before printing the summary, append friction entries per CONVENTIONS §9 — here: a question the
-process should have pre-empted, or a source read incompletely → `missing-step`; locked rules not
-where `flow.md` said → `missing-fact`, applied there; a section empty two cards running → `noise`.
+First append friction per CONVENTIONS §9: a question the process should have pre-empted or a source
+read incompletely → `missing-step`; locked rules not where `flow.md` said → `missing-fact`.
 
 Print: `LF-N`, type, size, open-question count, whether rule approval is needed, and the card link.
 

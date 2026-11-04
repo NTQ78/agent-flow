@@ -43,7 +43,8 @@ Then, for each card, write the release block and close it: `LF section <card> re
 
 The release block records: the date, every card in the batch, anything riding along unverified,
 whether a migration is pending, and **one bilingual changelog** for the whole release — English
-first, then Vietnamese, for the people who use the app, no technical vocabulary. **Done means
+first, then Vietnamese, for the people who use the app, no technical vocabulary; each card's line
+from its spec's main change, every label quoted from the locale files, never a card title. **Done means
 finished and verified, not deployed** — leave the deploy line reading `Deploy: not yet` until §2
 settles it, then rewrite the block with what happened.
 
