@@ -3,6 +3,28 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-11-05 — twelfth `/retro` run: a verification step names where its state comes from
+
+**Counts:** 242 unpromoted entries (2026-08-25 → 2026-11-05): HR_APP 155, ManageTask 30, sa-ban 27, wcl-admin-timeclock 4, 26 without a project. About 225 were already judged at the eleventh run; 15 arrived on 2026-11-05. 8 promoted, 2 rejected, 232 left watching.
+
+**What the owner approved:** P1, plus the promotions and rejections.
+
+- **`p.md`** (110 → 110):
+  - Step 6: each verification step names its method, its seeded record and **the mock path that produces the state**. The path is opened, or the flow is driven once; a capture or guide card is always driven first. `/p` had named verification surfaces the mock never reaches: the HR Timesheets queue reads the legacy seed and never emits warnings; a guide's persona, celebration source and shot count were all wrong until `/s` drove the flow.
+  - **Compressed to stay in budget:** Step 8's friction line and the "put the spec on the card" paragraph are now one paragraph. No meaning removed.
+  - Entries: F-2026-09-25-413, F-2026-11-05-LF-224-5, and two un-id'd HR_APP entries from 2026-11-05 (LF-222 `/s` and `/c`).
+- **Promoted without a diff:** four `missing-fact` entries verified present in HR_APP's flow.md: dev-DB counting through the API, mock shift spans, timesheet probes on PT and today-only, and superseding artifacts carrying `notes-<release>.md`.
+- **Repaired:** the LF-225 entry (a peer's) held raw backslashes and was invalid JSON; its paths now use forward slashes, per §9.
+- **Rejected:**
+  - F-2026-11-05-LF-224-6: covered by CONVENTIONS §4 (falsify every check); the entry says so itself.
+  - The 2026-11-05 `/ship` record-card entry: covered by CONVENTIONS §2 (owner work outside a card gets a card before the first edit).
+- **Watching:**
+  - F-2026-11-05-LF-224-7: an annotation hit the wrong box. s.md's "a probe counts once shown red" rule landed 2026-11-04 and was applied to missing targets, not wrong ones. Reword it if this recurs.
+  - F-2026-11-05-LF-224-8: a guide card missed an action between its endpoints.
+  - F-2026-11-05-LF-224-2: intake offered options from card history, not the current UI.
+  - Simplify's altitude pass correcting `/p` designs: two entries with different causes.
+  - The rest, as at the eleventh run.
+
 ## 2026-11-04 — eleventh `/retro` run: the rule existed, the reader it named did not
 
 **Counts:** 307 unpromoted entries (2026-08-25 → 2026-11-04): HR_APP 214, sa-ban 37, ManageTask 31, wcl-admin-timeclock 4, 21 without a project. 70 promoted, 6 rejected, 230 left watching.

@@ -83,7 +83,8 @@ harness, an `internal` class with no `InternalsVisibleTo`, a state no user path 
 finding. **List the existing tests, seeds and consumers pinning the old behaviour** — grep EVERY test
 tree (BE, FE, mock tests) for the old literal, route, method and changed field, never by test name —
 which go red, which stay as the net. No test runner, or a rule against new tests? Keep the
-numbering and write **verification steps**, each naming its method and the seeded record behind it.
+numbering and write **verification steps**, each naming its method, seeded record and **the mock
+path producing that state** — opened, or driven once (a capture or guide card is driven first).
 
 ## Step 7 — Risks and the work tree
 
@@ -98,9 +99,8 @@ numbering and write **verification steps**, each naming its method and the seede
 
 ## Step 8 — Record friction, write, close out
 
-Append friction per CONVENTIONS §9 first (a fact found in code → `missing-fact`, into `flow.md` now).
-
-Then put the spec on the card: `LF section <card> spec --file <scratch.md>`, `LF move <card> Todo`,
+Append friction per CONVENTIONS §9 (a code fact → `missing-fact`, into `flow.md` now). Then put
+the spec on the card: `LF section <card> spec --file <scratch.md>`, `LF move <card> Todo`,
 `LF tick <card> Spec`; `LF points <card> <n>` only when the survey disagrees with `/intake`.
 
 **Put every decision a sibling card is bound by** — a stored format, a vocabulary, which surface
