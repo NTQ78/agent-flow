@@ -57,8 +57,8 @@ Hard constraints (re-check the traps section of the project's `.claude/flow.md`)
 - Migrations are **additive-only**. Never drop or rename a column in use.
 - Permissions: request the minimum. Never widen a grant for convenience.
 - Anything whose shape an installed dependency or generator decides — a plugin's export, a class
-  Tailwind emits, a type a major version removed — is **inspected, not recalled**, against one
-  named source of truth. Nothing installed yet? Order the work so it is inspected first.
+  Tailwind emits — is **inspected, not recalled**, against one named source of truth, by signature
+  (overloads, generics, optional parameters), never by name. Not installed yet? Inspect it first.
 - A new value in a shared vocabulary — enum member, status word, DTO or form field — lists every
   reader and writer and what each does with it; the default branch is where it goes wrong. A new
   stored pointer or rule lists each event that changes its subject (a leaver, a removal, another

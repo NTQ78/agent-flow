@@ -3,6 +3,19 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-11-12 — fourteenth `/retro` run: inspect an API by signature, not by name
+
+**Counts:** 233 unpromoted. 231 were left watching by the thirteenth run the same morning; 2 are new (HR_APP, LF-257). 2 promoted, 1 rejected, 230 left watching.
+
+**What the owner approved:** P1.
+
+- **`p.md`** Step 4 (110 → 110): an API an installed dependency decides is inspected **by signature (overloads, generics, optional parameters), never by name**.
+  - Why: LF-257's IL guard banned Mapster's global-config entry points from a reflection pass over member names. That missed `TypeAdapterConfig<S,D>.NewConfig`/`ForType`/`Clear`, method groups, the parameterless `Mapper()`, and `ProjectToType`, whose config parameter is optional and defaults to the global. It also falsely banned overloads that pass a config. Four revisions across /s and /c.
+  - F-2026-08-27-103 is the same gap: a regex-generated allowlist missed a target-typed `new(...)`.
+  - **Deleted to stay in budget:** the example "a type a major version removed", and "Order the work so it is inspected first" shortened to "Inspect it first".
+  - Entries: F-2026-11-12-LF-257-03, F-2026-08-27-103.
+- **Rejected:** F-2026-11-12-LF-257-01 (intake counted files mentioning a symbol, not its uses). It is covered by intake Step 5's "at the unit the rule names", which the thirteenth run added the same day.
+
 ## 2026-11-12 — thirteenth `/retro` run: layout is measured, and a review covers what came after it
 
 **Counts:** 287 unpromoted entries (2026-08-25 → 2026-11-12): HR_APP 197, ManageTask 30, sa-ban 27, wcl-admin-timeclock 4, 29 without a project. About 232 were left watching at the twelfth run; about 55 are new. 44 promoted, 3 rejected, 231 left watching.
