@@ -59,7 +59,11 @@ fix now / should fix / noted. A finding in code this card only moved past is **n
 - Log in, reach **every screen that renders what changed** — each route importing a changed
   component, each screen reading a set the card added a value to, each consumer of a changed token
   format (grep, do not recall) — screenshot, and check for console errors, 4xx/5xx requests, raw
-  i18n keys (`some.key.name`), broken layout
+  i18n keys (`some.key.name`), an error state shown before any input
+- **Layout is measured, never read off a screenshot**: no overflow against the emulated 375 px
+  width; at the widest breakpoint one toolbar row shares one top; no value cell clipped in the
+  longest locale. A defect in your own screenshots is fixed here, shown red first — deferring it
+  needs the owner's word; a failure in one locale×width is measured before it is called a flake
 - **Drive every locale the project ships**; screenshot the one whose strings are longest
 - **Interactive states are verified by dispatching real input** — hover, focus, click — never by
   reading computed style off an element nobody is touching
@@ -84,18 +88,14 @@ requester specified. Record both in the verify block.
 - **Reproduce a failing external call standalone before changing any code.** A log line names the
   symptom; the response body names the cause. Two timeout increases shipped against a refusal.
 - **Business-logic failures** (wrong result, transition, permission): **STOP**. Measure the cause
-  and which paths show it, *then* offer options and ask; the card stays In progress (§8).
+  and which paths show it, *then* offer options and ask; the card stays In progress (§7).
 - **A fix at `/c` is new code**: before closing a finding, grep its siblings (same pattern in the
   file, every parameter on the same input path) and re-run related tests over what it touched.
 - **A red test is a claim about the product**: find which side a person decided before making the
   assertion match. A red no card owns is raised with the owner for its own card, never parked.
+- **Record friction** per CONVENTIONS §9 — an untested case, a failure a soft gate let through.
 
-## 7. Record friction
-
-Per CONVENTIONS §9: an untested case (`missing-step` on `/p` or `/s`), a failure a soft gate let
-through (`wrong-gate`), a check that found nothing twice (`noise`), an env gap (`missing-fact`).
-
-## 8. Verdict
+## 7. Verdict
 
 Write the verdict to a scratch `.md`: pass/fail per item, gate tier and why, untested cases, spec
 divergences, review findings, slop-test result, screenshot paths, and the points re-checked.

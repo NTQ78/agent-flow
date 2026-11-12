@@ -21,9 +21,9 @@ A `needs-approval` label with no sign-off is always a stop.
 
 ## Step 1 — Survey the code before writing
 
-Read the real code in the affected area, and **find by grep, not by browsing**: the helper siblings
-already call, every copy of what you replace (by shape, not name), every sentence stating a
-contract you change, every FE caller of a route you gate. Reuse the pattern similar work uses.
+Read the real code in the affected area, and **find by grep, not by browsing**: the helper or
+predicate siblings use for the same concept, every copy of what you replace (by shape, not name),
+every sentence stating a contract you change, every FE caller of a route you gate; reuse them.
 
 ## Step 2 — UI/UX design (only when there is new FE work)
 
@@ -49,8 +49,8 @@ Per layer, files to **create** or **modify** with **signatures** — enough for 
 use relies on stated** (a signature, an error or audit shape, a slot's layout, the save that
 persists it) — and so is every reader **and writer** of what it changes: a route, a guard, a derived
 figure, a legend, a reused export, a form posting it back, a job or path setting it, **every other
-importer of a changed component, every caller that builds its input, every string stating the same
-rule**. List them, or show why one is untouched. Grep-verify or do not name it.
+importer of a changed component (re-exports too), every caller that builds its input, every string
+stating the same rule**. List them, or show why one is untouched. Grep-verify or do not name it.
 
 Hard constraints (re-check the traps section of the project's `.claude/flow.md`):
 

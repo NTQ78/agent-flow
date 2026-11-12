@@ -3,6 +3,43 @@
 What changed in the flow, why, and — for a `/retro` run — the friction entries that justified it.
 Direct decisions are recorded here too, marked as such. The raw friction log stays out of git.
 
+## 2026-11-12 — thirteenth `/retro` run: layout is measured, and a review covers what came after it
+
+**Counts:** 287 unpromoted entries (2026-08-25 → 2026-11-12): HR_APP 197, ManageTask 30, sa-ban 27, wcl-admin-timeclock 4, 29 without a project. About 232 were left watching at the twelfth run; about 55 are new. 44 promoted, 3 rejected, 231 left watching.
+
+**What the owner approved:** P1–P8, plus the promotions and rejections.
+
+- **`c.md`** (110 → 110):
+  - §4: "broken layout" becomes a measured gate. That means no overflow against the emulated 375 px width; one toolbar row shares one top at the widest breakpoint; no value cell clipped in the longest locale; and an error state showing before any input counts as a defect. A defect in /c's own screenshots is fixed at /c, shown red first, and deferring it needs the owner's word. A failure in one locale×width is measured before it is called a flake. The owner had caught these on production-like data more than once.
+  - **Deleted to stay in budget:** §7 "Record friction" is now one bullet at the end of §6, and Verdict is renumbered §7.
+  - Entries: F-2026-11-06-LF-231-1, F-2026-11-06-LF-231-2, F-2026-11-11-LF-249-9, F-2026-11-11-LF-254-03, F-2026-11-11-LF-253-04, F-2026-11-03-LF-213-5, F-2026-11-11-LF-249-7, F-2026-11-11-LF-254-02, F-2026-09-28-499.
+- **`s.md`** (110 → 110): Close out: hunks changed after the `/code-review` (the owner reshaping a screen, or fixes that add branches) are reviewed again. **Compressed:** "Record friction" went from 3 lines to 2. Entries: F-2026-11-09-LF-241-c1, F-2026-11-11-LF-253-05.
+- **`intake.md`** (110 → 110):
+  - Step 5: a claim, including the agent's own earlier report, is measured against an independent source, never grouped by the field under suspicion. It is measured at the unit the rule names, and on every value shown. Entries: F-2026-11-09-LF-240-02, F-2026-11-09-LF-240-04, F-2026-11-10-LF-244-02, F-2026-10-20-755, F-2026-10-28-02.
+  - Step 7: each option names what exists today (grep, never a card title) and shows the requester's own example under it, passing or refused. The follow-ups now include each write route the answer newly opens. Entries: F-2026-11-10-LF-245-01, F-2026-11-05-LF-224-2, F-2026-11-11-LF-256-03.
+  - **Compressed:** Step 4 went from 4 lines to 2, and Step 9's friction line from 2 to 1.
+- **`p.md`** (110 → 110): Step 1 now greps for the helper **or predicate** siblings use for the same concept. Step 4's importer list includes re-exports. Entries: F-2026-11-09-LF-240-07, F-2026-11-03-LF-213-4, F-2026-11-09-LF-243-02.
+- **`CONVENTIONS.md`** §4 (169 → 169): board blocks, release notes and card bodies go through Write/Edit. The byte scan covers C0 **and C1**: the C1 check had missed a U+0082 from a `\2026` in a Python heredoc. This is a rewording of the existing script rule, which existed and was broken twice in one release. Entries: F-2026-11-11-release-2, F-2026-11-12-REL-03-03, F-2026-11-11-LF-253-01 (intake).
+- **HR_APP `flow.md`** (project-local, not in this repo):
+  - P6: a line at the top of the FE test gate: `/p` writes WCL-HR FE cases as verification steps, never as new vitest cases. Entries: F-2026-11-09-LF-240-06, F-2026-11-11-LF-249-4.
+  - P8: facts applied:
+    - Fluent Emoji has no country flags (LF-246-01).
+    - Probes match dates by an ISO `data-date` (LF-246-03).
+    - The onboarding note was stale, corrected against `FirstLoginService.cs:238`: first login enforces Required too, with `enforceVocabularies: false`, and a `select` renders as a dropdown (LF-249-2, LF-249-5).
+- **Promoted without a diff:** 13 `missing-fact` entries verified present in HR_APP's flow.md: LF-247-02/03/04, LF-253-02, LF-256-01/02/04, REL-03-02, and five entries without an id (LF-229 ×2, LF-230, LF-238, release 2026-11-05-04).
+- **Repaired:** F-2026-11-12-REL-03-03 held raw backslashes and was invalid JSON. Its paths now use forward slashes.
+- **Rejected:**
+  - The LF-238 staging-unreachable note: a transient environment state.
+  - F-2026-11-03-LF-211-1 (title length): covered by intake Step 8, and lf.js refuses before writing.
+  - F-2026-11-11-LF-248-01: covered by intake Step 5's remote-branch line.
+- **Not a flow change:** the recurring FE full-suite flakes (grant-leave-dialog, payslip-form-page, position-line-drawer, lookup-combobox) and the BE Mapster `SettingStore` race go to an HR_APP card. They stay watching until it lands.
+- **Watching:**
+  - F-2026-11-12-REL-03-01: a dropped card still rides along in a whole-tree project.
+  - F-2026-11-11-LF-253-03: the column list for a cloned row.
+  - The lf.js asks (`priority`, `unlabel`).
+  - The sa-ban `missing-fact` entries: sa-ban's flow.md is still not found.
+  - About 220 single entries.
+
 ## 2026-11-05 — twelfth `/retro` run: a verification step names where its state comes from
 
 **Counts:** 242 unpromoted entries (2026-08-25 → 2026-11-05): HR_APP 155, ManageTask 30, sa-ban 27, wcl-admin-timeclock 4, 26 without a project. About 225 were already judged at the eleventh run; 15 arrived on 2026-11-05. 8 promoted, 2 rejected, 232 left watching.

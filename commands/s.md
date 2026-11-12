@@ -81,16 +81,16 @@ One that changes business behaviour or a locked rule follows "When the spec is w
 
 ## Record friction
 
-Per CONVENTIONS §9, from the build log: a trap `flow.md` missed → `missing-fact`, **appended to its
-traps section now**; each fix outside scope or spec divergence → `missing-step` on the stage that
-should have seen it; work redone → `wrong-order`.
+Per CONVENTIONS §9, from the build log: a trap `flow.md` missed → `missing-fact`, appended to its
+traps **now**; a fix outside scope or spec divergence → `missing-step`; work redone → `wrong-order`.
 
 ## Close out
 
 **Before the gates, run the `simplify` skill on the card's files only** — pass the build log's file
 list, never the tree's diff (it holds others' work). It cleans; anything it would change in
 behaviour is reverted. Log what it changed (owner, 2026-11-02). Then `/code-review` over the same
-files when the card adds a write path, so its fixes land inside `/s`, not `/c`.
+files when the card adds a write path, so its fixes land inside `/s`, not `/c`. Hunks changed after
+that review — the owner reshaping a screen, or fixes that add branches — are reviewed again.
 
 **Gates are the last thing you do.** Edit anything after running them and the result you write
 into the build log describes a tree that no longer exists — re-run, or say in the log that it does.

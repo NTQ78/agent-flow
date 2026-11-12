@@ -43,10 +43,8 @@ Read the locked rules in `.claude/flow.md`. If the request contradicts any of th
 
 ## Step 4 — Check against cards already on the board
 
-`LF ls <project>` and read the titles. For anything close, `LF get LF-N`. Look for:
-
-- duplicates → report them, ask whether to merge
-- older cards this request would contradict → warn about the silent conflict, cite the `LF-N`
+`LF ls <project>` and read the titles; for anything close, `LF get LF-N`. A duplicate → report it,
+ask whether to merge. An older card this request silently contradicts → warn, cite the `LF-N`.
 
 ## Step 5 — Impact scope
 
@@ -55,8 +53,9 @@ is to catch work that looks small and spreads: FE screens; BE endpoints / handle
 which roles see the change; reports, exports, jobs and email templates depending on the touched
 code; every caller of a touched action; which copy of a duplicated definition the screen reads.
 
-**A claim in the request is a hypothesis** — a named culprit, a reviewer's "two places", "staging
-diverged", "it should only show X". Reproduce or measure it before Impact scope inherits it.
+**A claim is a hypothesis** — a named culprit, a reviewer's "two places", your own earlier report.
+Measure it before Impact scope inherits it: against an independent source (dates, ledger, audit —
+never grouped by the field under suspicion), at the unit the rule names, on every value shown.
 
 **Name the cards that touch the same files**, open or not, and say which must land first — then
 `git fetch` and name the remote branches and `origin/main` commits since your base that touch them.
@@ -71,8 +70,10 @@ diverged", "it should only show X". Reproduce or measure it before Impact scope 
 List every remaining ambiguity. Each question must be specific, answerable in one sentence, and
 state the consequence of guessing wrong — for one that decides where data lives, the scope each
 answer buys (schema, migration, product change). Do not ask what reading the code would answer.
-A question carries the follow-ups its answer opens — who is told, where it lives, one record or
-many, its siblings in the same family — each with a proposed default.
+Each option names what exists today (grep, never a card title) and shows the requester's own
+example under it, passing or refused. A question carries the follow-ups its answer opens — who is
+told, where it lives, one record or many, its siblings, each write route it newly opens — each
+with a proposed default.
 
 Add a draft message to the requester — **in Vietnamese**, colleague tone, every question in one ask.
 **The requester or a scope owner is at the keyboard** (no mail, thread or file source)? Ask the hard
@@ -102,8 +103,7 @@ a guessed N once replaced another session's Done card's tree. `/p` renumbers it 
 
 ## Step 9 — Record friction and close out
 
-First append friction per CONVENTIONS §9: a question the process should have pre-empted or a source
-read incompletely → `missing-step`; locked rules not where `flow.md` said → `missing-fact`.
+First append friction per CONVENTIONS §9 (a question that should have been pre-empted → `missing-step`).
 
 Print: `LF-N`, type, size, open-question count, whether rule approval is needed, and the card link.
 

@@ -75,8 +75,8 @@ language** — a translation is not evidence.
 - For an access, permission or validation change, **map the path, not the files**: every entry
   point and right reaching the guarded state (FE gates too: menu, page guard, the query a button
   waits on), each action a newly admitted actor is then offered, and the layer that *stops* it.
-- **A script that edits a file or writes a board block runs from a FILE, by path** — never a
-  heredoc or `-c` — reads and writes bytes, and its output is scanned for control bytes before use.
+- **Board blocks, release notes and card bodies go through Write/Edit**; a script editing a file
+  runs from a FILE, by path (never a heredoc or `-c`), and its output is scanned for C0+C1 bytes.
 - **A result you have not tried to falsify is not a result.** Show a check can go red before
   reading its green; try to make X happen before writing "X cannot happen" into a migration, a
   `flow.md` or a commit; a measurement is a check — an empty selector reports the product, not itself.
